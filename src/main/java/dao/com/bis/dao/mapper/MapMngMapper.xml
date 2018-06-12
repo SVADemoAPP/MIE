@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.MapMngDao">
+	<select id="doquery" resultType="MapMngModel">
+		select a.*,b.name storeName from
+		bi_maps a join bi_store b on a.storeId =
+		b.id and b.id = (select
+		min(id) from bi_store)
+	</select>
+	
+	<select id="doquerys" resultType="MapMngModel">
+		select a.*,b.name storeName from
+		bi_maps a join bi_store b on a.storeId =
+		b.id and b.id = #{value}
+	</select>	
+	
+	<select id="doqueryss" resultType="MapMngModel">
+		select a.*,b.name storeName from
+		bi_maps a join bi_store b on a.storeId =
+		b.id and a.mapId = #{value}
+	</select>	
+
+	<select id="getMapDataByStoreName" resultType="MapMngModel">
+		select a.* from
+		bi_maps a join bi_store b on a.storeId =
+		b.id where
+		b.name=#{name}
+	</select>
+	
+    <select id="getStoreData" resultType="MarketModel">
+        select a.* from bi_store a join  bi_mixing b  on a.id = b.storeId where b.codeToMapId = #{mapId}
+    </select>	
+	
+    <select id="getMapDataByStoreName1" resultType="MapMngModel">
+       select a.floor,a.xo,a.yo,a.scale,a.coordinate,a.angle,a.path,a.svg,a.navi,a.storeId,a.imgWidth,a.imgHeight,a.id,a.updateTime,a.createTime,a.mapType,
+       (select codeToMapId from bi_mixing where mapId=a.mapId) mapId from
+        bi_maps a join bi_store b on a.storeId =
+        b.id join bi_mixing c on c.storeId = b.id 
+        where b.name= #{name} group by mapId
+    </select>	
+
+
+	<select id="doallquery" resultType="MapMngModel">
+		select a.*,b.name storeName
+		from
+		bi_maps a join bi_store b on a.storeId =
+		b.id
+	</select>
+	<select id="getAllMapId" resultType="String">
+		select mapId from bi_maps
+	</select>
+	<select id="getStoreIdByMapId" resultType="int">
+		select storeId from
+		bi_maps where mapId = #{value}
+	</select>
+
+	<select id="getMapDataByMapId" resultType="MapMngModel">
+		select a.*,b.name
+		storeName from bi_maps a join bi_store b on a.storeId =
+		b.id and
+		a.mapId = #{value}
+	</select>
+
+	<select id="queryMapByStore" resultType="MapMngModel">
+		SELECT a.*,b.name
+		storeName FROM bi_maps a join bi_store b on a.storeId =
+		b.id WHERE b.id
+		= #{value} order by a.mapId
+	</select>
+
+	<select id="getMapNameByMapId" resultType="String">
+		SELECT path FROM
+		bi_maps WHERE mapId = #{value}
+	</select>
+	<select id="getSvgNameByMapId" resultType="String">
+		SELECT svg FROM
+		bi_maps WHERE mapId = #{value}
+	</select>
+
+	<select id="getNaviNameByMapId" resultType="String">
+		SELECT navi FROM
+		bi_maps WHERE mapId = #{value}
+	</select>
+
+	<select id="getMapNameById" resultType="String">
+		SELECT path FROM
+		bi_maps
+		WHERE id = #{value}
+	</select>
+	<select id="getSvgNameById" resultType="String">
+		SELECT svg FROM
+		bi_maps
+		WHERE id = #{value}
+	</select>
+	<select id="getNaviNameById" resultType="String">
+		SELECT navi FROM
+		bi_maps
+		WHERE id = #{value}
+	</select>
+	<delete id="deleteMapByMapId">
+		DELETE FROM bi_maps WHERE mapId = #{value}
+	</delete>
+
+	<update id="updateMap">
+		UPDATE bi_maps
+		<set>
+			floor = #{floor},
+			xo = #{xo},
+			yo = #{yo},
+			scale = #{scale},
+			coordinate =
+			#{coordinate},
+			angle = #{angle},
+			mapId = #{mapId},
+			storeId = #{storeId},
+			updateTime = #{updateTime},
+			mapType = #{mapType},
+			<if test="path != null">
+				path = #{path},
+				<if test="imgWidth != 0">
+					imgWidth = #{imgWidth},
+					imgHeight = #{imgHeight},
+				</if>
+			</if>
+			<if test="svg != null">
+				svg = #{svg},
+			</if>
+			<if test="navi != null">
+				navi = #{navi},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<insert id="saveMapInfo">
+		INSERT INTO bi_maps(
+		mapId,
+		floor,
+		xo,
+		yo,
+		scale,
+		coordinate,
+		angle,
+		path,
+		svg,
+		navi,
+		imgWidth,
+		imgHeight,
+		storeId,
+		updateTime,
+		createTime,
+		mapType
+		)
+		VALUES (
+		#{mapId},
+		#{floor},
+		#{xo},
+		#{yo},
+		#{scale},
+		#{coordinate},
+		#{angle},
+		#{path},
+		#{svg},
+		#{navi},
+		#{imgWidth},
+		#{imgHeight},
+		#{storeId},
+		#{updateTime},
+		#{createTime},
+		#{mapType}
+		)
+	</insert>
+
+	<select id="checkMapIdIsExisted" resultType="int">
+		SELECT COUNT(*)
+		FROM bi_maps
+		WHERE mapId = #{mapId}
+		<if test="id != null">
+			and id != #{id}
+		</if>
+	</select>
+
+	<select id="getFloorByPlaceId" resultType="String">
+		SELECT mapId FROM
+		bi_maps WHERE storeId = #{storeId}
+	</select>
+
+	<select id="getMapCarData" resultType="MapMngModel">
+		SELECT a.*,b.name
+		storeName FROM bi_maps a left join bi_store b on a.storeId
+		= b.id where
+		a.mapId = #{value} and a.mapType = 1
+	</select>
+
+	<select id="getParkingNumber" resultType="String">
+		SELECT parkingNumber
+		FROM bi_parkinginformation WHERE mapId = #{value} and
+		isTrue = 0
+	</select>
+
+
+	<select id="getMapTrendByHour" resultType="Map">
+		select distinct
+		b.floor
+		name,a.visitorCount value from
+		bi_trend_map_hour a join bi_maps
+		b on
+		a.fromMapId=b.mapId where
+		a.mapId=#{mapId} and a.hour=#{sign} and
+		a.time=#{time} order by value desc
+	</select>
+	<select id="getMapTrendByDay" resultType="Map">
+		select distinct b.floor
+		name,a.visitorCount value from
+		bi_trend_map_day a join bi_maps b on
+		a.fromMapId=b.mapId where
+		a.mapId=#{mapId} and a.day=#{sign} and
+		a.time=#{time} order by value desc
+	</select>
+	<select id="getMapTrendByHourOther" resultType="Integer">
+		select
+		visitorCount from
+		bi_trend_map_hour where fromMapId is null and
+		mapId=#{mapId} and hour=#{sign} and
+		time=#{time} limit 1
+	</select>
+	<select id="getMapTrendByDayOther" resultType="Integer">
+		select
+		visitorCount from
+		bi_trend_map_day where fromMapId is null and
+		mapId=#{mapId} and day=#{sign} and
+		time=#{time} limit 1
+	</select>
+</mapper>

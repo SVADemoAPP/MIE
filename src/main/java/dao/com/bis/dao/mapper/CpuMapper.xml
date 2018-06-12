@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.CpuDao">
+	
+	<insert id="saveCpu">
+		INSERT INTO bi_cmd(cpuParameter,lastTime)
+		VALUES(#{cpuParameter},#{lastTime})
+	</insert>
+	
+	<select id="selectTimeById" resultType="long">
+		SELECT lastTime FROM bi_cmd WHERE id = (SELECT max(id) FROM bi_cmd)
+	</select>
+	
+	<select id="selectParameter" resultType="int">
+		SELECT cpuParameter FROM bi_cmd WHERE id = (SELECT max(id) FROM bi_cmd)
+	</select>
+	
+	<select id="selectCount" resultType="int">
+		SELECT  count(*)  FROM bi_cmd
+	</select>
+	
+	<select id="selectMinId" resultType="long">
+		SELECT min(id) FROM bi_cmd
+	</select>
+	
+	<delete id="deleteCount">
+		DELETE FROM bi_cmd WHERE id = #{id}
+	</delete>
+	
+</mapper>

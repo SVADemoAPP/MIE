@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.UserDao">
+	<select id="doquery" resultMap="userResult">
+		SELECT * FROM bi_user_info where
+		userName=#{userName}
+	</select>
+
+	<resultMap id="userResult" type="UserModel">
+		<id property="id" column="id" />
+		<result property="userName" column="userName" />
+		<result property="gender" column="gender" />
+		<result property="hobby" column="hobby" />
+		<result property="birthday" column="birthday" />
+		<result property="headPhoto" column="headPhoto" />
+		<result property="profession" column="profession" />
+		<result property="updateTime" column="updateTime" />
+		<result property="createTime" column="createTime" />
+	</resultMap>
+	<select id="likequery" resultType="String">
+		SELECT userName FROM
+		bi_user_info where userName like CONCAT('%',#{key},'%') order by
+		userName limit 6
+	</select>
+
+	<insert id="register" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		bi_user(userName,password,nickName,createTime,lastLoginTime)
+		values
+		(#{userName},#{password},#{nickName},#{createTime},#{lastLoginTime})
+	</insert>
+
+	<select id="login" resultType="Integer">
+		select id from bi_user where
+		${columeName}=#{userName} and password=#{password}
+	</select>
+
+
+	<select id="loginByOpenid" resultType="Integer">
+		select id from bi_user
+		where
+		openid=#{openid}
+	</select>
+
+	<insert id="registerByOpenid" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into
+		bi_user(openid,createTime,lastLoginTime)
+		values
+		(#{openid},#{createTime},#{lastLoginTime})
+	</insert>
+	
+	<select id="getUserInfo" resultType="UserModel">
+		select id,userName,nickName,phone,email,gender,address,
+		birthday,lastLoginTime,createTime,updateTime from bi_user
+		where
+		id=#{id}
+	</select>
+	
+	<update id="modifyPassword">
+		update bi_user set password=#{newPassword} where 
+		id=#{id} and password=#{oldPassword}
+	</update>
+	
+	<update id="modifyUserInfo">
+	 update bi_user 
+        <set>
+            <if test="nickName != null">
+                nickName = #{nickName},        
+            </if>
+             <if test="phone != null">
+                phone = #{phone},        
+            </if>
+             <if test="email != null">
+                email = #{email},        
+            </if>
+             <if test="gender != null">
+                gender = #{gender},        
+            </if>
+             <if test="address != null">
+                address = #{address},        
+            </if>
+             <if test="birthday != null">
+                birthday = #{birthday},        
+            </if>
+            updateTime=#{updateTime},
+        </set>
+        where id = #{id}
+	</update>
+	
+</mapper>

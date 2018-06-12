@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.PeripheryServiceDao">
+
+	<insert id="updateData">
+		REPLACE INTO 
+			bi_peripheral_service(
+				id,
+				category,
+				shopName,
+				shopAddress,
+				distance,
+				peripheryCategory,
+				path,
+				maxPath,
+				phoneNumber,
+				businessHours,
+				storeId
+			)
+			VALUES(
+				#{id},
+				#{category},
+				#{shopName},
+				#{shopAddress},
+				#{distance},
+				#{peripheryCategory},
+				#{path},
+				#{maxPath},
+				#{phoneNumber},
+				#{businessHours},
+				#{storeId}
+			)
+	
+	</insert>
+	
+	<insert id="saveData">
+		REPLACE INTO 
+			bi_peripheral_service(
+				id,
+				category,
+				shopName,
+				shopAddress,
+				distance,
+				peripheryCategory,
+				path,
+				maxPath,
+				phoneNumber,
+				businessHours,
+				storeId
+			)
+			VALUES
+				<foreach collection ="list" item="item" index= "index" separator =",">
+	                (
+	                #{item.id}, 
+	                #{item.category},
+	                #{item.shopName},
+	                #{item.shopAddress},
+	                #{item.distance},
+	                #{item.peripheryCategory},
+	                #{item.path},
+	                #{item.maxPath},
+	                #{item.phoneNumber},
+	                #{item.businessHours},
+	                #{item.storeId}
+	                )
+            	</foreach >
+	</insert>
+
+</mapper>

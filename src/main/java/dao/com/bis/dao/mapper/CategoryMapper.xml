@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.CategoryDao">
+
+	<select id="doquery" resultType="CategoryModel">
+		SELECT * FROM bi_shop_category
+	</select>
+
+	<select id="queryCategoryByStore" resultType="CategoryModel">
+		SELECT
+		distinct(a.id) id,a.name name FROM bi_shop_category a join bi_shop b
+		join bi_maps c join bi_store d on a.id =
+		b.categoryId and
+		b.mapId=c.mapID and c.storeId = d.id WHERE d.id
+		= #{value}
+
+	</select>
+
+	<select id="selectCategorySame" resultType="int">
+		SELECT COUNT(*) FROM
+		bi_shop_category WHERE name = #{name} and id != #{id}
+	</select>
+
+	<select id="getPeripheryCategoryDataByStoreId" resultType="PeripheryCategoryModel">
+		select a.*,b.name storeName from bi_peripheral_service a join bi_store
+		b on a.storeId = b.id and a.storeId = #{storeId}
+	</select>
+
+	<insert id="saveInfo">
+		INSERT INTO
+		bi_shop_category(name,updateTime,createTime)
+		VALUES(#{name},#{updateTime},#{createTime})
+	</insert>
+
+	<update id="updateInfo">
+		UPDATE bi_shop_category
+		SET name = #{name}, updateTime
+		= #{updateTime} WHERE id = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE from bi_shop_category WHERE id = #{id}
+	</delete>
+
+	<insert id="saveCategory">
+		INSERT INTO
+		bi_shop_category(
+		name,
+		createTime,
+		x,
+		y,
+		deepTime,
+		visitorNumber
+		)
+		VALUES(
+		#{name},
+		#{createTime},
+		#{x},
+		#{y},
+		#{deepTime},
+		#{visitorNumber}
+		)
+	</insert>
+
+
+	<update id="updateCategory">
+		UPDATE bi_shop_category
+		SET name = #{name}, updateTime
+		= #{updateTime},
+		x= #{x},y=#{y},deepTime= #{deepTime},visitorNumber=
+		#{visitorNumber}
+		WHERE id = #{id}
+	</update>
+
+	<select id="checkNameIsExisted" resultType="int">
+		SELECT COUNT(*)
+		FROM bi_shop_category
+		WHERE name = #{name}
+		<if test="id != null">
+			and id != #{id}
+		</if>
+	</select>
+
+	<select id="selectByName" resultType="int">
+		SELECT count(*) FROM
+		bi_shop_category WHERE name = #{name}
+	</select>
+
+	<select id="selectByName1" resultType="int">
+		SELECT count(*) FROM
+		bi_shop_category WHERE name = #{name} and id!=#{id}
+	</select>
+
+</mapper>

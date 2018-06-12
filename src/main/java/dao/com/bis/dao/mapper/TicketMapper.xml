@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.TicketDao">
+    <insert id="saveData">
+        INSERT INTO bi_ticket(
+        shopName,
+        floorName,
+        ticketName,
+        creatTime,
+        chanceName,
+        imageWidth,
+        imageHigth)
+        VALUES(
+        #{shopName},
+        #{floorName},
+        #{ticketName},
+        #{creatTime},
+        #{chanceName},
+        #{imageWidth},
+        #{imageHigth}
+        )
+    </insert>
+    <update id="updateData">
+        UPDATE bi_ticket 
+        <set>
+            shopName = #{shopName},
+            floorName = #{floorName},
+            chanceName = #{chanceName},
+            <if test="ticketName != null">
+                ticketName = #{ticketName},
+                <if test="imageWidth != 0">
+                    imageWidth = #{imageWidth},
+                    imageHigth = #{imageHigth},
+                </if>
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+   <select id="getData" resultType="TicketModel">
+      select a.id,b.mapId mapId,c.id storeId,d.id shopId,a.ticketName,a.chanceName,a.creatTime,b.floor floorName,c.name storeName,d.shopName 
+      from bi_ticket a join bi_maps b on a.floorName = b.mapId join bi_store c on c.id = b.storeId join bi_shop d on d.id = a.shopName
+    </select>
+    
+    <delete id="deleteDataById">
+        DELETE FROM bi_ticket WHERE id = #{id}
+    </delete>  
+    
+    <select id="getTiketByShopId" resultType="Map">
+        select ticketName ticketPath,chanceName chances from bi_ticket where shopName = #{shopId} 
+    </select>           
+</mapper>

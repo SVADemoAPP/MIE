@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.CostDao">
+
+	<select id="getUserCostSumNowDay" resultType="BigDecimal">
+		select
+		sum(spending) totalSum from
+		bi_static_cost where userId=#{userId} and
+		to_days(createTime) =
+		to_days(now()) group by
+		userId
+	</select>
+
+	<select id="getUserCostCountNowDay" resultType="Integer">
+		select
+		count(spending) totalCount from
+		bi_static_cost where userId=#{userId}
+		and
+		to_days(createTime) =
+		to_days(now()) group by
+		userId
+	</select>
+	<select id="getUserCostSumNowDayByCategory" resultType="Map">
+		select
+		a.name name,sum(c.spending) value from bi_shop_category a join
+		bi_shop
+		b join (select
+		* from
+		bi_static_cost where userId=#{userId} and
+		to_days(createTime) =
+		to_days(now()) ) c on
+		a.id=b.categoryId and
+		b.id=c.shopId group by
+		a.name order by value desc limit 4
+	</select>
+
+	<select id="getUserCostCountNowDayByCategory" resultType="Map">
+		select
+		a.name name,count(c.spending) value from bi_shop_category a join
+		bi_shop b join (select
+		* from
+		bi_static_cost where userId=#{userId} and
+		to_days(createTime) =
+		to_days(now())) c on
+		a.id=b.categoryId and
+		b.id=c.shopId group by
+		a.name order by value desc limit 4
+	</select>
+	<select id="getUserCostSumNowDayByShop" resultType="Map">
+		select
+		b.shopName name,sum(c.spending) value
+		from bi_shop b join (select
+		*
+		from
+		bi_static_cost where
+		userId=#{userId} and
+		to_days(createTime) =
+		to_days(now())) c on
+		b.id=c.shopId group by
+		b.shopName order by value
+		desc
+		limit 4
+	</select>
+
+	<select id="getUserCostCountNowDayByShop" resultType="Map">
+		select
+		b.shopName name,count(c.spending) value
+		from bi_shop b join (select
+		*
+		from
+		bi_static_cost where
+		userId=#{userId} and
+		to_days(createTime) =
+		to_days(now()) ) c on
+		b.id=c.shopId group by
+		b.shopName order by value
+		desc
+		limit 4
+	</select>
+
+	<select id="getUserCostSumLastMonth" resultType="BigDecimal">
+		select
+		sum(spending) totalSum from
+		bi_static_cost where
+		userId=#{userId} and
+		to_days(now())-to_days(createTime) between 1 and 30 group by
+		userId
+	</select>
+
+	<select id="getUserCostCountLastMonth" resultType="Integer">
+		select
+		count(spending) totalCount from
+		bi_static_cost where
+		userId=#{userId}
+		and
+		to_days(now())-to_days(createTime) between 1 and 30 group by
+		userId
+	</select>
+	<select id="getUserCostSumLastMonthByCategory" resultType="Map">
+		select
+		a.name name,sum(c.spending) value from bi_shop_category a join
+		bi_shop b join (select
+		* from
+		bi_static_cost where
+		userId=#{userId} and
+		to_days(now())-to_days(createTime) between 1 and 30) c on
+		a.id=b.categoryId and
+		b.id=c.shopId group by
+		a.name order by value desc
+		limit 4
+	</select>
+
+	<select id="getUserCostCountLastMonthByCategory" resultType="Map">
+		select
+		a.name name,count(c.spending) value from bi_shop_category a
+		join
+		bi_shop b join (select
+		* from
+		bi_static_cost where
+		userId=#{userId}
+		and
+		to_days(now())-to_days(createTime) between 1 and 30) c on
+		a.id=b.categoryId and b.id=c.shopId group by
+		a.name order by value
+		desc
+		limit 4
+	</select>
+	<select id="getUserCostSumLastMonthByShop" resultType="Map">
+		select
+		b.shopName name,sum(c.spending) value
+		from bi_shop_category a join
+		bi_shop b join (select
+		*
+		from
+		bi_static_cost where
+		userId=#{userId} and
+		to_days(now())-to_days(createTime) between 1 and
+		30 ) c on
+		a.id=b.categoryId and
+		b.id=c.shopId where a.name=#{category} group by
+		b.shopName order by value
+		desc
+	</select>
+
+	<select id="getUserCostCountLastMonthByShop" resultType="Map">
+		select
+		b.shopName name,count(c.spending) value
+		from bi_shop_category a join
+		bi_shop b join (select
+		*
+		from
+		bi_static_cost where
+		userId=#{userId} and
+		to_days(now())-to_days(createTime) between 1
+		and 30 ) c on
+		a.id=b.categoryId and
+		b.id=c.shopId where a.name=#{category} group by
+		b.shopName order by
+		value desc
+	</select>
+
+	<select id="getUserCostSumLastMonthEveryDay" resultType="Map">
+		select
+		DATE_FORMAT(createTime,'%Y-%m-%d') name,
+		sum(spending) value from
+		bi_static_cost where
+		userId=#{userId} and
+		to_days(now())-to_days(createTime) between 1 and
+		30 group by
+		DATE_FORMAT(createTime,'%Y-%m-%d')
+	</select>
+
+	<select id="getUserCostCountLastMonthEveryDay" resultType="Map">
+		select DATE_FORMAT(createTime,'%Y-%m-%d') name,
+		count(spending) value
+		from
+		bi_static_cost where
+		userId=#{userId} and
+		to_days(now())-to_days(createTime) between 1
+		and 30 group by
+		DATE_FORMAT(createTime,'%Y-%m-%d')
+	</select>
+
+
+	<select id="getUserCostSumLastYear" resultType="BigDecimal">
+		select
+		sum(spending) totalSum from
+		bi_static_cost where userId=#{userId} and
+		period_diff(date_format(now(),'%Y%m'),date_format(createTime,'%Y%m'))
+		between 1 and 12 group by userId
+	</select>
+
+	<select id="getUserCostCountLastYear" resultType="Integer">
+		select
+		count(spending) totalCount from
+		bi_static_cost where userId=#{userId}
+		and
+		period_diff(date_format(now(),'%Y%m'),date_format(createTime,'%Y%m'))
+		between 1 and 12 group by
+		userId
+	</select>
+	<select id="getUserCostSumLastYearByCategory" resultType="Map">
+		select
+		a.name name,sum(c.spending) value from bi_shop_category a join
+		bi_shop
+		b join (select
+		* from
+		bi_static_cost where userId=#{userId} and
+		period_diff(date_format(now(),'%Y%m'),date_format(createTime,'%Y%m'))
+		between 1 and 12) c on
+		a.id=b.categoryId and
+		b.id=c.shopId group by
+		a.name order by value desc limit 4
+	</select>
+
+	<select id="getUserCostCountLastYearByCategory" resultType="Map">
+		select
+		a.name name,count(c.spending) value from bi_shop_category a
+		join
+		bi_shop b join (select
+		* from
+		bi_static_cost where userId=#{userId}
+		and
+		period_diff(date_format(now(),'%Y%m'),date_format(createTime,'%Y%m'))
+		between 1 and 12) c on
+		a.id=b.categoryId and b.id=c.shopId group by
+		a.name order by value desc limit 4
+	</select>
+	<select id="getUserCostSumLastYearByShop" resultType="Map">
+		select
+		b.shopName name,sum(c.spending) value
+		from bi_shop_category a
+		join
+		bi_shop b join (select
+		*
+		from
+		bi_static_cost where userId=#{userId} and
+		period_diff(date_format(now(),'%Y%m'),date_format(createTime,'%Y%m'))
+		between 1 and 12) c on a.id=b.categoryId and
+		b.id=c.shopId where
+		a.name=#{category} group by
+		b.shopName order by value
+		desc
+
+	</select>
+
+	<select id="getUserCostCountLastYearByShop" resultType="Map">
+		select
+		b.shopName name,count(c.spending) value
+		from bi_shop_category a
+		join
+		bi_shop b join (select
+		*
+		from
+		bi_static_cost where userId=#{userId} and
+		period_diff(date_format(now(),'%Y%m'),date_format(createTime,'%Y%m'))
+		between 1 and 12) c on a.id=b.categoryId and
+		b.id=c.shopId where
+		a.name=#{category} group by
+		b.shopName order by
+		value desc
+	</select>
+
+	<select id="getUserCostSumLastYearEveryMonth" resultType="Map">
+		select
+		DATE_FORMAT(createTime,'%Y-%m') name,
+		sum(spending) value from
+		bi_static_cost where userId=#{userId} and
+		period_diff(date_format(now(),'%Y%m'),date_format(createTime,'%Y%m'))
+		between 1 and 12 group by
+		DATE_FORMAT(createTime,'%Y-%m')
+	</select>
+
+	<select id="getUserCostCountLastYearEveryMonth" resultType="Map">
+		select
+		DATE_FORMAT(createTime,'%Y-%m') name,
+		count(spending) value from
+		bi_static_cost where userId=#{userId} and
+		period_diff(date_format(now(),'%Y%m'),date_format(createTime,'%Y%m'))
+		between 1 and 12 group by
+		DATE_FORMAT(createTime,'%Y-%m')
+	</select>
+
+	<select id="getUserLocationCountNowDay" resultType="Integer">
+		select
+		count(userId) locationCount from ${tableName} where userId=#{userId}
+		group by userId
+
+	</select>
+
+	<select id="getUserDelayByDate" resultType="Map">
+		select
+		DATE_FORMAT(time,'%Y-%m-%d') name,sum(delaytime) value from
+		${tableName} where userId=#{userId} and type=0 group by
+		DATE_FORMAT(time,'%Y-%m-%d')
+
+	</select>
+
+	<select id="getUserDelayByYear" resultType="Map">
+		select
+		sum(delaytime)
+		timeDelay,count(delaytime) countDelay from ${tableName} where
+		userId=#{userId} and type=0
+		group by userId
+
+	</select>
+
+	<select id="getUserYearDelayByCategory" resultType="Map">
+		select
+		a.name
+		name,sum(c.delaytime)
+		timeDelay,count(c.delaytime) countDelay from
+		bi_shop_category a
+		join
+		bi_shop b join ${tableName} c on
+		a.id=b.categoryId and b.id=c.shopId where
+		c.userId=#{userId} and
+		c.type=0
+		group by a.name
+
+	</select>
+
+	<select id="getUserStaySumLastYearByShop" resultType="Map">
+		select
+		b.shopName name,sum(c.delaytime) timeDelay from bi_shop_category a
+		join
+		bi_shop b join ${tableName} c on
+		a.id=b.categoryId and
+		b.id=c.shopId where c.userId=#{userId} and c.type=0 and
+		a.name=#{category} group by
+		b.shopName
+	</select>
+	<select id="getUserStayCountLastYearByShop" resultType="Map">
+		select
+		b.shopName name,count(c.delaytime) countDelay from bi_shop_category a
+		join
+		bi_shop b join ${tableName} c on
+		a.id=b.categoryId and
+		b.id=c.shopId where c.userId=#{userId} and c.type=0 and
+		a.name=#{category} group by
+		b.shopName
+	</select>
+
+	<select id="getUserMonthDelayByCategory" resultType="Map">
+		select
+		a.name
+		name,sum(c.delaytime)
+		timeDelay,count(c.delaytime) countDelay
+		from
+		bi_shop_category a
+		join
+		bi_shop b join ${tableName} c on
+		a.id=b.categoryId and b.id=c.shopId where
+		c.userId=#{userId} and
+		c.type=0 and
+		to_days(now())-to_days(c.time) between 1 and
+		30
+		group by
+		a.name
+
+	</select>
+
+	<select id="getUserStaySumLastMonthByShop" resultType="Map">
+		select
+		b.shopName name,sum(c.delaytime) timeDelay from bi_shop_category a
+		join
+		bi_shop b join ${tableName} c on
+		a.id=b.categoryId and
+		b.id=c.shopId where c.userId=#{userId} and c.type=0 and
+		a.name=#{category} and
+		to_days(now())-to_days(c.time) between 1 and
+		30
+		group by
+		b.shopName
+	</select>
+	<select id="getUserStayCountLastMonthByShop" resultType="Map">
+		select
+		b.shopName name,count(c.delaytime) countDelay from bi_shop_category a
+		join
+		bi_shop b join ${tableName} c on
+		a.id=b.categoryId and
+		b.id=c.shopId where c.userId=#{userId} and c.type=0 and
+		a.name=#{category} and
+		to_days(now())-to_days(c.time) between 1 and
+		30
+		group by
+		b.shopName
+	</select>
+</mapper>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Tables</title>
+    <!-- Mobile specific metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Force IE9 to render in normal mode -->
+    <!--[if IE]><meta http-equiv="x-ua-compatible" content="IE=9" /><![endif]-->
+    <meta name="author" content="SuggeElson" />
+    <meta name="description" content=""
+    />
+    <meta name="keywords" content=""
+    />
+    <meta name="application-name" content="sprFlat admin template" />
+    <!-- Import google fonts - Heading first/ text second -->
+    <link rel='stylesheet' type='text/css' />
+    <!--[if lt IE 9]>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:700" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Droid+Sans:400" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Droid+Sans:700" rel="stylesheet" type="text/css" />
+    <![endif]-->
+    <!-- Css files -->
+    <!-- Icons -->
+    <link href="../css/icons.css" rel="stylesheet" />
+    <!-- jQueryUI -->
+    <link href="../css/sprflat-theme/jquery.ui.all.css" rel="stylesheet" />
+    <!-- Bootstrap stylesheets (included template modifications) -->
+    <link href="../css/bootstrap.css" rel="stylesheet" />
+    <!-- Plugins stylesheets (all plugin custom css) -->
+    <link href="../css/plugins.css" rel="stylesheet" />
+    <!-- Main stylesheets (template main css file) -->
+    <link href="../css/main.css" rel="stylesheet" />
+    <!-- Custom stylesheets ( Put your own changes here ) -->
+    <link href="../css/custom.css" rel="stylesheet" />
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../img/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../img/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../img/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../img/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="icon" href="../img/ico/favicon.ico" type="image/png">
+    <!-- Windows8 touch icon ( http://www.buildmypinnedsite.com/ )-->
+    <meta name="msapplication-TileColor" content="#3399cc" />
+</head>
+    <body>
+        <!-- Start #header -->
+        <div id="header">
+            <div class="container-fluid">
+                <div class="navbar">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="index.html">
+                            <img src="../../../images/svalogo.png" style="margin:-7px 5px 0 20%;height:35px;"></img><span class="text-logo">SVA</span><span class="text-slogan"></span>
+                        </a>
+                    </div>
+                    <nav class="top-nav" role="navigation">
+                        <ul class="nav navbar-nav pull-left">
+                            <li id="toggle-sidebar-li">
+                                <a href="#" id="toggle-sidebar"><i class="en-arrow-left2"></i>
+                        </a>
+                            </li>
+                            <li>
+                                <a href="#" class="full-screen"><i class="fa-fullscreen"></i></a>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav pull-right">
+                            <li class="dropdown">
+                                <a href="#" data-toggle="dropdown">
+                                    <img class="user-avatar" src="../img/avatars/48.jpg" alt="SuggeElson">SuggeElson</a>
+                                <ul class="dropdown-menu right" role="menu">
+                                    <li><a href="profile.html"><i class="st-user"></i> Profile</a>
+                                    </li>
+                                    <li><a href="file.html"><i class="st-cloud"></i> Files</a>
+                                    </li>
+                                    <li><a href="#"><i class="st-settings"></i> Settings</a>
+                                    </li>
+                                    <li><a href="login.html"><i class="im-exit"></i> Logout</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- Start .header-inner -->
+        </div>
+        <!-- End #header -->
+        <!-- Start #sidebar -->
+        <div id="sidebar">
+            <!-- Start .sidebar-inner -->
+            <div class="sidebar-inner">
+                <!-- Start #sideNav -->
+                <ul id="sideNav" class="nav nav-pills nav-stacked">
+                    <li><a href="../../../market/getMarketInfo">Mall<i class="st-chart"></i></a>
+                    </li>
+                    <li><a href="../../../home/shop"><i class="im-images"></i>Shop</a>
+                    </li>
+                    <li><a href="../../../home/user">User<i class="im-screen"></i></a>
+                    </li>
+                    <li>
+                        <a href="#">Configuration<i class="im-paragraph-justify"></i></a>
+                        <ul class="nav sub">
+                            <li><a href="storeConfig.html"><i class="ec-pencil2"></i>Store Config</a>
+                            </li>
+                            <li><a href="mapConfig.html"><i class="im-checkbox-checked"></i>Map Config</a>
+                            </li>
+                            <li><a href="categoryConfig.html"><i class="im-wand"></i>Category Config</a>
+                            </li>
+                            <li><a href="shopConfig.html"><i class="fa-pencil"></i>Shop Config</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- End #sideNav -->
+                <!-- Start .sidebar-panel -->
+                <div class="sidebar-panel">
+                    <h4 class="sidebar-panel-title"><i class="im-fire"></i> Server usage</h4>
+                    <div class="sidebar-panel-content">
+                        <ul class="server-stats">
+                            <li>
+                                <span class="txt">Disk space</span>
+                                <span class="percent">78</span>
+                                <div id="usage-sparkline" class="sparkline">Loading...</div>
+                                <div class="pie-chart" data-percent="78"></div>
+                            </li>
+                        </ul>
+                        <ul class="server-stats">
+                            <li>
+                                <span class="txt">CPU</span>
+                                <span class="percent">56</span>
+                                <div id="cpu-sparkline" class="sparkline">Loading...</div>
+                                <div class="pie-chart" data-percent="56"></div>
+                            </li>
+                        </ul>
+                        <ul class="server-stats">
+                            <li>
+                                <span class="txt">Memory</span>
+                                <span class="percent">14</span>
+                                <div id="ram-sparkline" class="sparkline">Loading...</div>
+                                <div class="pie-chart" data-percent="14"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- End .sidebar-panel -->
+            </div>
+            <!-- End .sidebar-inner -->
+        </div>
+        <!-- End #sidebar -->
+        <!-- Start #content -->
+        <div id="content">
+            <!-- Start .content-wrapper -->
+            <div class="content-wrapper">
+                <div class="row">
+                    <!-- Start .row -->
+                    <!-- Start .page-header -->
+                    <div class="col-lg-12 heading">
+                        <h1 class="page-header"><i class="im-table2"></i>Map Config</h1>
+                        <!-- Start .bredcrumb -->
+                        <ul id="crumb" class="breadcrumb">
+                        </ul>
+                        <!-- End .breadcrumb -->
+                    </div>
+                    <!-- End .page-header -->
+                </div>
+                <!-- End .row -->
+                <div class="outlet">
+                    <!-- Start .outlet -->
+                    <!-- Page start here ( usual with .row ) -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- col-lg-12 start here -->
+                            <div class="panel panel-default plain toggle panelClose panelRefresh">
+                                <!-- Start .panel -->
+                                <div class="panel-heading white-bg">
+                                    <h4 class="panel-title">Map Config</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row operationBtn">
+                                        <button class="btn btn-success">add</button>
+                                        <button class="btn btn-danger">delete</button>
+                                        <button class="btn btn-warning">edit</button>
+                                    </div>
+                                    <table class="table display" id="datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>Store name</th>
+                                                <th>Floor name</th>
+                                                <th>Map ID</th>
+                                                <th>X-coordinate origin(m)</th>
+                                                <th>Y-coordinate origin(m)</th>
+                                                <th>Scale</th>
+                                                <th>Origin position</th>
+                                                <th>Angle</th>
+                                                <th>Map info</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="odd">
+                                                <td>Test Store1.1</td>
+                                                <td>3F</td>
+                                                <td>170001</td>
+                                                <td>0</td>
+                                                <td>0</td>
+                                                <td>20.01</td>
+                                                <td>Lower left</td>
+                                                <td>0</td>
+                                                <td>170001...</td>
+                                            </tr>
+                                            <tr class="even">
+                                                <td>Test Store1.2</td>
+                                                <td>3F</td>
+                                                <td>170001</td>
+                                                <td>0</td>
+                                                <td>0</td>
+                                                <td>20.01</td>
+                                                <td>Lower left</td>
+                                                <td>0</td>
+                                                <td>170001...</td>
+                                            </tr>
+                                            <tr class="odd">
+                                                <td>Test Store1.3</td>
+                                                <td>3F</td>
+                                                <td>170001</td>
+                                                <td>0</td>
+                                                <td>0</td>
+                                                <td>20.01</td>
+                                                <td>Lower left</td>
+                                                <td>0</td>
+                                                <td>170001...</td>
+                                            </tr>
+                                            <tr class="even">
+                                                <td>Test Store1.4</td>
+                                                <td>3F</td>
+                                                <td>170001</td>
+                                                <td>0</td>
+                                                <td>0</td>
+                                                <td>20.01</td>
+                                                <td>Lower left</td>
+                                                <td>0</td>
+                                                <td>170001...</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Store name</th>
+                                                <th>Floor name</th>
+                                                <th>Map ID</th>
+                                                <th>X-coordinate origin(m)</th>
+                                                <th>Y-coordinate origin(m)</th>
+                                                <th>Scale</th>
+                                                <th>Origin position</th>
+                                                <th>Angle</th>
+                                                <th>Map info</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- End .panel -->
+                        </div>
+                        <!-- col-lg-12 end here -->
+                    </div>
+                    <!-- Page End here -->
+                </div>
+                <!-- End .outlet -->
+            </div>
+            <!-- End .content-wrapper -->
+            <div class="clearfix"></div>
+        </div>
+        <!-- End #content -->
+        <!-- Javascripts -->
+        <!-- Load pace first -->
+        <script src="../plugins/core/pace/pace.min.js"></script>
+        <!-- Important javascript libs(put in all pages) -->
+        <script src="../js/jquery-1.8.3.min.js"></script>
+        <script>
+        window.jQuery || document.write('<script src="../js/libs/jquery-2.1.1.min.js">\x3C/script>')
+        </script>
+        <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <script>
+        window.jQuery || document.write('<script src="../js/libs/jquery-ui-1.10.4.min.js">\x3C/script>')
+        </script>
+        <!--[if lt IE 9]>
+          <script type="text/javascript" src="../js/libs/excanvas.min.js"></script>
+          <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+          <script type="text/javascript" src="../js/libs/respond.min.js"></script>
+        <![endif]-->
+        <!-- Bootstrap plugins -->
+        <script src="../js/bootstrap/bootstrap.js"></script>
+        <!-- Core plugins ( not remove ever) -->
+        <!-- Handle responsive view functions -->
+        <script src="../js/jRespond.min.js"></script>
+        <!-- Custom scroll for sidebars,tables and etc. -->
+        <script src="../plugins/core/slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="../plugins/core/slimscroll/jquery.slimscroll.horizontal.min.js"></script>
+        <!-- Resize text area in most pages -->
+        <script src="../plugins/forms/autosize/jquery.autosize.js"></script>
+        <!-- Proivde quick search for many widgets -->
+        <script src="../plugins/core/quicksearch/jquery.quicksearch.js"></script>
+        <!-- Bootbox confirm dialog for reset postion on panels -->
+        <script src="../plugins/ui/bootbox/bootbox.js"></script>
+        <!-- Other plugins ( load only nessesary plugins for every page) -->
+        <script src="../plugins/core/moment/moment.min.js"></script>
+        <script src="../plugins/charts/sparklines/jquery.sparkline.js"></script>
+        <script src="../plugins/charts/pie-chart/jquery.easy-pie-chart.js"></script>
+        <script src="../plugins/forms/icheck/jquery.icheck.js"></script>
+        <script src="../plugins/forms/tags/jquery.tagsinput.min.js"></script>
+        <script src="../plugins/forms/tinymce/tinymce.min.js"></script>
+        <script src="../plugins/tables/datatables/jquery.dataTables.min.js"></script>
+        <script src="../plugins/tables/datatables/jquery.dataTablesBS3.js"></script>
+        <script src="../plugins/tables/datatables/tabletools/ZeroClipboard.js"></script>
+        <script src="../plugins/tables/datatables/tabletools/TableTools.js"></script>
+        <script src="../plugins/misc/highlight/highlight.pack.js"></script>
+        <script src="../plugins/misc/countTo/jquery.countTo.js"></script>
+        <script src="../js/jquery.sprFlat.js"></script>
+        <script src="../js/app.js"></script>
+        <script src="../js/pages/data-tables.js"></script>
+    </body>
+</html>

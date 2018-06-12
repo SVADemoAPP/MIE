@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.RateDao">
+	<select id="selectCountByShop"  resultType="double">
+		SELECT COUNT(DISTINCT userId) 
+		FROM ${tableName}
+		WHERE x/10 &gt;=
+		(
+			SELECT xSpot FROM bi_shop WHERE id=#{id} 
+		) 
+		AND x/10 &lt;=
+		(
+			SELECT x1Spot FROM bi_shop WHERE id=#{id}
+		) AND y/10 &gt;=
+		(
+			SELECT ySpot FROM bi_shop WHERE id=#{id}
+		) AND y/10 &lt;=
+		(
+			SELECT y1Spot FROM bi_shop WHERE id=#{id}
+		) AND ${tableName}.mapId in 
+		(
+			SELECT mapId FROM bi_shop WHERE id =#{id}
+		)
+	</select>
+	
+    <select id="getShopInfoByMapId" resultType="ShopModel">	
+        select a.*,b.x,b.y from bi_shop a join bi_shop_category b on a.categoryId = b.id join bi_maps c on c.mapId = a.mapId and a.mapId = #{mapId}
+    </select> 
+    
+    <select id="getShopInfoByStore" resultType="ShopModel"> 
+        select a.*,b.x,b.y from bi_shop a join bi_shop_category b on a.categoryId = b.id join bi_maps c on c.mapId = a.mapId and c.storeId = #{storeId}
+    </select>      	
+	
+    <select id="getShopCountByShopId" resultType="int"> 
+        select count(distinct userId) from ${tableName} where mapId = #{shop.mapId} and  x &gt;= (10 * #{shop.xSpot}) and x &lt;= (10 * #{shop.x1Spot}) and y &gt;= (10 * #{shop.ySpot}) and y &lt;= (10 * #{shop.y1Spot}) 
+    </select>   
+	
+	<select id="selectXByCategoryId" resultType="Integer">
+		SELECT x FROM bi_shop_category WHERE id =
+		(
+			SELECT categoryId FROM bi_shop WHERE id = #{id}
+		)	
+	</select>
+	
+	<select id="selectYByCategoryId" resultType="Integer">
+		SELECT y FROM bi_shop_category WHERE id =
+		(
+			SELECT categoryId FROM bi_shop WHERE id = #{id}
+		)	
+	</select>
+	
+	<select id="selectAllCountByShop" resultType="double">
+		SELECT COUNT(DISTINCT userId) 
+		FROM ${tableName}
+		WHERE x/10 &gt;=
+		(
+			(SELECT xSpot FROM bi_shop WHERE id=#{id}) - (#{x}/2)
+		) 
+		AND x/10 &lt;=
+		(
+			(SELECT x1Spot FROM bi_shop WHERE id=#{id}) + (#{x}/2)
+		) 
+		AND y/10 &gt;=
+		(
+			(SELECT ySpot FROM bi_shop WHERE id=#{id}) - (#{y}/2) 
+		) 
+		AND y/10 &lt;=
+		(
+			(SELECT y1Spot FROM bi_shop WHERE id=#{id}) + (#{y}/2)
+		) 
+		AND ${tableName}.mapId in 
+		(
+			SELECT mapId FROM bi_shop WHERE id =#{id}
+		)
+	
+	</select>
+	
+	<select id="selectAllCount" resultType="int">
+		SELECT COUNT(*) FROM bi_shop
+	</select>
+	
+	<select id="selectAllShopId" resultType="Integer">
+		SELECT id FROM bi_shop
+	</select>
+	
+    <select id="selectShopIdByStoreId" resultType="Integer">
+      SELECT a.id FROM bi_shop a join bi_maps b on a.mapId = b.mapId join bi_store c on c.id = b.storeId and b.storeId = #{storeId}
+    </select>	
+	
+	<select id="selectShopIdByMapId" resultType="Integer">
+		SELECT id FROM bi_shop where mapId = #{mapId}
+	</select>
+		
+	<select id="selectVisitorById" resultType="double">
+		SELECT visitorNumber FROM bi_shop_category WHERE id = 
+		(
+			SELECT categoryId FROM bi_shop WHERE id = #{id}
+		)
+	</select>
+	
+	<select id="selectShopNameById" resultType="String">
+		SELECT shopName FROM bi_shop WHERE id = #{id}
+	</select>
+	
+	<select id="selectCountDelayTime" resultType="double">
+		SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{id} AND time = #{nowDay} AND delaytime &gt;=
+		(
+			SELECT deepTime FROM bi_shop_category WHERE id =
+			(
+				SELECT categoryId FROM bi_shop WHERE id = #{id}
+			)
+		)
+	</select>
+	
+    <select id="selectCountDelayTime1" resultType="double">
+        SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{id} AND time = #{nowDay} AND delaytime &lt;=
+        (
+            SELECT visitorNumber FROM bi_shop_category WHERE id =
+            (
+                SELECT categoryId FROM bi_shop WHERE id = #{id}
+            )
+        )
+    </select>	
+	
+	<select id="selectCount" resultType="double">
+		SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{id} AND time = #{nowDay}
+	</select>
+</mapper>

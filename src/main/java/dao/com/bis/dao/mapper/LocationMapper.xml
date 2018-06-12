@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.LocationDao">
+
+	<select id="queryAllUserId" resultType="String">
+		SELECT distinct(userID)
+		FROM ${tableName}
+	</select>
+
+	<select id="queryByUserId" resultType="LocationModel">
+		SELECT
+		TRUNCATE(timestamp/10000,0)*10000 timestamp,x,y,mapId,userID
+		FROM
+		${tableName}
+		WHERE userID = #{userId}
+		GROUP BY
+		TRUNCATE(timestamp/10000,0)
+		ORDER BY timestamp
+	</select>
+
+	<select id="doquery1" resultMap="locationResult">
+		SELECT a.*
+		FROM locationphone a
+		WHERE a.userID = #{userId} and a.z = #{floorNo}
+	</select>
+
+	<resultMap id="locationResult" type="LocationModel">
+		<result property="timestamp" column="timestamp" />
+		<result property="dataType" column="dataType" />
+		<result property="x" column="x" />
+		<result property="y" column="y" />
+		<result property="z" column="z" />
+		<result property="userID" column="userID" />
+		<result property="mapId" column="mapId" />
+	</resultMap>
+
+	<select id="queryHeatmap" resultType="LocationModel">
+		SELECT
+		f.userID,
+		max(f.timestamp) timestamp,
+		max(f.mapId) mapId,
+		max(f.dataType)
+		dataType,
+		max(f.idType) idType,
+		max(f.x) x,
+		max(f.y) y
+		FROM (
+		SELECT la.*
+		FROM
+		${tableName} la join (
+		SELECT a.userID, max(a.timestamp) timestamp,
+		max(a.mapId) mapId
+		FROM (
+		SELECT lb.*
+		FROM ${tableName} lb join (
+		SELECT
+		distinct(timestamp)
+		FROM ${tableName}
+		WHERE mapId = #{mapId} and
+		timestamp >#{time}
+		ORDER BY timestamp desc
+		LIMIT 4
+		) t on lb.timestamp =
+		t.timestamp
+		WHERE mapId = #{mapId}
+		) a
+		GROUP BY a.userID
+		) b
+		WHERE
+		la.timestamp= b.timestamp and la.userID = b.userID and la.mapId =
+		b.mapId
+		) f
+		GROUP BY f.userID
+	</select>
+
+	<select id="queryHeatmap5" resultType="LocationModel">
+		SELECT *
+		FROM (
+		SELECT *
+		FROM ${tableName}
+		WHERE z = #{floorNo}
+		and timestamp &gt; #{time}
+		ORDER
+		BY timestamp desc
+		) a
+		GROUP BY a.userID
+	</select>
+
+	<select id="queryHeatmap6" resultType="LocationModel">
+		SELECT *
+		FROM (
+		SELECT *
+		FROM ${tableName}
+		WHERE z = #{floorNo}
+		) a
+		GROUP BY a.userID
+	</select>
+
+	<select id="queryLocationByUseId" resultType="LocationModel">
+		SELECT
+		bi_locationphone.*
+		FROM bi_locationphone
+		WHERE userID = #{value}
+		and
+		timestamp = (
+		SELECT max(timestamp)
+		FROM bi_locationphone
+		WHERE userID =
+		#{userId}
+		)
+	</select>
+
+	<select id="getUserId" resultType="LocationModel">
+		SELECT distinct(userID)
+		FROM
+		${tableName}
+		WHERE z = #{floorNo}
+		and timestamp &gt; #{time}
+	</select>
+
+	<select id="getMark" resultType="LocationModel">
+		SELECT *
+		FROM ${tableName}
+		WHERE
+		userID = #{userId} and timestamp &gt; #{time}
+		ORDER BY timestamp
+	</select>
+
+	<select id="queryOverData" resultType="LocationModel">
+		SELECT
+		f.userID,
+		max(f.timestamp) timestamp,
+		max(f.z) z,
+		max(f.dataType) dataType,
+		max(f.idType) idType,
+		max(f.x) x,
+		max(f.y) y
+		FROM
+		(
+		SELECT la.*
+		FROM
+		${tableName} la
+		join (
+		SELECT a.userID, max(a.timestamp) timestamp,
+		max(a.z) z
+		FROM (
+		SELECT lb.* FROM ${tableName} lb join (
+		SELECT
+		distinct(timestamp)
+		FROM ${tableName}
+		WHERE z = #{floorNo} and timestamp
+		&gt; #{time}
+		ORDER BY timestamp desc limit 4
+		) t on lb.timestamp =
+		t.timestamp
+		WHERE z = #{floorNo}
+		) a
+		GROUP BY a.userID
+		) b
+		WHERE
+		la.timestamp= b.timestamp and la.userID = b.userID and la.z = b.z
+		) f
+		GROUP BY f.userID
+	</select>
+
+	<select id="queryLocationForPosition" resultType="Map">
+		<foreach item="time" index="index" collection="timeList"
+			separator=" union ">
+			SELECT userID
+			FROM location${time}
+			WHERE z = #{floorNo} and
+			idType = 'MSISDN'
+		</foreach>
+	</select>
+
+	<select id="queryScatterMapData" resultType="Map">
+		SELECT
+		a.*,r.role,r.userName,r.phoneNumber
+		FROM (
+		SELECT * FROM (
+		SELECT * FROM
+		${tableName}
+		WHERE z = #{floorNo} and timestamp &gt; #{time}
+		ORDER BY
+		timestamp desc
+		) a
+		GROUP BY a.userID
+		) a left join register r on a.userID
+		= r.userId
+	</select>
+
+	<select id="getNumberByMinute" resultType="int">
+		SELECT count(distinct
+		a.userID) number
+		FROM ${tableName} a join maps b on a.z = b.floorNo
+		WHERE b.placeId = #{placeId}
+	</select>
+
+	<select id="getYesterdayNumber" resultType="int">
+		SELECT count(distinct
+		a.userID) number
+		FROM ${tableName} a join maps b on a.z = b.floorNo
+		WHERE b.placeId = #{placeId} and a.timestamp &lt; #{time}
+	</select>
+
+	<select id="getNowPeople" resultType="int">
+		SELECT count(distinct
+		a.userID) number
+		FROM ${tableName} a join maps b on a.z = b.floorNo
+		WHERE b.placeId = #{placeId} and a.timestamp &gt; #{time}
+	</select>
+
+	<select id="getOneHourData" resultType="int">
+		SELECT count(distinct
+		a.userID) number
+		FROM ${tableName} a join bi_maps b on a.mapId =
+		b.mapId
+		WHERE a.mapId = #{mapId} and a.timestamp &gt; #{time}
+	</select>
+
+	<select id="getOneDayData" resultType="int">
+		SELECT count(distinct
+		a.userID) number
+		FROM ${tableName} a join bi_maps b on a.mapId =
+		b.mapId
+		WHERE a.mapId = #{mapId}
+	</select>
+	<select id="getAllCount" resultType="int">
+		SELECT count(userId) number
+		FROM ${tableName} a join bi_maps b on a.mapId = b.mapId
+		WHERE a.mapId =
+		#{mapId}
+	</select>
+
+	<select id="getNowCount" resultType="int">
+		select count(distinct
+		userId)
+		from ${tableName}
+		where mapId = #{shopData.mapId}
+		and timestamp
+		>#{times}
+		and x &gt; (#{shopData.xSpot}) *10
+		and x &lt;
+		(#{shopData.x1Spot})*10
+		and y &gt; (#{shopData.ySpot}) *10
+		and y &lt;
+		(#{shopData.y1Spot})*10
+	</select>
+
+	<select id="getNowCounts" resultType="int">
+		select count(distinct
+		userId)
+		from ${tableName}
+		where mapId = #{shopData.mapId}
+		and timestamp
+		&gt; #{times}
+		and x &gt;
+		(#{shopData.xSpot}) *10
+		and x &lt;
+		(#{shopData.x1Spot})*10
+		and y &gt;
+		(#{shopData.ySpot}) *10
+		and y &lt;
+		(#{shopData.y1Spot})*10
+		<!-- and timestamp &lt;= #{endTime} -->
+	</select>
+
+	<select id="getShopHeatMapByShopId" resultType="LocationModel">
+		select
+		x,y,mapId,userId
+		from ${tableName}
+		where mapId = #{shopData.mapId}
+		and
+		timestamp >#{times}
+		and x &gt; (#{shopData.xSpot}) *10
+		and x &lt;
+		(#{shopData.x1Spot})*10
+		and y &gt; (#{shopData.ySpot}) *10
+		and y &lt;
+		(#{shopData.y1Spot})*10
+		group by userId
+	</select>
+
+
+	<select id="getMapHeatMapByIds" resultType="LocationModel">
+	   select a.x,a.y,a.mapId,a.userId from(select
+        x,y,mapId,userId
+        from ${tableName}
+        where mapId =  #{mapId} order by timestamp desc) a 
+        group by a.userId;
+	</select>
+	
+	<select id="getMapHeatMapById" resultType="LocationModel">
+		select
+		x,y,mapId,userId
+		from ${tableName}
+		where mapId = #{mapId}
+		and timestamp
+		&gt; #{times}
+		group by userId
+	</select>
+
+
+	<select id="getPeriodMapHeatMap" resultType="LocationModel">
+		select
+		x,y,mapId,userId
+		from ${tableName}
+		where mapId = #{mapId}
+		and timestamp
+		&gt; #{startTime}
+		and timestamp &lt; #{endTime}
+		group by userId
+	</select>
+
+	<select id="getMapPeriodHeatMapById" resultType="LocationModel">
+		select
+		x,y,mapId,userId
+		from ${tableName}
+		where mapId = #{shopData.mapId}
+		and
+		timestamp &gt; #{beginTimes}
+		and x &gt;
+		(#{shopData.xSpot}) *10
+		and x &lt; (#{shopData.x1Spot})*10
+		and y &gt;
+		(#{shopData.ySpot}) *10
+		and y &lt; (#{shopData.y1Spot})*10
+		group by
+		userId
+		<!--      and timestamp &lt; #{times} -->
+	</select>
+
+	<select id="getYesCount" resultType="int">
+		select count(distinct
+		userId)
+		from ${tableName}
+		where mapId = #{shopData.mapId}
+		and timestamp
+		&gt; #{beginTimes}
+		and timestamp &lt; #{times}
+		and x &gt;
+		(#{shopData.xSpot}) *10
+		and x &lt; (#{shopData.x1Spot})*10
+		and y &gt;
+		(#{shopData.ySpot}) *10
+		and y &lt; (#{shopData.y1Spot})*10
+	</select>
+
+	<select id="getTenminitShopData" resultType="LocationModel">
+		select
+		timestamp,userId
+		from ${tableName}
+		where mapId = #{shopData.mapId}
+		and
+		timestamp &gt; #{times}
+		and timestamp &lt;= #{endTime}
+		and x &gt;
+		(#{shopData.xSpot}) *10
+		and x &lt;
+		(#{shopData.x1Spot})*10
+		and y &gt;
+		(#{shopData.ySpot}) *10
+		and y &lt;
+		(#{shopData.y1Spot})*10
+		order by
+		timestamp
+	</select>
+
+
+	<select id="getTenminitMallData" resultType="LocationModel">
+		select
+		a.timestamp,a.userId
+		from ${tableName} a join bi_maps b on
+		a.mapId=b.mapId
+		where b.storeId = #{storeId}
+		and a.timestamp &gt;
+		#{startTime} and
+		a.timestamp &lt; #{endTime}
+		order by a.timestamp
+	</select>
+
+	<select id="getTenminitFloorData" resultType="LocationModel">
+		select
+		a.timestamp,a.userId
+		from ${tableName} a join bi_maps b on
+		a.mapId=b.mapId
+		where b.mapId = #{mapId}
+		and a.timestamp &gt;
+		#{startTime} and
+		a.timestamp &lt; #{endTime}
+		order by a.timestamp
+	</select>
+
+	<select id="getNowAllCount" resultType="String">
+		select distinct userId
+		from ${tableName}
+		where mapId = #{shopData.mapId}
+		and x &gt;
+		(#{shopData.xSpot}) *10
+		and x &lt; (#{shopData.x1Spot})*10
+		and y &gt;
+		(#{shopData.ySpot}) *10
+		and y &lt; (#{shopData.y1Spot})*10
+	</select>
+
+	<select id="getYesNowCount" resultType="String">
+		select distinct userId
+		from ${tableName}
+		where mapId = #{shopData.mapId}
+		and timestamp &lt;
+		#{times}
+		and x &gt; (#{shopData.xSpot}) *10
+		and x &lt;
+		(#{shopData.x1Spot})*10
+		and y &gt; (#{shopData.ySpot}) *10
+		and y &lt;
+		(#{shopData.y1Spot})*10
+	</select>
+
+	<select id="getAllTiaoshu" resultType="int">
+		select count(userId)
+		from
+		${tableName}
+		where mapId = #{shopData.mapId}
+		and x &gt;
+		(#{shopData.xSpot}) *10
+		and x &lt; (#{shopData.x1Spot})*10
+		and y &gt;
+		(#{shopData.ySpot}) *10
+		and y &lt; (#{shopData.y1Spot})*10
+	</select>
+
+	<select id="getYesAllTiaoshu" resultType="int">
+		select count(userId)
+		from ${tableName}
+		where mapId = #{shopData.mapId}
+		and timestamp &lt;
+		#{times}
+		and x &gt; (#{shopData.xSpot}) *10
+		and x &lt;
+		(#{shopData.x1Spot})*10
+		and y &gt; (#{shopData.ySpot}) *10
+		and y &lt;
+		(#{shopData.y1Spot})*10
+	</select>
+
+
+	<select id="getMomentTotal" resultType="int">
+		select count(distinct
+		userId)
+		from ${tableName} a join bi_maps b
+		on a.mapId=b.mapId
+		where
+		b.mapId = #{mapId}
+		and a.timestamp &gt; #{beginTimes}
+		and
+		a.timestamp &lt; #{times}
+	</select>
+	
+	<select id="getMallTotal" resultType="int">
+		select count(distinct
+		userId)
+		from ${tableName} a join bi_maps b
+		on a.mapId=b.mapId
+		where
+		b.storeId = #{storeId}
+		and a.timestamp &gt; #{beginTimes}
+		and
+		a.timestamp &lt; #{times}
+	</select>
+	
+	<select id="getMallTotal1" resultType="int">
+		select count(distinct
+		userId)
+		from ${tableName} a join bi_maps b
+		on a.mapId=b.mapId
+		where
+		b.storeId = #{storeId}
+		and a.timestamp &gt; #{beginTimes}
+	</select>		
+
+
+	<select id="getTodayUserIdList" resultType="String">
+		select distinct
+		userId
+		from ${tableName} a join bi_maps b
+		on a.mapId=b.mapId
+		where
+		b.storeId = #{storeId}
+	</select>
+	
+	<select id="getTodayUserIdListByMapId" resultType="String">
+		select distinct
+		userId
+		from ${tableName} a join bi_maps b
+		on a.mapId=b.mapId
+		where
+		b.mapId = #{mapId}
+	</select>	
+
+	<select id="getTodayDelayCount" resultType="Long">
+		select count(userId)
+		from ${tableName} a join bi_maps b
+		on a.mapId=b.mapId
+		where b.storeId =
+		#{storeId}
+	</select>
+	
+	<select id="getTodayDelayCountByMapId" resultType="Long">
+		select count(userId)
+		from ${tableName} a join bi_maps b
+		on a.mapId=b.mapId
+		where b.mapId =
+		#{mapId}
+	</select>	
+
+	<select id="getStoreMomentCount" resultType="long">
+		select
+		count(distinct a.userId) from ${tableName} a join bi_maps b on
+		a.mapId=b.mapId where b.storeId =#{storeId} and a.timestamp &gt;
+		#{startTime}
+		<!-- and a.timestamp &lt; #{endTime} -->
+	</select>
+	
+	<select id="getFloorMomentCount" resultType="long">
+		select
+		count(distinct a.userId) from ${tableName} a join bi_maps b on
+		a.mapId=b.mapId where b.mapId =#{mapId} and a.timestamp &gt;
+		#{startTime} 
+		<!-- and a.timestamp &lt; #{endTime} -->
+	</select>	
+
+	<select id="queryAllUserIdByMapId" resultType="String">
+		SELECT
+		distinct(userID)FROM ${tableName} where mapId=#{mapId} order by userID
+	</select>
+
+
+	<select id="queryAllUserIdByShopId" resultType="String">
+		SELECT
+		distinct(a.userID)FROM ${tableName} a join bi_shop b on
+		a.mapId=b.mapId
+		and (a.x between least(b.xSpot*10,b.x1Spot*10) and
+		greatest(b.xSpot*10,b.x1Spot*10))
+		and (a.y between least(b.ySpot*10,b.y1Spot*10)
+		and greatest(b.ySpot*10,b.y1Spot*10))
+		where b.id=#{shopId}
+		order by
+		a.userID
+	</select>
+
+	<select id="getOtherMapIdByMaxTime" resultType="LocationModel">
+		select
+		a.timestamp,a.mapId from ${tableName} a join bi_maps b on
+		a.mapId=b.mapId
+		where b.storeId=(select storeId from bi_maps where
+		mapId=#{mapId}) and
+		a.userId=#{userId}
+		and a.mapId!=#{mapId} and
+		a.timestamp &lt; (SELECT max(timestamp) from
+		${tableName} where
+		userId=#{userId} and mapId=#{mapId}) order by
+		a.timestamp desc limit 1
+	</select>
+
+	<select id="getOtherShopIdByMaxTime" resultType="LocationModel">
+		select
+		a.timestamp,b.id from ${tableName} a join bi_shop b on
+		a.mapId=b.mapId
+		and a.userId=#{userId} and (a.x between least(b.xSpot*10,b.x1Spot*10) and
+		greatest(b.xSpot*10,b.x1Spot*10))
+		and (a.y between least(b.ySpot*10,b.y1Spot*10)
+		and greatest(b.ySpot*10,b.y1Spot*10))
+		where b.id!=#{shopId} and a.timestamp
+		&lt; (select
+		max(a.timestamp) from ${tableName} a join bi_shop b on
+		a.mapId=b.mapId
+		and (a.x between least(b.xSpot*10,b.x1Spot*10) and
+		greatest(b.xSpot*10,b.x1Spot*10)) and (a.y between least(b.ySpot*10,b.y1Spot*10)
+		and greatest(b.ySpot*10,b.y1Spot*10)) where b.id=#{shopId} and
+		a.userId=#{userId}) and ((select storeId from bi_maps where
+		mapId=b.mapId)=(select d.storeId from bi_shop c join bi_maps d on
+		c.mapId=d.mapId where c.id=#{shopId}))
+		order by a.timestamp desc limit
+		1
+	</select>
+
+	<insert id="saveTrendMapByHour">
+		INSERT INTO bi_trend_map_hour(
+		mapId,
+		fromMapId,
+		visitorCount,
+		hour,
+		time
+		)
+		VALUES (
+		#{mapId},
+		#{fromMapId},
+		#{visitorCount},
+		#{sign},
+		#{time}
+		)
+	</insert>
+
+	<insert id="saveTrendMapByDay">
+		INSERT INTO bi_trend_map_day(
+		mapId,
+		fromMapId,
+		visitorCount,
+		day,
+		time
+		)
+		VALUES (
+		#{mapId},
+		#{fromMapId},
+		#{visitorCount},
+		#{sign},
+		#{time}
+		)
+	</insert>
+
+	<insert id="saveTrendShopByHour">
+		INSERT INTO bi_trend_shop_hour(
+		shopId,
+		fromShopId,
+		visitorCount,
+		hour,
+		time
+		)
+		VALUES (
+		#{shopId},
+		#{fromShopId},
+		#{visitorCount},
+		#{sign},
+		#{time}
+		)
+	</insert>
+
+	<insert id="saveTrendShopByDay">
+		INSERT INTO bi_trend_shop_day(
+		shopId,
+		fromShopId,
+		visitorCount,
+		day,
+		time
+		)
+		VALUES (
+		#{shopId},
+		#{fromShopId},
+		#{visitorCount},
+		#{sign},
+		#{time}
+		)
+	</insert>
+	
+    <select id="getCountByTimestamp" resultType="int">
+        select count(*) from ${tableName} where timestamp >#{timestamp} 
+    </select>	
+</mapper>

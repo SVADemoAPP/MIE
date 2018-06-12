@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.MixingDao">
+    <insert id="saveData">
+        INSERT INTO bi_mixing(
+        mapId,
+        storeId,
+        creatTime,
+        storeCode,
+        floorCode,
+        codeToMapId
+        )
+        VALUES(
+        #{mapId},
+        #{storeId},
+        #{creatTime},
+        #{storeCode},
+        #{floorCode},
+        #{codeToMapId}
+        )
+    </insert>
+    <update id="updateData">
+        UPDATE bi_mixing 
+        <set>
+            mapId = #{mapId},
+            storeId = #{storeId},
+            creatTime = #{creatTime},
+            storeCode = #{storeCode},
+            floorCode = #{floorCode},
+            codeToMapId = #{codeToMapId}
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+   <select id="getData" resultType="MixingModel">
+        select a.*,b.name storeName,c.floor floorName from bi_mixing a join bi_store b on a.storeId = b.id join bi_maps c on a.mapId = c.mapId
+    </select>
+    
+    <delete id="deleteDataById">
+        DELETE FROM bi_mixing WHERE id = #{id}
+    </delete>  
+    
+</mapper>

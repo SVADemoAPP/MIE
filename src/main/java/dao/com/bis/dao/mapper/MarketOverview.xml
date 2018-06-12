@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.MarketOverviewDao">
+	<select id="doquery" resultType="MarketOverviewModel">
+		select (select count(distinct userid) from ${tableName}) as CurDailyVistorNum,(select count(userid)/30 from ${tableName}) as AverageStayMinutes,(select SUM(spending) from bi_static_cost where createTime=CURDATE()) as CurDailySales,0 as AverageSales
+	</select>
+	<select id="getShopType" resultType="ShopTypeModel">
+		select distinct name as ShopType from bi_shop_category
+	</select>
+	<select id="getMarketMonthdailyDelay" resultType="MarketMonthDataModel">
+	<![CDATA[select distinct time as date,delaytime as value from bi_static_store_delay where type=0 and time <= CURDATE() and time>= DATE_SUB(CURDATE(),INTERVAL 30 DAY)]]>
+	</select>
+	
+	<select id="getMarketMonthDailyVisitorCnt" resultType="MarketMonthDataModel">
+	<![CDATA[select distinct time as date,allcount as value from bi_static_store_delay where type=0 and time <= CURDATE() and time>= DATE_SUB(CURDATE(),INTERVAL 30 DAY)]]>
+	</select>
+	
+	<select id="getMarketSalesInfoByType" resultType="MarketShopTopModel">
+	select A.shopName as shopName,sum(B.spending) as value from bi_shop A , bi_static_cost B ,bi_shop_category C where A.id=B.shopId and A.categoryId= C.id and B.createTime &gt;= DATE_SUB(CURDATE(),INTERVAL #{timeDiffDay} DAY) and B.createTime &lt;= CURDATE() and C.name in (
+	<foreach collection ="typeSeq" item="item" index= "index" separator =",">
+                #{item}
+            </foreach >) 
+            GROUP BY shopName ORDER BY value desc
+	</select>
+	
+	<select id="getMarketVisitorCntInfoByType" resultType="MarketShopTopModel">
+	select A.shopName as shopName,sum(B.allcount) as value from bi_shop A , bi_static_store_delay B ,bi_shop_category C where A.id=B.storeId and A.categoryId= C.id and B.time &gt;= DATE_SUB(CURDATE(),INTERVAL #{timeDiffDay} DAY) and B.time &lt;= CURDATE() and B.type=0 and C.name in (
+	<foreach collection ="typeSeq" item="item" index= "index" separator =",">
+                #{item}
+            </foreach >) 
+            GROUP BY shopName ORDER BY value desc
+	</select>
+	
+	<select id="getMarketDelayInfoByType" resultType="MarketShopTopModel">
+	select A.shopName as shopName,sum(B.delaytime) as value from bi_shop A , bi_static_store_delay B ,bi_shop_category C where A.id=B.storeId and A.categoryId= C.id and B.time &gt;= DATE_SUB(CURDATE(),INTERVAL #{timeDiffDay} DAY) and B.time &lt;= CURDATE() and B.type=0 and C.name in (
+	<foreach collection ="typeSeq" item="item" index= "index" separator =",">
+                #{item}
+            </foreach >) 
+            GROUP BY shopName ORDER BY value desc
+	</select>
+	
+	
+	<select id="getMarketShopSquare" resultType="MarketShopSquareModel">
+		select xSpot as x,ySpot as y,x1Spot as x1,y1Spot as y1 from bi_shop
+	</select>
+	<select id="getMarketShopType" resultType="StringIntModel">
+		SELECT B.name as eleName ,count(B.name) as eleValue from bi_shop A , bi_shop_category B where A.categoryId=B.id GROUP BY eleName ORDER BY eleValue desc
+	</select>
+	
+	<select id="getShopUserSalesInfoByShopName" resultType="ShopSalesUserInfoModel">
+		select A.username as userName ,sum(B.spending) as salesMoney ,count(B.spending) as salesCnt from bi_user_info A ,bi_static_cost B ,bi_shop C where A.id= B.userId and B.shopId=C.id and C.shopName=#{shopName} and B.createTime &gt;= SUBDATE(CURDATE(),INTERVAL #{timeDiffDay} DAY) and B.createTime &lt;= CURDATE() group by userName ORDER BY spending desc
+	</select>
+	
+	
+</mapper>

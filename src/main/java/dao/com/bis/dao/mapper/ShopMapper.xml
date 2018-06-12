@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.ShopDao">
+	<select id="doquery" resultMap="shopResult">
+		SELECT a.*,b.name FROM
+		bi_shop a
+		left join bi_shop_category b on a.categoryId=b.id where
+		shopName=#{shopName}
+	</select>
+
+	<resultMap id="shopResult" type="ShopModel">
+		<id property="id" column="id" />
+		<result property="shopName" column="shopName" />
+		<result property="mapId" column="mapId" />
+		<result property="xSpot" column="xSpot" />
+		<result property="ySpot" column="ySpot" />
+		<result property="description" column="description" />
+		<result property="status" column="status" />
+		<result property="zoneId" column="zoneId" />
+		<result property="x1Spot" column="x1Spot" />
+		<result property="y1Spot" column="y1Spot" />
+		<result property="category" column="name" />
+		<result property="isVip" column="isVip" />
+	</resultMap>
+	<select id="likequery" resultType="String">
+		SELECT shopName FROM bi_shop
+		where shopName like CONCAT('%',#{key},'%') order by shopName limit 6
+	</select>
+
+	<select id="queryAllShop" resultType="ShopModel">
+		SELECT a.*,b.floor
+		floorName, c.id storeId, c.name storeName, d.name
+		categoryName
+		FROM
+		bi_shop a
+		left join bi_maps b on a.mapId = b.mapId
+		left join bi_store c
+		on b.storeId = c.id
+		left join bi_shop_category d on a.categoryId = d.id
+	</select>
+
+	<select id="queryShopByStore" resultType="ShopModel">
+		SELECT a.* FROM bi_shop a join bi_maps b join bi_store c on a.mapId =
+		b.mapId and b.storeId=c.id WHERE c.id
+		= #{id}
+		<if test="categoryId != null">
+			and categoryId=#{categoryId}
+		</if>
+	</select>
+
+	<select id="getAllShopId" resultType="Integer">
+		SELECT id from bi_shop
+	</select>
+
+	<select id="getAllShop" resultType="ShopModel">
+		SELECT a.*,b.floor floorName,
+		c.id storeId, c.name storeName, d.name
+		categoryName
+		FROM bi_shop a
+		join
+		bi_maps b on a.mapId = b.mapId
+		join bi_store c on b.storeId = c.id
+		join
+		bi_shop_category d on a.categoryId = d.id
+	</select>
+
+	<select id="getShopCostTp10" resultType="ShopCostModel">
+		SELECT a.*,b.userName
+		from
+		bi_static_cost a join bi_user_info b
+		on a.userId = b.id
+		where
+		a.shopId = #{shopId} order by a.spending desc limit 10
+	</select>
+	<select id="getShopVisitimeTp10" resultType="ShopCostModel">
+		SELECT delaytime
+		spending,shopId,userId userName from
+		${tableName} where shopId =
+		#{shopId} and type = 1 order by delaytime desc limit
+		10
+	</select>
+
+	<select id="getShopIdByshopName" resultType="int">
+		select id from
+		bi_shop where shopName = #{shopName}
+	</select>
+
+	<select id="getShopDataByShopId" resultType="java.util.Map">
+		select
+		sum(delaytime) alltimes,count(distinct userId) allcount,time times
+		from ${tableName} where type = 0 and shopId = #{shopId} group by time
+	</select>
+
+	<select id="getShopDataByShopId1" resultType="java.util.Map">
+		select
+		sum(delaytime) alltimes,count(distinct userId) allcount,(select
+		substring(time,1,7) from ${tableName} limit 1) times from ${tableName}
+		where type = 1 and shopId = #{shopId} group by time
+	</select>
+
+	<select id="getShopWeekData" resultType="java.util.Map">
+		select sum(delaytime)
+		alltimes,count(distinct userId) allcount,time times
+		from ${tableName}
+		where type = 0 and shopId = #{shopId} and time &gt;=
+		#{beginTime} and
+		time &lt;= #{lastTime} group by time
+	</select>
+
+
+	<select id="getShopWeekData1" resultType="java.util.Map">
+		select sum(delaytime)
+		alltimes,count(distinct userId) allcount,time times
+		from ${tableName}
+		where type = 0 and shopId = #{shopId} and time &gt;=
+		#{beginTime} group
+		by time
+	</select>
+
+	<select id="getShopWeekData2" resultType="java.util.Map">
+		select sum(delaytime)
+		alltimes,count(distinct userId) allcount,time times
+		from ${tableName}
+		where type = 0 and shopId = #{shopId} and time &lt;=
+		#{lastTime} group
+		by time
+	</select>
+
+	<select id="getGenderByShopId" resultType="java.util.Map">
+		select
+		gender,count(gender) allcount from bi_user_info where id in (select
+		userId from bi_static_cost where shopId = #{shopId}) group by gender
+	</select>
+
+	<select id="getprofessionByShopId" resultType="UserModel">
+		select
+		profession,count(profession) allcount from
+		bi_user_info where id in
+		(select userId from bi_static_cost where shopId =
+		#{shopId})
+		group by
+		profession order by allcount desc limit 7
+	</select>
+
+	<insert id="saveShopInfo">
+		INSERT INTO
+		bi_shop(
+		mapId,
+		shopName,
+		description,
+		status,
+		xSpot,
+		ySpot,
+		x1Spot,
+		y1Spot,
+		categoryId,
+		isVip,
+		updateTime,
+		createTime
+		)
+		VALUES(
+		#{mapId},
+		#{shopName},
+		#{description},
+		#{status},
+		#{xSpot},
+		#{ySpot},
+		#{x1Spot},
+		#{y1Spot},
+		#{categoryId},
+		#{isVip},
+		#{updateTime},
+		#{createTime}
+		)
+	</insert>
+
+	<delete id="deleteShopById">
+		DELETE
+		FROM bi_shop
+		WHERE
+		id = #{id}
+	</delete>
+
+	<update id="updateShopInfo">
+		UPDATE bi_shop
+		SET
+		mapId=#{mapId},
+		shopName =
+		#{shopName},
+		description = #{description},
+		status = #{status},
+		xSpot=#{xSpot},
+		ySpot=#{ySpot},
+		x1Spot=#{x1Spot},
+		y1Spot=#{y1Spot},
+		categoryId=#{categoryId},
+		isVip = #{isVip},
+		updateTime=#{updateTime}
+		WHERE id = #{id}
+	</update>
+
+	<select id="getShopInfoByMapId" resultType="ShopModel">
+		SELECT *
+		from bi_shop
+		where mapId = #{value}
+	</select>
+	<select id="getShopInfoByMapId1" resultType="ShopModel">
+		SELECT shopName,id
+		shopId,xSpot,ySpot,x1Spot,y1Spot,mapId
+		from bi_shop
+		where mapId =
+		#{value}
+	</select>
+
+	<select id="checkByName" resultType="int">
+		SELECT count(*) res
+		FROM bi_shop a join bi_maps b on a.mapId=b.mapId
+		where a.shopName = #{name} and b.storeId=#{storeId}
+		<if test="id != null">
+			and a.id != #{id}
+		</if>
+	</select>
+
+	<select id="getTicketByLocation" resultType="String">
+		SELECT id FROM
+		bi_shop
+		where
+		mapId = #{mapId}
+		and #{x} &gt; (xSpot) 
+		and #{x} &lt;
+		(x1Spot)
+		and #{y} &gt; (ySpot) 
+		and #{y} &lt; (y1Spot)
+	</select>
+
+	<select id="getShopDataById" resultType="ShopModel">
+		SELECT *
+		from bi_shop
+		where id = #{shopId}
+	</select>
+
+	<select id="getAllShopData" resultType="ShopModel">
+		SELECT *
+		from bi_shop
+	</select>
+
+
+	<select id="getAllNewDataByShopId" resultType="NewUserModel">
+		select * from
+		bi_newuser
+		where shopId = #{shopId} and time &gt;= #{startTime}
+		and time
+		&lt;= #{endTime}
+	</select>
+
+
+	<select id="getShopTrendByHour" resultType="Map">
+		select distinct
+		b.shopName
+		name,a.visitorCount value from
+		bi_trend_shop_hour a join
+		bi_shop b on
+		a.fromShopId=b.id where
+		a.shopId=#{shopId} and
+		a.hour=#{sign} and
+		a.time=#{time} order by value desc
+	</select>
+	<select id="getShopTrendByDay" resultType="Map">
+		select distinct
+		b.shopName
+		name,a.visitorCount value from
+		bi_trend_shop_day a join
+		bi_shop b on
+		a.fromShopId=b.id where
+		a.shopId=#{shopId} and
+		a.day=#{sign} and
+		a.time=#{time} order by value desc
+	</select>
+	<select id="getShopTrendByHourOther" resultType="Integer">
+		select
+		visitorCount from
+		bi_trend_shop_hour where fromShopId=-1 and
+		shopId=#{shopId} and hour=#{sign} and
+		time=#{time} limit 1
+	</select>
+	<select id="getShopTrendByDayOther" resultType="Integer">
+		select
+		visitorCount from
+		bi_trend_shop_day where fromShopId=-1 and
+		shopId=#{shopId} and day=#{sign} and
+		time=#{time} limit 1
+	</select>
+</mapper>

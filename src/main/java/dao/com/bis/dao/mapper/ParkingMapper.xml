@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bis.dao.ParkingDao">       
+
+    <update id="saveParking" >
+       update bi_parkinginformation set entryTime=#{entryTime},x=#{x},y=#{y},userName=#{userName},isTrue=1 where parkingNumber = #{parkingNumber} and mapId = #{mapId}
+    </update>   
+    
+    <select id="getParking" resultType="ParkinginformationModel">
+       select * from bi_parkinginformation where userName=#{userName} and isTrue=1
+    </select>       
+    
+    <update id="clearParkingNumber" >
+       update bi_parkinginformation set entryTime=null,outTime=null,userName=null,isTrue=0 where parkingNumber = #{parkingNumber} and mapId = #{mapId} and userName =#{userName}   
+    </update>  
+    
+    <update id="clearParkingNumber1" >
+       update bi_parkinginformation set entryTime=null,outTime=null,userName=null,isTrue=0 where userName =#{userName}   
+    </update>     
+                        
+</mapper>

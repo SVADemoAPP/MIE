@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.StatisticsDao">
+
+    <select id="isTableExist" resultType="int">
+        SELECT COUNT(*) 
+        FROM information_schema.tables 
+        WHERE table_name = #{tableName} and TABLE_SCHEMA = #{schema}
+    </select>
+    
+    <update id="createTable">
+        CREATE TABLE  ${value}
+        (        
+	    `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+	    `userId` VARCHAR(50) NOT NULL COMMENT '用户id' COLLATE 'utf8_bin',
+	    `mapId` VARCHAR(50) NOT NULL COMMENT '地图id',
+	    `x` DECIMAL(10,0) NULL DEFAULT NULL COMMENT 'x坐标',
+	    `y` DECIMAL(10,0) NULL DEFAULT NULL COMMENT 'y坐标',
+	    `idType` VARCHAR(50) NULL DEFAULT NULL COMMENT '订阅类型' ,
+	    `dataType` VARCHAR(50) NULL DEFAULT NULL ,
+	    `timestamp` BIGINT(20) NULL DEFAULT NULL COMMENT '本地时间戳',
+	    `time_sva` BIGINT(20) NULL DEFAULT NULL COMMENT 'sva时间戳',
+	    PRIMARY KEY (`id`),
+        INDEX `Index 2` (`timestamp`),
+        INDEX `Index 3` (`mapId`)	    
+         )COLLATE='latin1_swedish_ci';
+    </update>
+    
+    <update id="createShopTable">
+        CREATE TABLE  ${value}
+        (        
+	    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	    `time` DATE NOT NULL COMMENT '时间',
+	    `delaytime` DECIMAL(10,2) NOT NULL COMMENT '平均驻留时长',
+	    `shopId` INT(11) NOT NULL COMMENT '店铺id',
+	    `userId` VARCHAR(200) NOT NULL COLLATE 'utf8_bin',
+	    `type` INT(11) NOT NULL DEFAULT '0' COMMENT '0:按日，1按月',
+	    PRIMARY KEY (`shopId`, `time`, `type`, `userId`),
+	    INDEX `Index 1` (`id`)
+        );
+    </update>          
+
+	<select id="getStoreStatistics" resultType="java.util.Map">
+		select count(a.userId) allcount,count(distinct a.userId) usercount,b.storeId 
+		from ${tableName} a join bi_maps b on a.mapId =  b.mapId group by b.storeId
+	</select>
+	
+    <update id="insertSql">
+        ${value}
+    </update>	
+
+    <select id="getAreaData" resultType="AreaModel">
+        select * from bi_shop 
+    </select>
+    
+    <select id="getUserDataByArea" resultType="java.util.Map">
+        select count(a.userId) allcount,userId,#{area.id} shopId from  
+        (select * from ${tableName} where mapId = #{area.mapId} and x &gt; (10*#{area.xSpot}) and x &lt; (10*#{area.x1Spot}) and y &gt; (10*#{area.ySpot}) and  y &lt; (10*#{area.y1Spot})) a group by userId
+    </select>
+    
+    <select id="getAllcountByMapId" resultType="java.util.Map">
+        select count(a.userId) allcount,count(distinct a.userId) count,mapId from  
+        (select * from ${tableName}) a group by mapId
+    </select>      
+
+    <select id="getStoreByMouth" resultType="java.util.Map">
+        select sum(a.delaytime*a.allcount) allTime,sum(a.allcount) allcount,a.storeId 
+        from (select * from bi_static_store_delay where time> #{time} and type = 0) a  group by a.storeId
+    </select>
+      
+    <select id="getUserByMouth" resultType="java.util.Map">
+        select sum(a.delaytime) allTime,a.shopId,a.userId 
+        from (select * from ${tableName} where time > #{time} and type = 0) a group by a.userId,a.shopId 
+    </select>
+    
+    <insert id="savePeopleRoute">
+        INSERT INTO bi_pre_peope_route
+            (userId, shopId, time)
+        VALUES
+            <foreach collection ="list" item="item" index= "index" separator =",">
+                (
+                #{item.userId}, 
+                #{item.shopId},
+                #{item.time}
+                )
+            </foreach >
+    </insert>
+    
+    <insert id="doUpdate">
+        ${sql}
+    </insert>
+    
+    <select id="getOrderedPeopleRoute" resultType="StatisticsModel">
+        SELECT a.*
+        FROM bi_pre_peope_route a
+        LEFT JOIN bi_shop b 
+            on a.shopId = b.id
+        WHERE b.mapId = #{mapId} and time &gt; #{startTime} and time &lt; #{endTime}
+        ORDER BY userId, time
+    </select>
+    
+    <insert id="saveNewUser">
+        INSERT INTO bi_newuser
+            (time,newUser,todayUser,yesdayUser,shopId,storeId,mapId)
+        VALUES
+             (#{time}, 
+              #{newUser},
+              #{todayUser},
+              #{yesdayUser},
+              #{shopId},
+              #{storeId},
+              #{mapId}              
+              )                                                             
+    </insert>  
+
+    <select id="getStroeUserById" resultType="String">
+        select distinct userId from ${tableName} where mapId in (select mapId FROM  bi_maps WHERE storeId = #{storeId})
+    </select>
+    
+    <select id="getMapIdUser" resultType="String">
+        select distinct userId from ${tableName} where mapId =#{mapId}
+    </select>    
+
+    <select id="login" resultType="int">
+        select count(*) from bi_login where userName=#{userName} and password=#{password}
+    </select> 
+    
+    <select id="getIvasList" resultType="IvasSvaModel">
+        select * from bi_ivas_sva
+    </select> 
+    
+    <update id="updateLogin" >
+        update  bi_login set lastLoginTime = #{loginTime}
+    </update>  
+    
+    <select id="getNewUserByMapId" resultType="NewUserModel">
+        select * from
+        bi_newuser
+        where mapId = #{mapId} and time &gt;= #{startTime}
+        and time
+        &lt;= #{endTime}
+    </select>                    
+</mapper>

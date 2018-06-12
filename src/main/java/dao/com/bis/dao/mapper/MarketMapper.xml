@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bis.dao.MarketDao">
+	<select id="getAllStore" resultType="MarketModel">
+		SELECT * FROM bi_store
+	</select>
+
+	<select id="getStoreName" resultType="String">
+		SELECT name FROM bi_store
+	</select>
+
+	<insert id="saveInfo">
+		INSERT INTO
+		bi_store(name,updateTime,createTime)
+		VALUES(#{name},#{updateTime},#{createTime})
+	</insert>
+
+	<update id="updateInfo">
+		UPDATE bi_store
+		SET name = #{name}, updateTime =
+		#{updateTime} WHERE id = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM bi_store WHERE id = #{value}
+	</delete>
+
+	<select id="checkName" resultType="int">
+		SELECT count(*) FROM bi_store
+		where name = #{storeName}
+	</select>
+
+	<select id="checkName1" resultType="int">
+		SELECT count(*) FROM bi_store
+		where name = #{storeName} and id!=#{id}
+	</select>
+
+	<select id="getShopWeekData" resultType="java.util.Map">
+		select sum(a.delaytime)
+		alltimes,count(distinct a.userId) allcount,a.time
+		times
+		from
+		${tableName} a join bi_shop b join bi_maps c
+		on a.shopId=b.id and
+		b.mapId=c.mapId
+		where a.type = 0 and c.storeId = #{storeId}
+		and a.time
+		&gt;= #{beginTime} and a.time &lt;= #{lastTime} group by
+		a.time
+	</select>
+
+
+	<select id="getShopWeekData1" resultType="java.util.Map">
+		select sum(a.delaytime)
+		alltimes,count(distinct a.userId) allcount,a.time
+		times
+		from
+		${tableName} a join bi_shop b join bi_maps c
+		on a.shopId=b.id and
+		b.mapId=c.mapId
+		where a.type = 0 and c.storeId = #{storeId} and a.time
+		&gt;= #{beginTime}
+		group by a.time
+	</select>
+
+	<select id="getShopWeekData2" resultType="java.util.Map">
+		select sum(a.delaytime)
+		alltimes,count(distinct a.userId) allcount,a.time
+		times
+		from
+		${tableName} a join bi_shop b join bi_maps c
+		on a.shopId=b.id and
+		b.mapId=c.mapId
+		where a.type = 0 and c.storeId = #{storeId} and a.time
+		&lt;= #{lastTime}
+		group by a.time
+	</select>
+
+	<select id="getShopDataById" resultType="ShopModel">
+		SELECT *
+		from bi_shop
+		where id = #{shopId}
+	</select>
+
+	<select id="getAllNewDataByShopId" resultType="NewUserModel">
+		select a.* from
+		bi_newuser a join bi_shop b join bi_maps c
+		on a.shopId=b.id and
+		b.mapId=c.mapId
+		where c.storeId = #{storeId} and a.time &gt;=
+		#{startTime}
+		and a.time &lt;= #{endTime}
+	</select>
+
+	<select id="getUserIdList" resultType="String">
+		select distinct a.userId
+		from ${tableName} a join bi_shop b join bi_maps c
+		on a.shopId=b.id and
+		b.mapId=c.mapId
+		where a.type = 0 and c.storeId = #{storeId}
+		and DATE_FORMAT(a.time,'%Y-%m-%d')=#{timeDate}
+	</select>
+	
+	<select id="getUserIdListByMapId" resultType="StatisticsModel">
+       select time,delaytime visitTime,allcount userCount,mapId from bi_static_floor where mapId = #{mapId} and DATE_FORMAT(time,'%Y-%m-%d')=#{timeDate};
+	</select>	
+
+	<select id="getDelaytimeSum" resultType="Float">
+		select sum(a.delaytime)
+		from ${tableName} a join bi_shop b join bi_maps c
+		on a.shopId=b.id and
+		b.mapId=c.mapId
+		where a.type = 0 and c.storeId = #{storeId}
+		and
+		DATE_FORMAT(a.time,'%Y-%m-%d')=#{timeDate}
+	</select>
+	
+	<select id="getDelaytimeSumByMapId" resultType="Float">
+		select sum(a.delaytime)
+		from ${tableName} a join bi_shop b join bi_maps c
+		on a.shopId=b.id and
+		b.mapId=c.mapId
+		where a.type = 0 and c.mapId = #{mapId}
+		and
+		DATE_FORMAT(a.time,'%Y-%m-%d')=#{timeDate}
+	</select>
+
+</mapper>
