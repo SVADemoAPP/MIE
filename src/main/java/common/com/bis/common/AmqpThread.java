@@ -10,7 +10,6 @@ package com.bis.common;
 
 import java.io.File;
 import java.net.URISyntaxException;
-import java.util.Date;
 
 import javax.jms.BytesMessage;
 import javax.jms.Destination;
@@ -260,6 +259,7 @@ public class AmqpThread extends Thread {
         {
             tableName = "bi_location_" + Util.dateFormat(System.currentTimeMillis(), "yyyyMMdd");
             String insertSql = "insert into "+tableName+"(userId,mapId,x,y,timestamp) values";
+            int sqlLength = insertSql.length();
             for(int i = 0; i<list.size();i++){
                 LocationModel lm = new LocationModel();
                 JSONObject loc = list.getJSONObject(i);
@@ -268,8 +268,7 @@ public class AmqpThread extends Thread {
                 }
                 insertSql = insertSql+"('" + lm.getUserID()+ "','" + lm.getMapId() + "','" + lm.getX() + "','" + lm.getY() + "','" + lm.getTimestamp() + "'),";
             }
-            LOG.debug("saveLocationstream insertSql:" + insertSql);
-            if (list.size() > 0) {
+            if (list.size() > 0&&sqlLength<insertSql.length()) {
                 insertSql = insertSql.substring(0, insertSql.length() - 1);
                 LOG.debug("saveLocationstream insert:" + insertSql);
                 int areaResult = dao.insertSql(insertSql);
@@ -403,25 +402,35 @@ public class AmqpThread extends Thread {
         long timeLocal = System.currentTimeMillis();
         lm.setTimestamp(timeLocal);
         // 设置LocationModel
-        JSONObject location = loc.getJSONObject("location");
+        if(loc.containsKey("location"))
+        {
+            JSONObject location = loc.getJSONObject("location");
+            lm.setX(Double.valueOf(location.getInt("x")));
+            lm.setY(Double.valueOf(location.getInt("y"))); 
+            JSONArray useridList = loc.getJSONArray("userid");
+            // 用户存在多个的情况，目前只取第一个；若用户为空则不作处理
+            if(useridList.size()>0){
+                lm.setUserID(useridList.getString(0));
+            }else{
+                return false;
+            }
+            if(loc.containsKey("map"))
+            {
+                JSONObject mapList = loc.getJSONObject("map");
+                String mapId = mapList.getString("mapid");
+                lm.setMapId((mapId));  
+            } 
+        }else
+        {
+            return false;
+        }
 //        lm.setIdType(loc.getString("IdType"));
 //        lm.setTime_sva(Long.valueOf(loc.getLong("Timestamp")));
 //        lm.setDataType(loc.getString("datatype"));
-        lm.setX(Double.valueOf(location.getInt("x")));
-        lm.setY(Double.valueOf(location.getInt("y")));
-        JSONArray useridList = loc.getJSONArray("userid");
-        // 用户存在多个的情况，目前只取第一个；若用户为空则不作处理
-        if(useridList.size()>0){
-            lm.setUserID(useridList.getString(0));
-        }else{
-            return false;
-        }
-        // 楼层号转换
 
-        JSONObject mapList = loc.getJSONObject("map");
-        String mapId = mapList.getString("mapid");
-        lm.setMapId((mapId));
-        
+       
+        // 楼层号转换
+       
         return true;
     }
 }

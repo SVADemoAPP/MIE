@@ -639,7 +639,7 @@ public class QuartzJob {
      */
     private boolean verificationSva()
     {
-        long nowTime = System.currentTimeMillis()-120000;
+        long nowTime = System.currentTimeMillis()-60000;
         String tableName = Params.LOCATION + Util.dateFormat(new Date(), "yyyyMMdd");
         int count = 0;
         count = locationDao.getCountByTimestamp(nowTime, tableName);
