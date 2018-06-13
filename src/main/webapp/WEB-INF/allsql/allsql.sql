@@ -9,8 +9,8 @@ drop table if exists bi_user_info;
 CREATE TABLE `bi_visitor` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
 	`ipv4` VARCHAR(50) NOT NULL COMMENT '用户标识' COLLATE 'utf8_bin',
-	`acr` VARCHAR(50) NOT NULL COMMENT 'acr',
-	`eci` VARCHAR(50) NOT NULL COMMENT 'eci',
+	`acr` VARCHAR(255) NOT NULL COMMENT 'acr',
+	`eci` VARCHAR(255) NOT NULL COMMENT 'eci',
 	`gender` VARCHAR(50) NOT NULL COMMENT '性别' COLLATE 'utf8_bin',
 	`age` VARCHAR(50) NOT NULL COMMENT '年龄',
 	`localAddress` VARCHAR(255) NOT NULL COMMENT '归属地' COLLATE 'utf8_bin',

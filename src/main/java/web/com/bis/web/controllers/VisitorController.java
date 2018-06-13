@@ -300,13 +300,18 @@ public class VisitorController {
             @Override
             public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                 // TODO Auto-generated method stub
-                if ((long) o1.get("value") > (long) o2.get("value")) {
+                String str1=String.valueOf(o1.get("value"));
+                String str2=String.valueOf(o2.get("value"));
+                long l1=Long.parseLong(str1);
+                long l2=Long.parseLong(str2);
+                if (l1 >l2) {
                     return -1;
-                } else if ((long) o1.get("value") < (long) o2.get("value")) {
+                } else if (l1< l2) {
                     return 1;
                 } else {
                     return 0;
                 }
+                
             }
         });
         if (list.size() > 10) {
@@ -336,7 +341,7 @@ public class VisitorController {
             if (flag) {
                 Map<String, Object> newMap = new HashMap<>();
                 newMap.put("name", name);
-                newMap.put("value", coefficientData(Integer.parseInt(map.get("value").toString())));
+                newMap.put("value", Integer.parseInt(map.get("value").toString()));
                 allList.add(newMap);
             }
         }
