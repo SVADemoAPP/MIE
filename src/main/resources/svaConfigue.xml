@@ -20,7 +20,7 @@
 		<password1>User@123456</password1>
 		<status1>1</status1>
 		<subscribe_type1>2</subscribe_type1>
-		<ip_type1>MAC</ip_type1>
+		<ip_type1>IP</ip_type1>
 	</SpecifiesConfiguration>
 </Configuration>
 

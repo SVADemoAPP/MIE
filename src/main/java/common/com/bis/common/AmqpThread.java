@@ -110,13 +110,13 @@ public class AmqpThread extends Thread {
         //windows下  
         if("\\".equals(File.separator)){  
             System.out.println("windows");  
-        rootPath = classPath.substring(1,classPath.indexOf("/WEB-INF/classes"));  
+        rootPath = classPath.substring(1,classPath.indexOf("/classes"));  
         rootPath = rootPath.replace("/", "\\");  
         }  
         //linux下  
         if("/".equals(File.separator)){  
             System.out.println("linux");  
-        rootPath = classPath.substring(0,classPath.indexOf("/WEB-INF/classes"));  
+        rootPath = classPath.substring(0,classPath.indexOf("/classes"));  
         rootPath = rootPath.replace("\\", "/");  
         }  
         rootPath = rootPath + File.separator + "java_keystore" + File.separator;
@@ -176,6 +176,7 @@ public class AmqpThread extends Thread {
                         byte[] keyBytes = new byte[length];
                         tm.readBytes(keyBytes);
                         String messages = new String(keyBytes);
+                        LOG.debug("sva data:"+messages);
                         saveSvaData(messages, sva.getType(), sva.getIp(), sva.getId());
                     }else{
                         LOG.debug("Get zero length message");
@@ -217,7 +218,7 @@ public class AmqpThread extends Thread {
      */ 
     private void saveSvaData(String jsonStr, int type, String ip, String svaId){
         LOG.debug("SVA start!");
-        if(StringUtils.isEmpty(jsonStr)){
+        if(StringUtils.isEmpty(jsonStr.trim())){
             LOG.debug("AMQPThread No data from SVA!");
         }else{
             JSONObject result = JSONObject.fromObject(jsonStr);
@@ -314,7 +315,6 @@ public class AmqpThread extends Thread {
             }
             insertSql = insertSql+"('" + lm.getUserID()+ "','" + lm.getMapId() + "','" + lm.getX() + "','" + lm.getY() + "','" + lm.getTimestamp() + "'),";
         }
-        LOG.debug("locationstreamanonymous insertSql:" + insertSql);
         if (list.size() > 0) {
             insertSql = insertSql.substring(0, insertSql.length() - 1);
             LOG.debug("locationstreamanonymous insert:" + insertSql);

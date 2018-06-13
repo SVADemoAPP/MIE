@@ -56,6 +56,13 @@ public class ShopController {
     private LocationDao locationDao;
 
     private static final Logger LOG = Logger.getLogger(ShopController.class);
+    
+    @Value("${sva.coefficientSwitch}")
+    private int coefficientSwitch;   
+    
+    @Value("${sva.coefficient}")
+    private double coefficient;  
+
 
     /**
      * 
@@ -590,12 +597,12 @@ public class ShopController {
         modelMap.put("newData", newUserMap);
         modelMap.put("allData", countMap);
         modelMap.put("timeData", visitMap);
-        modelMap.put("nowPeople", count);
-        modelMap.put("yesPeople", yesCount);
-        modelMap.put("newPeople", newUser);
+        modelMap.put("nowPeople", coefficientData(count));
+        modelMap.put("yesPeople", coefficientData(yesCount));
+        modelMap.put("newPeople", coefficientData(newUser));
         modelMap.put("yesNewPeople", newUserMap.get(yesDays));
-        modelMap.put("nowAllPeople", allcount);
-        modelMap.put("yesAllPeople", yesAllCount);
+        modelMap.put("nowAllPeople", coefficientData(allcount));
+        modelMap.put("yesAllPeople", coefficientData(yesAllCount));
         modelMap.put("nowTime", averageTime);
         modelMap.put("yesTime", yesAverageTime);
         modelMap.put("yesTime1", visitMap.get(String.valueOf(Util.dateFormatStringtoLong(yesDays, Params.YYMMDD))));
@@ -646,4 +653,14 @@ public class ShopController {
         return modelMap;
     }
 
+    private int coefficientData(int data){
+        if(coefficientSwitch==0)
+        {
+            return data;
+        }else
+        {
+            return (int) (data*coefficient);
+        }
+        
+    }
 }

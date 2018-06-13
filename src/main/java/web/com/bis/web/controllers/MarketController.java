@@ -94,6 +94,12 @@ public class MarketController {
     @Autowired
     private LocationDao locationDao;
     private static final Logger LOG = Logger.getLogger(MarketController.class);
+    
+    @Value("${sva.coefficientSwitch}")
+    private int coefficientSwitch;   
+    
+    @Value("${sva.coefficient}")
+    private double coefficient;  
 
     /**
      * 
@@ -618,8 +624,8 @@ public class MarketController {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
         // modelMap.put(Params.RETURN_KEY_DATA, shopList);
-        modelMap.put("todayUser", todayUser);
-        modelMap.put("todayNewUser", todayNewUser);
+        modelMap.put("todayUser", coefficientData(todayUser));
+        modelMap.put("todayNewUser", coefficientData(todayNewUser));
         modelMap.put("todayAvgDelay", avgDelay);
         modelMap.put("weekUsercount", weekUsercount);
         modelMap.put("weekDelaytime", weekDelaytime);
@@ -695,8 +701,8 @@ public class MarketController {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
         // modelMap.put(Params.RETURN_KEY_DATA, shopList);
-        modelMap.put("todayUser", todayUser);
-        modelMap.put("todayNewUser", todayNewUser);
+        modelMap.put("todayUser", coefficientData(todayUser));
+        modelMap.put("todayNewUser", coefficientData(todayNewUser));
         modelMap.put("todayAvgDelay", avgDelay);
         modelMap.put("weekUsercount", weekUsercount);
         modelMap.put("weekDelaytime", weekDelaytime);
@@ -865,5 +871,15 @@ public class MarketController {
     	map.put("dRate", listDeepRate);
     	return map;
     }
-    
+
+    private int coefficientData(int data){
+        if(coefficientSwitch==0)
+        {
+            return data;
+        }else
+        {
+            return (int) (data*coefficient);
+        }
+        
+    }
 }

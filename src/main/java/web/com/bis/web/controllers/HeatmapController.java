@@ -48,6 +48,12 @@ public class HeatmapController {
     @Value("${sva.durationOfLocation}")
     private int durationOfLocation;
     
+    @Value("${sva.coefficientSwitch}")
+    private int coefficientSwitch;   
+    
+    @Value("${sva.coefficient}")
+    private double coefficient;  
+    
     private static final Logger LOG = Logger.getLogger(HeatmapController.class);
 
     @RequestMapping(value = "/api/getMapInfoByPosition", method = { RequestMethod.POST })
@@ -202,7 +208,7 @@ public class HeatmapController {
                 }
             }
             //遍历完过后存数目
-            timeMap.put(thisTime,  (long)userIdSet.size());
+            timeMap.put(thisTime,  (long)coefficientData(userIdSet.size()));
             userIdSet.clear();
         }
         modelMap.put("data", timeMap);
@@ -250,7 +256,7 @@ public class HeatmapController {
                 }
             }
             //遍历完过后存数目
-            timeMap.put(thisTime,  (long)userIdSet.size());
+            timeMap.put(thisTime,  (long)coefficientData(userIdSet.size()));
             userIdSet.clear();
         }
 //        // 分时间段的userId集合
@@ -321,7 +327,7 @@ public class HeatmapController {
                 }
             }
             //遍历完过后存数目
-            timeMap.put(thisTime,  (long)userIdSet.size());
+            timeMap.put(thisTime, (long)coefficientData(userIdSet.size()));
             userIdSet.clear();
         }
         modelMap.put("data", timeMap);
@@ -349,7 +355,7 @@ public class HeatmapController {
         long startTime = endTime - durationOfLocation*1000 - 28800000;
         long endTimes = endTime - 28800000;
         resultList = locationDao.getNowCounts(startTime, endTimes, tableName, model);
-        modelMap.put("data", resultList);
+        modelMap.put("data", coefficientData(resultList));
 
         return modelMap;
     }
@@ -386,7 +392,7 @@ public class HeatmapController {
         long count = locationDao.getMallTotal1(time, tableName, storeId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
 
-        modelMap.put("data", count);
+        modelMap.put("data", coefficientData((int)count));
 
         return modelMap;
     }    
@@ -403,7 +409,7 @@ public class HeatmapController {
         long startLong = Util.dateFormatStringtoLong(startTime, Params.YYYYMMDDHHMMSS) - 4000;
         long endLong = Util.dateFormatStringtoLong(endTime, Params.YYYYMMDDHHMMSS);
         // 表名
-        String nowDay = Util.dateFormat(startLong, Params.YYYYMMDD);
+        String nowDay = Util.dateFormat(endLong, Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
         resultList = locationDao.getPeriodMapHeatMap(startLong, endLong, tableName, mapId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
@@ -440,7 +446,7 @@ public class HeatmapController {
         String tableName = Params.LOCATION + nowDay;
         long userCount = locationDao.getStoreMomentCount(startTime, endTime, tableName, storeId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
-        modelMap.put("data", userCount);
+        modelMap.put("data", coefficientData((int)userCount));
         return modelMap;
     }
     
@@ -456,7 +462,7 @@ public class HeatmapController {
         String tableName = Params.LOCATION + nowDay;
         long userCount = locationDao.getFloorMomentCount(startTime, endTime, tableName, mapId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
-        modelMap.put("data", userCount);
+        modelMap.put("data", coefficientData((int)userCount));
         return modelMap;
     }    
     
@@ -493,5 +499,16 @@ public class HeatmapController {
     	map.put("dRate", listDeepRate);
     	
     	return map;
+    }
+    
+    private int coefficientData(int data){
+        if(coefficientSwitch==0)
+        {
+            return data;
+        }else
+        {
+            return (int) (data*coefficient);
+        }
+        
     }
 }

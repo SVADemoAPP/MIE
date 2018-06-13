@@ -61,6 +61,12 @@ public class VisitorController {
 
     @Autowired
     private StatisticsDao statisticsDao;
+    
+    @Value("${sva.coefficientSwitch}")
+    private int coefficientSwitch;   
+    
+    @Value("${sva.coefficient}")
+    private double coefficient;  
 
     /**
      * 
@@ -330,7 +336,7 @@ public class VisitorController {
             if (flag) {
                 Map<String, Object> newMap = new HashMap<>();
                 newMap.put("name", name);
-                newMap.put("value", map.get("value"));
+                newMap.put("value", coefficientData(Integer.parseInt(map.get("value").toString())));
                 allList.add(newMap);
             }
         }
@@ -373,9 +379,20 @@ public class VisitorController {
             }
             Map<String, Object> newMap = new HashMap<>();
             newMap.put("name", map.get("name") + ":" + temp + "%");
-            newMap.put("value", map.get("value"));
+            newMap.put("value", coefficientData(Integer.parseInt(map.get("value").toString())));
             returnList.add(newMap);
         }
         return returnList;
+    }
+    
+    private int coefficientData(int data){
+        if(coefficientSwitch==0)
+        {
+            return data;
+        }else
+        {
+            return (int) (data*coefficient);
+        }
+        
     }
 }
