@@ -527,7 +527,7 @@ public class HomeController {
                             // "homeAddressCI","workAddress","workAddressCI","expendAbility"};
                             switch (i) {
                             case 1: // ipv4
-                                jsonObject.put(names[i], Util.isIp(values[i])?values[i]:"");
+                                jsonObject.put(names[i], Util.isIp(values[i])?Util.convertIp(values[i]):"");
                                 break;
                             case 3: // acr
                             case 4: // eci
@@ -622,7 +622,7 @@ public class HomeController {
                             // "homeAddressCI","workAddress","workAddressCI","expendAbility"};
                             switch (i) {
                             case 1: // ipv4
-                                jsonObject.put(names[i], Util.isIp(values[i])?values[i]:"");
+                                jsonObject.put(names[i], Util.isIp(values[i])?Util.convertIp(values[i]):"");
                                 break;
                             case 3: // acr
                             case 4: // eci
