@@ -639,7 +639,7 @@ public class QuartzJob {
      */
     private boolean verificationSva()
     {
-        long nowTime = System.currentTimeMillis()-60000;
+        long nowTime = System.currentTimeMillis()-120000;
         String tableName = Params.LOCATION + Util.dateFormat(new Date(), "yyyyMMdd");
         int count = 0;
         count = locationDao.getCountByTimestamp(nowTime, tableName);
@@ -691,6 +691,10 @@ public class QuartzJob {
                             switch (i) {
                             case 1: // ipv4
                                 jsonObject.put(names[i], Util.isIp(values[i])?values[i]:"");
+                                break;
+                            case 3: // acr
+                            case 4: // eci
+                                jsonObject.put(names[i], values[i].length()<200?values[i]:"error");
                                 break;
                             case 5: // gender
                             case 6: // age

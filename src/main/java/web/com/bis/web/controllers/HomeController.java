@@ -507,6 +507,7 @@ public class HomeController {
             // String time = Util.dateFormat(date, Params.YYYYMMDDHHMMSS);
             String filePath = localPath;
             File file = new File(filePath, fileName);
+            System.out.println(fileName+" 是否存在："+file.exists());
             if (file.exists()) {
                 // System.out.println("信息文件存在");
                 List<JSONObject> list = new ArrayList<>();
@@ -528,6 +529,10 @@ public class HomeController {
                             case 1: // ipv4
                                 jsonObject.put(names[i], Util.isIp(values[i])?values[i]:"");
                                 break;
+                            case 3: // acr
+                            case 4: // eci
+                                jsonObject.put(names[i], values[i].length()<200?values[i]:"error");
+                                break;
                             case 5: // gender
                             case 6: // age
                             case 12: // expendAbility
@@ -539,6 +544,7 @@ public class HomeController {
 //                            case 10: // workAddress
 //                                break;
                             default:
+                                
                                 jsonObject.put(names[i], values[i]);
                                 break;
                             }
@@ -548,6 +554,7 @@ public class HomeController {
                     }
                     reader.close();
                 } catch (IOException e) {
+                    System.out.println("解析文件错误:"+e.toString());
                     e.printStackTrace();
                 } finally {
                     if (isr != null) {
@@ -563,7 +570,9 @@ public class HomeController {
                         }
                     }
                 }
+                System.out.println("存bi_visitor前list长度："+list.size());
                 visitorDao.saveData(list);
+                System.out.println("存bi_visitor完毕");
             }
             // LOG.debug("VisitorController~插入Visitor数据条数:" + num);
         } else {
@@ -614,6 +623,10 @@ public class HomeController {
                             switch (i) {
                             case 1: // ipv4
                                 jsonObject.put(names[i], Util.isIp(values[i])?values[i]:"");
+                                break;
+                            case 3: // acr
+                            case 4: // eci
+                                jsonObject.put(names[i], values[i].length()<200?values[i]:"error");
                                 break;
                             case 5: // gender
                             case 6: // age
