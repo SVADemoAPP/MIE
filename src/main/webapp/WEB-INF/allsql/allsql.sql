@@ -549,16 +549,18 @@ INSERT INTO `bi_parkinginformation` (`id`, `storeId`, `parkingNumber`, `entryTim
 	(120, 1, 'H2-119', NULL, NULL, NULL, '1', 0, NULL, NULL, NULL),
 	(121, 1, 'H2-120', NULL, NULL, NULL, '1', 0, NULL, NULL, NULL);
 	
-CREATE TABLE `bi_login` (
-    `userName` VARCHAR(50) NOT NULL COLLATE 'utf8_bin',
-    `password` VARCHAR(300) NOT NULL COLLATE 'utf8_bin',
-    `creatTime` DATETIME NOT NULL,
-    `lastLoginTime` DATETIME NULL DEFAULT NULL
-)
-COLLATE='latin1_swedish_ci';
+CREATE TABLE IF NOT EXISTS `bi_login` (
+  `userName` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `password` varchar(300) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `creatTime` datetime NOT NULL,
+  `lastLoginTime` datetime DEFAULT NULL
+)COLLATE='utf8_bin';
 
+-- 正在导出表  biss.bi_login 的数据：~1 rows (大约)
+/*!40000 ALTER TABLE `bi_login` DISABLE KEYS */;
 INSERT INTO `bi_login` (`userName`, `password`, `creatTime`, `lastLoginTime`) VALUES
-    ('admin', 'admin', '2017-08-10 17:31:06', NULL);
+    ('admin', 'admin', '2017-08-10 17:31:06', '2018-06-14 10:02:56'),
+    ('guest', 'guest', '2017-08-10 17:31:06', '2018-06-14 10:02:56');
 
 DROP TABLE IF EXISTS `bi_ivas_sva`;
 CREATE TABLE IF NOT EXISTS `bi_ivas_sva` (
