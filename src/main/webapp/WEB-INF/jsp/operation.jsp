@@ -148,7 +148,7 @@
                 <li><a class="active" href="<c:url value='/home/operation'/>"><spring:message
                             code="operation"></spring:message> <i class="br-stats"></i></a>
                     </li>
-                <c:if test="${sessionScope.userName}=='admin'">       
+                <c:if test="${sessionScope.userName== 'admin'}">       
 				<li><a href="#"><spring:message code="configuration"></spring:message><i
 						class="im-paragraph-justify"></i></a>
 					<ul class="nav sub">

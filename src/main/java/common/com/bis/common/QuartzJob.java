@@ -3,7 +3,6 @@ package com.bis.common;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -538,26 +537,28 @@ public class QuartzJob {
             String tableName = Params.LOCATION + nowDay;
             // 根据楼层计算动向预处理
             List<String> mapIdList = mapMngDao.getAllMapId();
+            LocationModel model1;
             for (String mapId : mapIdList) {
                 // 用户来源map
                 Map<String, Integer> trendMap = new HashMap<>();
                 List<String> userIdList = locationDao.queryAllUserIdByMapId(mapId, tableName);
                 for (String userId : userIdList) {
-                    LocationModel model = locationDao.getOtherMapIdByMaxTime(mapId, userId, tableName);
-                    if (model == null) {
+                     model1 = locationDao.getOtherMapIdByMaxTime(mapId, userId, tableName);
+                    if (model1 == null) {
                         if (trendMap.get("other") == null) {
                             trendMap.put("other", 1);
                         } else {
                             trendMap.put("other", trendMap.get("other") + 1);
                         }
                     } else {
-                        String resultMapId = model.getMapId();
+                        String resultMapId = model1.getMapId();
                         if (trendMap.get(resultMapId) == null) {
                             trendMap.put(resultMapId, 1);
                         } else {
                             trendMap.put(resultMapId, trendMap.get(resultMapId) + 1);
                         }
                     }
+                    model1 = null;
                 }
                 TrendMapModel trendMapModel = new TrendMapModel(mapId, hour, nowDate);
                 // 按小时保存
@@ -587,25 +588,27 @@ public class QuartzJob {
             }
             // 根据店铺计算动向预处理
             List<Integer> shopIdList = shopDao.getAllShopId();
+            LocationModel model2;
             for (int shopId : shopIdList) {
                 Map<Integer, Integer> trendMap = new HashMap<>(); // 用户来源map
                 List<String> userIdList = locationDao.queryAllUserIdByShopId(shopId, tableName);
                 for (String userId : userIdList) {
-                    LocationModel model = locationDao.getOtherShopIdByMaxTime(shopId, userId, tableName);
-                    if (model == null) {
+                    model2 = locationDao.getOtherShopIdByMaxTime(shopId, userId, tableName);
+                    if (model2 == null) {
                         if (trendMap.get(-1) == null) {
                             trendMap.put(-1, 1);
                         } else {
                             trendMap.put(-1, trendMap.get(-1) + 1);
                         }
                     } else {
-                        int resultMapId = model.getId();
+                        int resultMapId = model2.getId();
                         if (trendMap.get(resultMapId) == null) {
                             trendMap.put(resultMapId, 1);
                         } else {
                             trendMap.put(resultMapId, trendMap.get(resultMapId) + 1);
                         }
                     }
+                    model2 = null;
                 }
                 TrendShopModel trendShopModel = new TrendShopModel(shopId, hour, nowDate);
                 // 按小时保存

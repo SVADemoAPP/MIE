@@ -79,6 +79,7 @@ public class DataAnalysisService
                     temp.setTime(Util.dateFormat(lm.getTimestamp(), Params.YYYYMMDDHHMMSS));
                     list.add(temp);
                     lastShopId = newShopId;
+                    temp = null;
                 }
             }
         }
