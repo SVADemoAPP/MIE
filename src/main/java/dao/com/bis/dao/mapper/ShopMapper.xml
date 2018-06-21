@@ -106,7 +106,7 @@
 		from ${tableName}
 		where type = 0 and shopId = #{shopId} and time &gt;=
 		#{beginTime} and
-		time &lt;= #{lastTime} group by time
+		time &lt; #{lastTime} group by time
 	</select>
 
 

@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +25,6 @@ import com.bis.common.conf.Params;
 import com.bis.dao.LocationDao;
 import com.bis.dao.ShopDao;
 import com.bis.dao.StatisticsDao;
-import com.bis.model.MapMngModel;
 import com.bis.model.NewUserModel;
 import com.bis.model.ShopCostModel;
 import com.bis.model.ShopModel;
@@ -580,14 +578,15 @@ public class ShopController {
             double vistiTime = Double.valueOf(allTimes) / allSize;
 
             visitMap.put(String.valueOf(Util.dateFormatStringtoLong(keyVal, Params.YYYYMMDD2)), vistiTime);
-            countMap.put(keyVal, allSize);
+            countMap.put(keyVal.replace("-", "/").substring(2, keyVal.length()), coefficientData(allSize));
         }
+        yesAllCount = coefficientData(Integer.parseInt(lists.get(lists.size()-1).get("allcount").toString()));
         List<NewUserModel> list = dao.getAllNewDataByShopId(shopId, sevenDays, yesDays);
         for (int i = 0; i < list.size(); i++) {
             NewUserModel model = list.get(i);
             // String userTime = model.getTime();
             int newUsers = model.getNewUser();
-            newUserMap.put(yesDays, newUsers);
+            newUserMap.put(yesDays, coefficientData(newUsers));
         }
         Map<String, Object> modelMap = new HashMap<String, Object>();
         // visitMap.put(String.valueOf(Util.dateFormatStringtoLong(yesDays,
@@ -602,11 +601,11 @@ public class ShopController {
         modelMap.put("newPeople", coefficientData(newUser));
         modelMap.put("yesNewPeople", newUserMap.get(yesDays));
         modelMap.put("nowAllPeople", coefficientData(allcount));
-        modelMap.put("yesAllPeople", coefficientData(yesAllCount));
+        modelMap.put("yesAllPeople", yesAllCount);
         modelMap.put("nowTime", averageTime);
         modelMap.put("yesTime", yesAverageTime);
         modelMap.put("yesTime1", visitMap.get(String.valueOf(Util.dateFormatStringtoLong(yesDays, Params.YYMMDD))));
-        modelMap.put("newAllPeople", allcount);
+//        modelMap.put("newAllPeople", allcount);
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
         modelMap.put(Params.RETURN_KEY_DATA, shopList);
 

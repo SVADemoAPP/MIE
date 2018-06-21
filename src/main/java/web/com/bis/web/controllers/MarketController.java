@@ -48,7 +48,6 @@ import com.bis.model.StatisticsModel;
 import com.bis.model.StringIntModel;
 import com.bis.web.auth.AuthPassport;
 import com.bis.web.auth.Rates;
-import com.bis.web.auth.SystemInfo;
 import com.bis.web.auth.WeatherInfo;
 
 import net.sf.json.JSONArray;
@@ -604,7 +603,7 @@ public class MarketController {
             // jsonObject1.put("name", weeks2[i]);
             // jsonObject1.put("value", userIdList.size());
             // weekUsercount.add(jsonObject1);
-            weekUsercount.put(weeks2[i], userIdList.size());
+            weekUsercount.put(weeks2[i], coefficientData(userIdList.size()));
 
             float avgDelaytime = 0;
             if (userIdList.size() != 0) {
@@ -619,7 +618,7 @@ public class MarketController {
             // JSONObject jsonObject3 = new JSONObject();
             // jsonObject3.put("name", weeks2[j]);
             // jsonObject3.put("value", userIdList.size());
-            weekNewUsercount.put(weeks2[j], userIdList.size());
+            weekNewUsercount.put(weeks2[j], coefficientData(userIdList.size()));
         }
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
@@ -631,7 +630,7 @@ public class MarketController {
         modelMap.put("weekDelaytime", weekDelaytime);
         modelMap.put("weekNewUsercount", weekNewUsercount);
 
-        modelMap.put("allWeekCount", allWeekCount);
+        modelMap.put("allWeekCount", coefficientData(Integer.parseInt(String.valueOf(allWeekCount))));
         modelMap.put("allWeekAvgDelay", allWeekCount == 0 ? 0 : Util.sToM((allWeekTime * 60 / allWeekCount)));
         return modelMap;
     }
@@ -639,9 +638,9 @@ public class MarketController {
     @RequestMapping(value = "/getWeekTotalByFloor", method = { RequestMethod.POST })
     @ResponseBody
     public Map<String, Object> getWeekTotalByFloor(@RequestParam("mapId") String mapId) {
-        TreeMap<String, String> weekUsercount = new TreeMap<>();
+        TreeMap<String, Integer> weekUsercount = new TreeMap<>();
         TreeMap<String, String> weekDelaytime = new TreeMap<>();
-        TreeMap<String, String> weekNewUsercount = new TreeMap<>();
+        TreeMap<String, Integer> weekNewUsercount = new TreeMap<>();
         List<String> todayUserIdList = new ArrayList<>(); // 今天的userId
         long todayDelayCount = 0; // 今天的位置条数
         List<String> listYesUser = new ArrayList<>();//昨天的user
@@ -673,25 +672,25 @@ public class MarketController {
         todayNewUser = todayUserIdList.size();
         String yesDays = weeks[0];
         String  sevenDays = weeks[weeks.length-1];
-        float allWeekCount = 0;
+        int allWeekCount = 0;
         float allWeekTime = 0;
         for (int i = 0; i < weeks.length; i++) {
-            weekNewUsercount.put(weeks[i], "0");
+            weekNewUsercount.put(weeks[i], 0);
             List<StatisticsModel> userIdList =  daoMarket.getUserIdListByMapId(mapId, weeks[i]);
             if (userIdList.size()>0) {
                 allWeekCount += userIdList.get(0).getUserCount();
                 allWeekTime +=  Double.valueOf(userIdList.get(0).getVisitTime())*userIdList.get(0).getUserCount();
-                weekUsercount.put(weeks[i], String.valueOf(userIdList.get(0).getUserCount()));
+                weekUsercount.put(weeks[i], coefficientData(Integer.parseInt(String.valueOf(userIdList.get(0).getUserCount()))));
                 weekDelaytime.put(weeks[i], userIdList.get(0).getVisitTime());
             }else
             {
-                weekUsercount.put(weeks[i], "0");
+                weekUsercount.put(weeks[i], 0);
                 weekDelaytime.put(weeks[i], "0"); 
             }
         }
         List<NewUserModel> list = statisticsDao.getNewUserByMapId(mapId,yesDays,sevenDays);
         for (int i = 0; i < list.size(); i++) {
-            weekNewUsercount.put(list.get(i).getTime(),String.valueOf(list.get(i).getNewUser()));
+            weekNewUsercount.put(list.get(i).getTime(),coefficientData(Integer.parseInt(String.valueOf(list.get(i).getNewUser()))));
         }
         float avgDelay = 0;
         if (todayUser != 0) {
@@ -707,8 +706,7 @@ public class MarketController {
         modelMap.put("weekUsercount", weekUsercount);
         modelMap.put("weekDelaytime", weekDelaytime);
         modelMap.put("weekNewUsercount", weekNewUsercount);
-
-        modelMap.put("allWeekCount", allWeekCount);
+        modelMap.put("allWeekCount", coefficientData(allWeekCount));
         modelMap.put("allWeekAvgDelay", allWeekCount == 0 ? 0 : Util.sToM((allWeekTime * 60 / allWeekCount)));
         return modelMap;
     }    

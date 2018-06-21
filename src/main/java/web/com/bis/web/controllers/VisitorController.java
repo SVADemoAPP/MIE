@@ -21,6 +21,7 @@ import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cglib.core.Local;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bis.common.Util;
 import com.bis.common.conf.Params;
+import com.bis.dao.LocationDao;
 import com.bis.dao.StatisticsDao;
 import com.bis.dao.VisitorDao;
 import com.bis.model.TextModel;
@@ -61,6 +63,9 @@ public class VisitorController {
 
     @Autowired
     private StatisticsDao statisticsDao;
+    
+    @Autowired
+    private LocationDao locationDao;
     
     @Value("${sva.coefficientSwitch}")
     private int coefficientSwitch;   
@@ -278,9 +283,10 @@ public class VisitorController {
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
         Map<String, Object> modelMap = new HashMap<String, Object>();
+        int sum = locationDao.getMallTotal1(1,tableName, storeId);
         if (statisticsDao.isTableExist(tableName, this.db) > 0) {
             modelMap.put("mapData", addRation(dao.getMapVisitorCount(tableName, storeId)));
-            modelMap.put("shopData",sortTop10(addRation( dao.getShopVisitorCount(tableName, storeId))));
+            modelMap.put("shopData",sortTop10(addRation( dao.getShopVisitorCount(tableName, storeId),sum)));
             modelMap.put("status", Params.RETURN_CODE_200);
         } else {
             modelMap.put("status", Params.RETURN_CODE_400);
@@ -368,6 +374,31 @@ public class VisitorController {
         if (sum == 0) {
             return returnList;
         }
+        for (int i = 0; i < mapList.size(); i++) {
+            Map<String, Object> map = mapList.get(i);
+            float temp = 0;
+            if (i != mapList.size() - 1) {
+                if (map.get("value") instanceof Long) {
+                    temp = Util.getTwoPointNumber((float) ((long) map.get("value") * 100) / sum);
+                } else if (map.get("value") instanceof Integer) {
+                    temp = Util.getTwoPointNumber((float) ((int) map.get("value") * 100) / sum);
+                    ;
+                }
+                totalRation -= temp;
+            } else {
+                temp = Util.getTwoPointNumber(totalRation);
+            }
+            Map<String, Object> newMap = new HashMap<>();
+            newMap.put("name", map.get("name") + ":" + temp + "%");
+            newMap.put("value", coefficientData(Integer.parseInt(map.get("value").toString())));
+            returnList.add(newMap);
+        }
+        return returnList;
+    }
+    
+    private List<Map<String, Object>> addRation(List<Map<String, Object>> mapList,int sum) {
+        List<Map<String, Object>> returnList = new ArrayList<>();
+        float totalRation = 100;
         for (int i = 0; i < mapList.size(); i++) {
             Map<String, Object> map = mapList.get(i);
             float temp = 0;

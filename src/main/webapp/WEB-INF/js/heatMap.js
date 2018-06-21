@@ -793,13 +793,13 @@ var heatMap = function() {
 								var yesAllPeople = data.yesAllPeople;
 								var nowTime = data.nowTime;
 								var yesTime = data.yesTime;
-								var newAllPeople = data.newAllPeople;
+//								var newAllPeople = data.newAllPeople;
 
 								var nowArray = mapToarray(nowData);
 								var newArray = mapToarray(newData);
 								var allArray = mapToarray(allData);
 								var timeArray = mapToarray(timeData);
-								var nowArrays = mapToarray2(nowData);
+								var nowArrays = mapToarray2(allData);
 								var timeArrays = mapToarray2(timeData);
 								fuzhiFunction("nowPeople", "nowPeopleId",
 										"nowData", nowArray, nowPeople,
@@ -821,11 +821,12 @@ var heatMap = function() {
 								var allTimes = 0;
 								var cishu = 0;
 								var cishu1 = 0;
-								for (var int = 0; int < nowArray.length; int++) {
-									if (nowArray[int] != 0) {
+								for (var int = 0; int < allArray.length; int++) {
+									if (allArray[int] != 0) {
 										cishu = cishu + 1;
-										chartAllCount += nowArray[int];
+										chartAllCount += allArray[int];
 									}
+									
 									if (timeArray[int] != 0) {
 										allTimes += timeArray[int];
 										cishu1 = cishu1 + 1;
@@ -953,6 +954,43 @@ var heatMap = function() {
 							}
 						});
 	};
+	var initPeriodHeatmap1 = function(param) {
+		$("#mapContainer1").css("background-image", "");
+		$("#heatmap1").empty();
+		$.post("/sva/heatmap/api/getMapInfoByPosition?mapId=" + mapIds,
+				function(data) {
+					if (data.data.length > 0) {
+						if (data.data[0].path) {
+							var data = data.data[0];
+							// 全局变量赋值
+							origX = data.xo;
+							origY = data.yo;
+							bgImg = data.path;
+							bgImgWidth = data.imgWidth;
+							bgImgHeight = data.imgHeight;
+							scale = data.scale;
+							coordinate = data.coordinate;
+							// 设置背景图片
+							// var bgImgStr = "url(upload/" + bgImg + ")";
+							var bgImgStr = "url(../upload/map/" + bgImg + ")";
+							var imgInfo = calImgSize(bgImgWidth, bgImgHeight);
+							imgScale = imgInfo[0];
+							imgWidth = imgInfo[1];
+							imgHeight = imgInfo[2];
+							$("#mapContainer1").css(
+									{
+										"width" : imgWidth + "px",
+										"height" : imgHeight + "px",
+										"background-image" : bgImgStr,
+										"background-size" : imgWidth + "px "
+												+ imgHeight + "px",
+										"margin" : "0 auto"
+									});
+						}
+					}
+				});
+	};
+	
 
 	var initPeriodHeatmap = function(param) {
 		$("#mapContainer1").css("background-image", "");
@@ -1074,7 +1112,7 @@ var heatMap = function() {
 						startTime : startTimestamp,
 						endTime : timestamps
 					};
-					initPeriodHeatmap(param);
+					initPeriodHeatmap1(param);
 					// 今天
 					var date1 = new Date();
 					nowDate1 = date1.format("yyyy-MM-dd");
@@ -1115,7 +1153,7 @@ var heatMap = function() {
 					startTime : startTimestamp,
 					endTime : timestamps
 				};
-				initPeriodHeatmap(param);
+				initPeriodHeatmap1(param);
 				clearTimeout(charTime1);
 				intiHeatMapChart();
 //				RouteLine.changeShop(shopIds,mapIds);
@@ -1177,7 +1215,7 @@ $(document).ready(function() {
 		textcolor : '#5a5e63',
 		gray : objColors.gray
 	}
-	showColors = [ colours.blue, colours.yellow, colours.red, colours.green ];
+	showColors = [ colours.blue, colours.yellow, colours.red, colours.green,colours.dark,colours.brown,colours.orange,colours.purple,colours.pink,colours.lime,colours.magenta,colours.teal, colours.gray];
 	initPieChart();
 	setTimes();
 });

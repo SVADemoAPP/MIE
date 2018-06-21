@@ -195,6 +195,7 @@ var refreshTotalData = function() {
 									+ timeToString(nowTime); // 显示m+s格式的时间字符串
 						}
 					});
+	getTodayTopData();
 	clearTimeout(totalTimer);
 	totalTimer = setTimeout("refreshTotalData();",600000);
 };
@@ -1503,7 +1504,7 @@ $(document).ready(function() {
 		barColor:'#97d3c5',
 		gray : objColors.gray
 	}
-	showColors = [ colours.blue, colours.yellow, colours.red, colours.green ];
+	showColors = [ colours.blue, colours.yellow, colours.red, colours.green,colours.dark,colours.brown,colours.orange,colours.purple,colours.pink,colours.lime,colours.magenta,colours.teal, colours.gray];
 	initPieChart();
 
 });

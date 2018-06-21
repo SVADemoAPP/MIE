@@ -638,6 +638,7 @@ var heatMap = function() {
 			min : 1,
 			data : []
 		};
+		heatmap1 = h337.create(configObj1); 
 		heatmap1.setData(dataObj); // 先清空
 		$.post("../heatmap/api/getMapInfoByPosition?mapId=" + mapIds, function(
 				data) {
@@ -1225,7 +1226,7 @@ var heatMap = function() {
 							initTotalData();
 							initHeatmap();
 							initHeatmapTime();
-							getFiveMinuteHeatmap();
+//							getFiveMinuteHeatmap();
 //							mapIds2 = mapIds;
 //							mapIds3 = mapIds;
 							// 今天
@@ -1271,7 +1272,7 @@ var heatMap = function() {
 //							mapIds2 = mapIds;
 //							mapIds3 = mapIds;
 //							mapIds4 = mapIds;
-							getFiveMinuteHeatmap();
+//							getFiveMinuteHeatmap();
 							showMapTrend(0, sign1, nowDate1, "mapTrendByHour",
 									mapIds);
 							showMapTrend(1, sign2, nowDate2, "mapTrendByDay",
@@ -1332,7 +1333,7 @@ $(document).ready(function() {
 		textcolor : '#5a5e63',
 		gray : objColors.gray
 	}
-	showColors = [ colours.blue, colours.yellow, colours.red, colours.green ];
+	showColors = [ colours.blue, colours.yellow, colours.red, colours.green,colours.dark,colours.brown,colours.orange,colours.purple,colours.pink,colours.lime,colours.magenta,colours.teal, colours.gray];
 	initPieChart();
 	setTimes();
 
