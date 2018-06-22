@@ -255,7 +255,7 @@ color: white;
 							</div>
 							<div class="panel-body">
 								<div class="row">
-									<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
+									<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" >
 										<!-- col-lg-3 start here -->
 										<div class="tile gray-spr m0 mb20" style="background-color: #f68484;color: white">
 											<div class="tile-content text-center clearfix">
@@ -276,8 +276,7 @@ color: white;
 									<!-- col-lg-3 end here -->
 
 									<!-- col-lg-3 end here -->
-									<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-										<!-- col-lg-3 start here -->
+									<!--  <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 										<div class="tile gray-spr m0 mb20" style="background-color: #75b9e6;color: white">
 											<div class="tile-content text-center clearfix">
 												<div class="label"style="color: white">
@@ -293,10 +292,10 @@ color: white;
 												</div>
 											</div>
 										</div>
-									</div>
+									</div>-->
 
 									<!-- col-lg-3 end here -->
-									<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+									<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 										<!-- col-lg-3 start here -->
 										<div class="tile gray-spr m0 mb20"style="background-color: #71d398;color: white">
 											<div class="tile-content text-center clearfix">
@@ -315,7 +314,7 @@ color: white;
 											</div>
 										</div>
 									</div>
-									<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+									<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 										<!-- col-lg-3 start here -->
 										<div class="tile gray-spr m0 mb20"style="background-color: #97d3c5;color: white">
 											<div class="tile-content text-center clearfix">

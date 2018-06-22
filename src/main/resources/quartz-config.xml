@@ -57,7 +57,7 @@
 		<!-- 调用的类 -->
 		<property name="targetObject" ref="quartzJob" />
 		<!-- 调用类中的方法 -->
-		<property name="targetMethod" value="getTrend" />
+		<property name="targetMethod" value="saveTrend" />
 	</bean>
 
 	<bean id="jobtask6"
@@ -150,7 +150,7 @@
 		<property name="jobDetail" ref="jobtask5" />
 		<!-- cron表达式 -->
 		<!-- 每隔10秒执行一次 -->
-		<property name="cronExpression" value="00 00 * * * ?" />
+		<property name="cronExpression" value="30 48 * * * ?" />
 	</bean>
 
 	<bean id="doTime6"
@@ -184,7 +184,7 @@
 			<list>
 				<ref bean="doTime1" />
 				<ref bean="doTime2" />
-				<ref bean="doTime3" />
+		<!-- 	<ref bean="doTime3" /> -->  
 				<ref bean="doTime4" />
 				<ref bean="doTime5" />
 				<ref bean="doTime6" />

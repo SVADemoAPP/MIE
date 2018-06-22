@@ -25,7 +25,6 @@ import com.bis.common.conf.Params;
 import com.bis.dao.LocationDao;
 import com.bis.dao.ShopDao;
 import com.bis.dao.StatisticsDao;
-import com.bis.model.NewUserModel;
 import com.bis.model.ShopCostModel;
 import com.bis.model.ShopModel;
 import com.bis.model.StatisticsModel;
@@ -473,7 +472,7 @@ public class ShopController {
         // 昨天实时人数
         int yesCount = 0;
         // 新增人数
-        int newUser = 0;
+//        int newUser = 0;
         // 今日累计人数
         int allcount = 0;
         // 昨日累计人数
@@ -523,15 +522,15 @@ public class ShopController {
             yesAllTiaoshu = locationDao.getYesAllTiaoshu(yesTableName, shopModel, yesTimes);
             averageTime = Util.getMinute(allTiaoshu * 2000, allcount);
             yesAverageTime = Util.getMinute(yesAllTiaoshu * 2000, yesAllCount);
-            nowList.removeAll(yesList);
-            newUser = nowList.size();
+//            nowList.removeAll(yesList);
+//            newUser = nowList.size();
         } else {
             return null;
         }
         c.setTime(new Date());
         c.add(Calendar.DATE, -7);
         String sevenDay = Util.dateFormat(c.getTimeInMillis(), Params.YYYYMMDD);
-        String sevenDays = Util.dateFormat(c.getTimeInMillis(), Params.YYMMDD);
+//        String sevenDays = Util.dateFormat(c.getTimeInMillis(), Params.YYMMDD);
         if (Integer.parseInt(nows) >= 7) {
             lists = dao.getShopWeekData(shopTableName, shopId, sevenDay, nowDay);
         } else {
@@ -548,11 +547,11 @@ public class ShopController {
         Map<String, Object> visitMap = new TreeMap<String, Object>();
         Map<String, Object> countMap = new TreeMap<String, Object>();
         Map<String, Object> nowMap = new TreeMap<String, Object>();
-        Map<String, Object> newUserMap = new TreeMap<String, Object>();
+//        Map<String, Object> newUserMap = new TreeMap<String, Object>();
         nowMap.put(yesDays, yesCount);
         visitMap.put(String.valueOf(Util.dateFormatStringtoLong(yesDays, Params.YYMMDD)), 0);
         countMap.put(yesDays, 0);
-        newUserMap.put(yesDays, 0);
+//        newUserMap.put(yesDays, 0);
 
         for (int i = 2; i < 8; i++) {
             c.setTime(new Date());
@@ -569,7 +568,7 @@ public class ShopController {
             nowMap.put(newRiqi, yesCounts);
             visitMap.put(String.valueOf(Util.dateFormatStringtoLong(newRiqi, Params.YYMMDD)), 0);
             countMap.put(newRiqi, 0);
-            newUserMap.put(newRiqi, 0);
+//            newUserMap.put(newRiqi, 0);
         }
         for (int i = 0; i < lists.size(); i++) {
             String keyVal = lists.get(i).get("times").toString();
@@ -581,25 +580,25 @@ public class ShopController {
             countMap.put(keyVal.replace("-", "/").substring(2, keyVal.length()), coefficientData(allSize));
         }
         yesAllCount = coefficientData(Integer.parseInt(lists.get(lists.size()-1).get("allcount").toString()));
-        List<NewUserModel> list = dao.getAllNewDataByShopId(shopId, sevenDays, yesDays);
-        for (int i = 0; i < list.size(); i++) {
-            NewUserModel model = list.get(i);
-            // String userTime = model.getTime();
-            int newUsers = model.getNewUser();
-            newUserMap.put(yesDays, coefficientData(newUsers));
-        }
+//        List<NewUserModel> list = dao.getAllNewDataByShopId(shopId, sevenDays, yesDays);
+//        for (int i = 0; i < list.size(); i++) {
+//            NewUserModel model = list.get(i);
+//            // String userTime = model.getTime();
+//            int newUsers = model.getNewUser();
+//            newUserMap.put(yesDays, coefficientData(newUsers));
+//        }
         Map<String, Object> modelMap = new HashMap<String, Object>();
         // visitMap.put(String.valueOf(Util.dateFormatStringtoLong(yesDays,
         // Params.YYMMDD)), yesAverageTime);
         nowMap.put(yesDays, yesAllCount);
         modelMap.put("nowData", nowMap);
-        modelMap.put("newData", newUserMap);
+//        modelMap.put("newData", newUserMap);
         modelMap.put("allData", countMap);
         modelMap.put("timeData", visitMap);
         modelMap.put("nowPeople", coefficientData(count));
         modelMap.put("yesPeople", coefficientData(yesCount));
-        modelMap.put("newPeople", coefficientData(newUser));
-        modelMap.put("yesNewPeople", newUserMap.get(yesDays));
+//        modelMap.put("newPeople", coefficientData(newUser));
+//        modelMap.put("yesNewPeople", newUserMap.get(yesDays));
         modelMap.put("nowAllPeople", coefficientData(allcount));
         modelMap.put("yesAllPeople", yesAllCount);
         modelMap.put("nowTime", averageTime);

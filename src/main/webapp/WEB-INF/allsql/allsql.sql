@@ -375,29 +375,29 @@ COLLATE='latin1_swedish_ci';
 
 
 CREATE TABLE `bi_trend_shop_day` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-	`shopId` INT(11) NOT NULL COMMENT '统计的shopId',
-	`fromShopId` VARCHAR(50) NOT NULL COMMENT '来源shopId，其他为-1',
-	`visitorCount` BIGINT(20) NOT NULL COMMENT '客流量',
-	`day` INT(11) NOT NULL COMMENT '日期，天，1到31',
-	`time` DATE NOT NULL COMMENT '日期',
-	PRIMARY KEY (`id`),
-	INDEX `FK_bi_trend_shop_day_bi_shop` (`shopId`),
-	CONSTRAINT `FK_bi_trend_shop_day_bi_shop` FOREIGN KEY (`shopId`) REFERENCES `bi_shop` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+    `shopId` INT(11) NOT NULL COMMENT '统计的shopId',
+    `fromShopId` VARCHAR(50) NULL DEFAULT NULL,
+    `visitorCount` BIGINT(20) NOT NULL COMMENT '客流量',
+    `day` INT(11) NOT NULL COMMENT '日期，天，1到31',
+    `time` DATE NOT NULL COMMENT '日期',
+    PRIMARY KEY (`id`),
+    INDEX `FK_bi_trend_shop_day_bi_shop` (`shopId`),
+    CONSTRAINT `FK_bi_trend_shop_day_bi_shop` FOREIGN KEY (`shopId`) REFERENCES `bi_shop` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 )
 COLLATE='latin1_swedish_ci';
 
 
 CREATE TABLE `bi_trend_shop_hour` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-	`shopId` INT(11) NOT NULL COMMENT '统计的shopId',
-	`fromShopId` VARCHAR(50) NOT NULL COMMENT '来源shopId，其他为-1',
-	`visitorCount` BIGINT(20) NOT NULL COMMENT '客流量',
-	`hour` INT(11) NOT NULL COMMENT '整点，1到24',
-	`time` DATE NOT NULL COMMENT '日期',
-	PRIMARY KEY (`id`),
-	INDEX `FK_bi_trend_shop_hour_bi_shop` (`shopId`),
-	CONSTRAINT `FK_bi_trend_shop_hour_bi_shop` FOREIGN KEY (`shopId`) REFERENCES `bi_shop` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+    `shopId` INT(11) NOT NULL COMMENT '统计的shopId',
+    `fromShopId` VARCHAR(50) NULL DEFAULT NULL COMMENT '来源shopId，其他为-1',
+    `visitorCount` BIGINT(20) NOT NULL COMMENT '客流量',
+    `hour` INT(11) NOT NULL COMMENT '整点，1到24',
+    `time` DATE NOT NULL COMMENT '日期',
+    PRIMARY KEY (`id`),
+    INDEX `FK_bi_trend_shop_hour_bi_shop` (`shopId`),
+    CONSTRAINT `FK_bi_trend_shop_hour_bi_shop` FOREIGN KEY (`shopId`) REFERENCES `bi_shop` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 )
 COLLATE='latin1_swedish_ci';
 

@@ -581,15 +581,15 @@ public class MarketController {
             delaytimeAll.add(delaytimeSum);
         }
         int todayUser = todayUserIdList.size();
-        todayUserIdList.removeAll(userIdAll.get(weeks.length - 1));
-        int todayNewUser = todayUserIdList.size();
+//        todayUserIdList.removeAll(userIdAll.get(weeks.length - 1));
+//        int todayNewUser = todayUserIdList.size();
         float avgDelay = 0;
         if (todayUser != 0) {
             avgDelay = Util.sToM(todayDelayCount * 2 / todayUser);
         }
         JSONObject weekUsercount = new JSONObject();
         JSONObject weekDelaytime = new JSONObject();
-        JSONObject weekNewUsercount = new JSONObject();
+//        JSONObject weekNewUsercount = new JSONObject();
         long allWeekCount = 0;
         float allWeekTime = 0;
         // 过去7天的一定格式日期数组
@@ -611,24 +611,24 @@ public class MarketController {
             }
             weekDelaytime.put(weeks2[i], avgDelaytime);
         }
-        for (int j = 6; j > 0; j--) {
-            List<String> userIdList = userIdAll.get(j);
-            List<String> lastIdList = userIdAll.get(j - 1);
-            userIdList.removeAll(lastIdList);
-            // JSONObject jsonObject3 = new JSONObject();
-            // jsonObject3.put("name", weeks2[j]);
-            // jsonObject3.put("value", userIdList.size());
-            weekNewUsercount.put(weeks2[j], coefficientData(userIdList.size()));
-        }
+//        for (int j = 6; j > 0; j--) {
+//            List<String> userIdList = userIdAll.get(j);
+//            List<String> lastIdList = userIdAll.get(j - 1);
+//            userIdList.removeAll(lastIdList);
+//            // JSONObject jsonObject3 = new JSONObject();
+//            // jsonObject3.put("name", weeks2[j]);
+//            // jsonObject3.put("value", userIdList.size());
+//            weekNewUsercount.put(weeks2[j], coefficientData(userIdList.size()));
+//        }
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
         // modelMap.put(Params.RETURN_KEY_DATA, shopList);
         modelMap.put("todayUser", coefficientData(todayUser));
-        modelMap.put("todayNewUser", coefficientData(todayNewUser));
+//        modelMap.put("todayNewUser", coefficientData(todayNewUser));
         modelMap.put("todayAvgDelay", avgDelay);
         modelMap.put("weekUsercount", weekUsercount);
         modelMap.put("weekDelaytime", weekDelaytime);
-        modelMap.put("weekNewUsercount", weekNewUsercount);
+//        modelMap.put("weekNewUsercount", weekNewUsercount);
 
         modelMap.put("allWeekCount", coefficientData(Integer.parseInt(String.valueOf(allWeekCount))));
         modelMap.put("allWeekAvgDelay", allWeekCount == 0 ? 0 : Util.sToM((allWeekTime * 60 / allWeekCount)));
@@ -640,11 +640,11 @@ public class MarketController {
     public Map<String, Object> getWeekTotalByFloor(@RequestParam("mapId") String mapId) {
         TreeMap<String, Integer> weekUsercount = new TreeMap<>();
         TreeMap<String, String> weekDelaytime = new TreeMap<>();
-        TreeMap<String, Integer> weekNewUsercount = new TreeMap<>();
+//        TreeMap<String, Integer> weekNewUsercount = new TreeMap<>();
         List<String> todayUserIdList = new ArrayList<>(); // 今天的userId
         long todayDelayCount = 0; // 今天的位置条数
         List<String> listYesUser = new ArrayList<>();//昨天的user
-        int todayNewUser = 0; 
+//        int todayNewUser = 0; 
 
         // 过去7天的一定格式日期数组
         String[] weeks = Util.getLastNumDays(7, Params.YYYYMMDD2);
@@ -669,13 +669,13 @@ public class MarketController {
         }
         int todayUser = todayUserIdList.size();
         todayUserIdList.removeAll(listYesUser);
-        todayNewUser = todayUserIdList.size();
-        String yesDays = weeks[0];
-        String  sevenDays = weeks[weeks.length-1];
+//        todayNewUser = todayUserIdList.size();
+//        String yesDays = weeks[0];
+//        String  sevenDays = weeks[weeks.length-1];
         int allWeekCount = 0;
         float allWeekTime = 0;
         for (int i = 0; i < weeks.length; i++) {
-            weekNewUsercount.put(weeks[i], 0);
+//            weekNewUsercount.put(weeks[i], 0);
             List<StatisticsModel> userIdList =  daoMarket.getUserIdListByMapId(mapId, weeks[i]);
             if (userIdList.size()>0) {
                 allWeekCount += userIdList.get(0).getUserCount();
@@ -688,10 +688,10 @@ public class MarketController {
                 weekDelaytime.put(weeks[i], "0"); 
             }
         }
-        List<NewUserModel> list = statisticsDao.getNewUserByMapId(mapId,yesDays,sevenDays);
-        for (int i = 0; i < list.size(); i++) {
-            weekNewUsercount.put(list.get(i).getTime(),coefficientData(Integer.parseInt(String.valueOf(list.get(i).getNewUser()))));
-        }
+//        List<NewUserModel> list = statisticsDao.getNewUserByMapId(mapId,yesDays,sevenDays);
+//        for (int i = 0; i < list.size(); i++) {
+//            weekNewUsercount.put(list.get(i).getTime(),coefficientData(Integer.parseInt(String.valueOf(list.get(i).getNewUser()))));
+//        }
         float avgDelay = 0;
         if (todayUser != 0) {
             avgDelay = Util.sToM(todayDelayCount * 2 / todayUser);
@@ -701,11 +701,11 @@ public class MarketController {
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
         // modelMap.put(Params.RETURN_KEY_DATA, shopList);
         modelMap.put("todayUser", coefficientData(todayUser));
-        modelMap.put("todayNewUser", coefficientData(todayNewUser));
+//        modelMap.put("todayNewUser", coefficientData(todayNewUser));
         modelMap.put("todayAvgDelay", avgDelay);
         modelMap.put("weekUsercount", weekUsercount);
         modelMap.put("weekDelaytime", weekDelaytime);
-        modelMap.put("weekNewUsercount", weekNewUsercount);
+//        modelMap.put("weekNewUsercount", weekNewUsercount);
         modelMap.put("allWeekCount", coefficientData(allWeekCount));
         modelMap.put("allWeekAvgDelay", allWeekCount == 0 ? 0 : Util.sToM((allWeekTime * 60 / allWeekCount)));
         return modelMap;

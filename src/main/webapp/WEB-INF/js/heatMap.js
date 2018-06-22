@@ -189,22 +189,22 @@ var refreshTotalData = function() {
 					},
 					function(data) {
 						if (data.error == 200) {
-							var newData = data.newData;
+//							var newData = data.newData;
 							var allData = data.allData;
 							var timeData = data.timeData;
-							var newPeople = data.newPeople;
-							var yesNewPeople = data.yesNewPeople;
+//							var newPeople = data.newPeople;
+//							var yesNewPeople = data.yesNewPeople;
 							var nowAllPeople = data.nowAllPeople;
 							var yesAllPeople = data.yesAllPeople;
 							var nowTime = data.nowTime;
 							var yesTime = data.yesTime;
 
-							var newArray = mapToarray(newData);
+//							var newArray = mapToarray(newData);
 							var allArray = mapToarray(allData);
 							var timeArray = mapToarray(timeData);
-							fuzhiFunction("newPeople", "newPeopleId",
-									"newData", newArray, newPeople,
-									yesNewPeople, 0, 1);
+//							fuzhiFunction("newPeople", "newPeopleId",
+//									"newData", newArray, newPeople,
+//									yesNewPeople, 0, 1);
 							fuzhiFunction("nowAllcount", "nowAllcountId",
 									"allDataId", allArray, nowAllPeople,
 									yesAllPeople, 0, 1);
@@ -782,13 +782,13 @@ var heatMap = function() {
 							if (data.error == 200) {
 								var yesss = data.yesTime1;
 								var nowData = data.nowData;
-								var newData = data.newData;
+//								var newData = data.newData;
 								var allData = data.allData;
 								var timeData = data.timeData;
 								var nowPeople = data.nowPeople;
 								var yesPeople = data.yesPeople;
-								var newPeople = data.newPeople;
-								var yesNewPeople = data.yesNewPeople;
+//								var newPeople = data.newPeople;
+//								var yesNewPeople = data.yesNewPeople;
 								var nowAllPeople = data.nowAllPeople;
 								var yesAllPeople = data.yesAllPeople;
 								var nowTime = data.nowTime;
@@ -796,7 +796,7 @@ var heatMap = function() {
 //								var newAllPeople = data.newAllPeople;
 
 								var nowArray = mapToarray(nowData);
-								var newArray = mapToarray(newData);
+//								var newArray = mapToarray(newData);
 								var allArray = mapToarray(allData);
 								var timeArray = mapToarray(timeData);
 								var nowArrays = mapToarray2(allData);
@@ -804,9 +804,9 @@ var heatMap = function() {
 								fuzhiFunction("nowPeople", "nowPeopleId",
 										"nowData", nowArray, nowPeople,
 										yesPeople, 0, 0);
-								fuzhiFunction("newPeople", "newPeopleId",
-										"newData", newArray, newPeople,
-										yesNewPeople, 0, 1);
+//								fuzhiFunction("newPeople", "newPeopleId",
+//										"newData", newArray, newPeople,
+//										yesNewPeople, 0, 1);
 								fuzhiFunction("nowAllcount", "nowAllcountId",
 										"allDataId", allArray, nowAllPeople,
 										yesAllPeople, 0, 1);

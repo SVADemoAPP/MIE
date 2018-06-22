@@ -194,22 +194,22 @@ var refreshTotalData = function() {
 					},
 					function(data) {
 						if (data.error == 200) {
-							var newData = data.weekNewUsercount;
+//							var newData = data.weekNewUsercount;
 							var allData = data.weekUsercount;
 							var timeData = data.weekDelaytime;
-							var newPeople = data.todayNewUser;
+//							var newPeople = data.todayNewUser;
 							var nowAllPeople = data.todayUser;
 							var nowTime = data.todayAvgDelay;
-							var newArray = mapToarray(newData);
+//							var newArray = mapToarray(newData);
 							newArray.reverse();
 							var allArray = mapToarray(allData);
 							var timeArray = mapToarray(timeData);
-							var yesNewPeople = newArray[5];
+//							var yesNewPeople = newArray[5];
 							var yesAllPeople = allArray[6];
 							var yesTime = timeArray[6];
-							fuzhiFunction("newPeople", "newPeopleId",
-									"newData", newArray, newPeople,
-									yesNewPeople, 0, 1);
+//							fuzhiFunction("newPeople", "newPeopleId",
+//									"newData", newArray, newPeople,
+//									yesNewPeople, 0, 1);
 							fuzhiFunction("nowAllcount", "nowAllcountId",
 									"allDataId", allArray, nowAllPeople,
 									yesAllPeople, 0, 1);
@@ -919,25 +919,25 @@ var heatMap = function() {
 						},
 						function(data) {
 							if (data.error == 200) {
-								var newData = data.weekNewUsercount;
+//								var newData = data.weekNewUsercount;
 								var allData = data.weekUsercount;
 								var timeData = data.weekDelaytime;
-								var newPeople = data.todayNewUser;
+//								var newPeople = data.todayNewUser;
 								var nowAllPeople = data.todayUser;
 								var nowTime = data.todayAvgDelay;
-								var newArray = mapToarray(newData);
-								newArray.reverse();
+//								var newArray = mapToarray(newData);
+//								newArray.reverse();
 								var allArray = mapToarray(allData);
 								var timeArray = mapToarray(timeData);
-								var yesNewPeople = newArray[5];
+//								var yesNewPeople = newArray[5];
 								var yesAllPeople = allArray[6];
 								var yesTime = timeArray[6];
 								var weekTime = data.allWeekAvgDelay;
 								var allArrays = mapToarray2(allData);
 								var timeArrays = mapToarray2(timeData);
-								fuzhiFunction("newPeople", "newPeopleId",
-										"newData", newArray, newPeople,
-										yesNewPeople, 0, 1);
+//								fuzhiFunction("newPeople", "newPeopleId",
+//										"newData", newArray, newPeople,
+//										yesNewPeople, 0, 1);
 								fuzhiFunction("nowAllcount", "nowAllcountId",
 										"allDataId", allArray, nowAllPeople,
 										yesAllPeople, 0, 1);

@@ -398,21 +398,21 @@ public class VisitorController {
     
     private List<Map<String, Object>> addRation(List<Map<String, Object>> mapList,int sum) {
         List<Map<String, Object>> returnList = new ArrayList<>();
-        float totalRation = 100;
+//        float totalRation = 100;
         for (int i = 0; i < mapList.size(); i++) {
             Map<String, Object> map = mapList.get(i);
             float temp = 0;
-            if (i != mapList.size() - 1) {
+//            if (i != mapList.size() - 1) {
                 if (map.get("value") instanceof Long) {
                     temp = Util.getTwoPointNumber((float) ((long) map.get("value") * 100) / sum);
                 } else if (map.get("value") instanceof Integer) {
                     temp = Util.getTwoPointNumber((float) ((int) map.get("value") * 100) / sum);
                     ;
                 }
-                totalRation -= temp;
-            } else {
-                temp = Util.getTwoPointNumber(totalRation);
-            }
+//                totalRation -= temp;
+//            } else {
+//                temp = Util.getTwoPointNumber(totalRation);
+//            }
             Map<String, Object> newMap = new HashMap<>();
             newMap.put("name", map.get("name") + ":" + temp + "%");
             newMap.put("value", coefficientData(Integer.parseInt(map.get("value").toString())));

@@ -657,5 +657,17 @@
 	
     <select id="getCountByTimestamp" resultType="int">
         select count(*) from ${tableName} where timestamp >#{timestamp} 
-    </select>	
+    </select>
+    
+    <select id="getAllTrendData" resultType="TrendAllModel">
+        select * from (select a.userId,max(a.timestamp) time,a.mapId from ${tableName} a 
+        join bi_maps b on a.mapId = b.mapId group by a.userId,a.mapId) as c 
+        order by c.userId asc,c.time desc      
+    </select>  
+    
+    <select id="getAllTrendShopData" resultType="TrendAllModel">
+        select * from (select a.userid,max(a.timestamp) time,b.id mapId from ${tableName} a 
+        join bi_shop b on a.mapId = b.mapId where a.x &gt;(b.xSpot)*10 and  a.x &lt;(b.x1Spot)*10 and a.y &gt; (b.ySpot)*10 and a.y &lt;(b.y1Spot)*10 group by a.userId,b.id) as c 
+        order by c.userId asc,c.time desc      
+    </select>            	
 </mapper>

@@ -15,6 +15,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.bis.model.LocationModel;
 import com.bis.model.ShopModel;
+import com.bis.model.TrendAllModel;
 import com.bis.model.TrendMapModel;
 import com.bis.model.TrendShopModel;
 
@@ -195,4 +196,8 @@ public interface LocationDao {
             @Param("tableName") String tableName);
     
     public int getCountByTimestamp(@Param("timestamp")long timestamp,@Param("tableName")String tableName);
+    
+    public List<TrendAllModel> getAllTrendData(@Param("tableName") String tableName);
+    
+    public List<TrendAllModel> getAllTrendShopData(@Param("tableName") String tableName);
 }
