@@ -140,7 +140,7 @@
 		<property name="jobDetail" ref="jobtask7" />
 		<!-- cron表达式 -->
 		<!-- 每隔10秒执行一次 -->
-		<property name="cronExpression" value="00 02 00 * * ?" />
+		<property name="cronExpression" value="00 00 04 * * ?" />
 	</bean>
 
 
@@ -150,7 +150,7 @@
 		<property name="jobDetail" ref="jobtask5" />
 		<!-- cron表达式 -->
 		<!-- 每隔10秒执行一次 -->
-		<property name="cronExpression" value="30 48 * * * ?" />
+		<property name="cronExpression" value="30 00 * * * ?" />
 	</bean>
 
 	<bean id="doTime6"

@@ -638,7 +638,7 @@ public class QuartzJob {
     }
     
     
-    private void saveTrend(){
+    public void saveTrend(){
         Calendar calendar = Calendar.getInstance();
         // 防止跑到下一天，往前推30分钟取时间值
         calendar.add(Calendar.MINUTE, -30);
@@ -666,7 +666,7 @@ public class QuartzJob {
             statisticsDao.doUpdate(insertsql);
         }
         // 如果hour为24同时按日保存
-        if (hour == 18) {
+        if (hour == 24) {
             int day = calendar.get(Calendar.DATE);
             for(String s:set)
             {
@@ -704,7 +704,7 @@ public class QuartzJob {
             statisticsDao.doUpdate(insertsql);
         }
         // 如果hour为24同时按日保存
-        if (hour == 18) {
+        if (hour == 24) {
             int day = calendar.get(Calendar.DATE);
             for(String s:shopset)
             {

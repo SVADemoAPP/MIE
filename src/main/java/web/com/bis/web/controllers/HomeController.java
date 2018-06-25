@@ -672,4 +672,94 @@ public class HomeController {
         return "today:" + ftpResult;
     }
 
+    @RequestMapping(value = "/testFtpOneDay", method = { RequestMethod.GET })
+    @ResponseBody
+    public Object testFtpOneDay(String dateKey) {
+        // System.out.println("定时任务：解析visitor文件");
+        String localPath = getClass().getResource("/").getPath();
+        // String localPath = System.getProperty("user.dir");
+        // localPath = localPath.substring(0,
+        // localPath.indexOf("bin"))+"webapps/SVAProject/WEB-INF";
+        localPath = localPath.substring(0, localPath.indexOf("/classes"));
+        localPath = localPath + "/" + "ftp" + "/";
+        LOG.debug("doFtpData localPath" + localPath);
+        // 解析前一天的visitor
+        Date date = new Date();
+//        String dateKey = Util.dateFormat(date, Params.YYYYMMDD);
+        String fileName = ftpFileNameHeader + dateKey + ".txt";
+        boolean ftpResult = Util.downFtpFile(ftpIp, ftpPort, ftpUserName, ftpPassWord, ftpRemotePath, fileName,
+                localPath, ftpType);
+        if (ftpResult) {
+
+            // String time = Util.dateFormat(date, Params.YYYYMMDDHHMMSS);
+            String filePath = localPath;
+            File file = new File(filePath, fileName);
+            if (file.exists()) {
+                // System.out.println("信息文件存在");
+                List<JSONObject> list = new ArrayList<>();
+                String[] names = Params.VISITOR_COLUMNS;
+                BufferedReader reader = null;
+                InputStreamReader isr = null;
+                try {
+                    isr = new InputStreamReader(new FileInputStream(file), "UTF-8");
+                    reader = new BufferedReader(isr);
+                    String tempString = null;
+                    // 一次读入一行，直到读入null为文件结束
+                    while ((tempString = reader.readLine()) != null) {
+                        JSONObject jsonObject = new JSONObject();
+                        String[] values = (tempString+"|end").replace("|", "_").split("_");
+                        for (int i = 0; i < names.length; i++) {
+                            // {"date","ipv4","ipv6","acr","eci","gender","age","localAddress","homeAddress",
+                            // "homeAddressCI","workAddress","workAddressCI","expendAbility"};
+                            switch (i) {
+                            case 1: // ipv4
+                                jsonObject.put(names[i], Util.isIp(values[i])?Util.convertIp(values[i]):"");
+                                break;
+                            case 3: // acr
+                            case 4: // eci
+                                jsonObject.put(names[i], values[i].length()<200?values[i]:"error");
+                                break;
+                            case 5: // gender
+                            case 6: // age
+                            case 12: // expendAbility
+                                jsonObject.put(names[i], "".equals(values[i])?"不详":values[i]);
+                                break;
+//                            case 7: // localAddress
+//                                break;
+//                            case 8: // homeAddress
+//                            case 10: // workAddress
+//                                break;
+                            default:
+                                jsonObject.put(names[i], values[i]);
+                                break;
+                            }
+                        }
+                        jsonObject.put("time", dateKey);
+                        list.add(jsonObject);
+                    }
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (isr != null) {
+                        try {
+                            isr.close();
+                        } catch (IOException e1) {
+                        }
+                    }
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e1) {
+                        }
+                    }
+                }
+                visitorDao.saveData(list);
+            }
+            // LOG.debug("VisitorController~插入Visitor数据条数:" + num);
+        } else {
+            LOG.debug("doFtpData downFtpFile failed result " + ftpResult);
+        }
+        return "today:" + ftpResult;
+    }
 }

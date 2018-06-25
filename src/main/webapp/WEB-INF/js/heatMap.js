@@ -1215,7 +1215,7 @@ $(document).ready(function() {
 		textcolor : '#5a5e63',
 		gray : objColors.gray
 	}
-	showColors = [ colours.blue, colours.yellow, colours.red, colours.green,colours.dark,colours.brown,colours.orange,colours.purple,colours.pink,colours.lime,colours.magenta,colours.teal, colours.gray];
+	showColors = [ colours.blue, colours.yellow, colours.red, colours.green,colours.dark,colours.brown,colours.orange,colours.purple,colours.pink,colours.lime,colours.teal, colours.gray];
 	initPieChart();
 	setTimes();
 });
