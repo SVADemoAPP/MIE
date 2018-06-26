@@ -90,7 +90,7 @@ public class DataAnalysisService
                 }
             }
         }
-        // 将结果列表写入数据库
+//        // 将结果列表写入数据库
 //        if(list.size()>0){
 //            statDao.savePeopleRoute(list);
 //        }
