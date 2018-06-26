@@ -27,9 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bis.common.SystemInfo;
 import com.bis.common.Util;
 import com.bis.common.conf.Params;
-import com.bis.dao.CpuDao;
 import com.bis.dao.LocationDao;
 import com.bis.dao.MapMngDao;
 import com.bis.dao.MarketDao;
@@ -41,7 +41,6 @@ import com.bis.model.MarketModel;
 import com.bis.model.MarketMonthDataModel;
 import com.bis.model.MarketShopSquareModel;
 import com.bis.model.MarketShopTopModel;
-import com.bis.model.NewUserModel;
 import com.bis.model.ShopCostModel;
 import com.bis.model.ShopModel;
 import com.bis.model.StatisticsModel;
@@ -66,9 +65,6 @@ public class MarketController {
  
     @Autowired
     private MarketOverviewDao dao;
-    
-    @Autowired
-	private CpuDao daoCpu; 
 
     @Value("${mysql.db}")
     private String db;
@@ -137,9 +133,9 @@ public class MarketController {
 //    	}
 //        modelAndView.addObject("memory", si.getEMS());
 //        modelAndView.addObject("diskspace", si.getDisk());
-        modelAndView.addObject("cpu", 98);
-        modelAndView.addObject("memory", 78);
-        modelAndView.addObject("diskspace", 30);
+        modelAndView.addObject("cpu", SystemInfo.cpu());
+        modelAndView.addObject("memory", SystemInfo.memory());
+        modelAndView.addObject("diskspace", SystemInfo.file());
         modelAndView.setViewName("/market2");
         return modelAndView;
     }

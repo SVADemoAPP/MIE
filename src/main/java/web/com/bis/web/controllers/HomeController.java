@@ -3,7 +3,6 @@ package com.bis.web.controllers;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -27,12 +26,11 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.RequestContext;
 
+import com.bis.common.SystemInfo;
 import com.bis.common.Util;
 import com.bis.common.conf.Params;
-import com.bis.dao.CpuDao;
 import com.bis.dao.VisitorDao;
 import com.bis.web.auth.AuthPassport;
-import com.bis.web.auth.SystemInfo;
 
 import net.sf.json.JSONObject;
 
@@ -46,8 +44,7 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping(value = "/home")
 public class HomeController {
-    @Autowired
-    private CpuDao dao;
+    
     private static final Logger LOG = Logger.getLogger(HomeController.class);
 
     @Autowired
@@ -88,9 +85,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("storeMng", true);
-        model.addAttribute("cpu", 89);
-        model.addAttribute("memory", 65);
-        model.addAttribute("diskspace", 30);
+        model.addAttribute("cpu", SystemInfo.cpu());
+        model.addAttribute("memory", SystemInfo.memory());
+        model.addAttribute("diskspace", SystemInfo.file());
         return "config/storeConfig";
     }
 
@@ -132,9 +129,9 @@ public class HomeController {
         model.addAttribute("infoMng", true);
         model.addAttribute("mapMng", true);
         model.addAttribute("info", info);
-        model.addAttribute("cpu", 90);
-        model.addAttribute("memory", 55);
-        model.addAttribute("diskspace", 30);
+        model.addAttribute("cpu", SystemInfo.cpu());
+        model.addAttribute("memory", SystemInfo.memory());
+        model.addAttribute("diskspace", SystemInfo.file());
         return "config/mapConfig";
     }
 
@@ -173,9 +170,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("categoryMng", true);
-        model.addAttribute("cpu", 92);
-        model.addAttribute("memory", 65);
-        model.addAttribute("diskspace", 30);
+        model.addAttribute("cpu", SystemInfo.cpu());
+        model.addAttribute("memory", SystemInfo.memory());
+        model.addAttribute("diskspace", SystemInfo.file());
         return "config/categoryConfig";
     }
 
@@ -214,9 +211,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("InputMng", true);
-        model.addAttribute("cpu", 95);
-        model.addAttribute("memory", 75);
-        model.addAttribute("diskspace", 30);
+        model.addAttribute("cpu", SystemInfo.cpu());
+        model.addAttribute("memory", SystemInfo.memory());
+        model.addAttribute("diskspace", SystemInfo.file());
         return "config/shopConfig";
     }
 
@@ -255,9 +252,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("InputMng", true);
-        model.addAttribute("cpu", 90);
-        model.addAttribute("memory", 85);
-        model.addAttribute("diskspace", 30);
+        model.addAttribute("cpu", SystemInfo.cpu());
+        model.addAttribute("memory", SystemInfo.memory());
+        model.addAttribute("diskspace", SystemInfo.file());
         return "config/ticketConfig";
     }
 
@@ -290,9 +287,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("InputMng", true);
-        model.addAttribute("cpu", 99);
-        model.addAttribute("memory", 69);
-        model.addAttribute("diskspace", 30);
+        model.addAttribute("cpu", SystemInfo.cpu());
+        model.addAttribute("memory", SystemInfo.memory());
+        model.addAttribute("diskspace", SystemInfo.file());
         return "config/mixingConfig";
     }
 
@@ -332,9 +329,9 @@ public class HomeController {
         // model.addAttribute("cpu",si.getCpuRatioForWindows());
         // model.addAttribute("memory", si.getEMS());
         // model.addAttribute("diskspace",si.getDisk());
-        model.addAttribute("cpu", 98);
-        model.addAttribute("memory", 78);
-        model.addAttribute("diskspace", 30);
+        model.addAttribute("cpu", SystemInfo.cpu());
+        model.addAttribute("memory", SystemInfo.memory());
+        model.addAttribute("diskspace", SystemInfo.file());
         return "shop";
     }
 
@@ -365,9 +362,9 @@ public class HomeController {
         // }
         model.addAttribute("infoMng", true);
         model.addAttribute("InputMng", true);
-        model.addAttribute("cpu", 96);
-        model.addAttribute("memory", 65);
-        model.addAttribute("diskspace", 30);
+        model.addAttribute("cpu", SystemInfo.cpu());
+        model.addAttribute("memory", SystemInfo.memory());
+        model.addAttribute("diskspace", SystemInfo.file());
         // model.addAttribute("cpu",si.getCpuRatioForWindows());
         // model.addAttribute("memory", si.getEMS());
         // model.addAttribute("diskspace",si.getDisk());
@@ -406,9 +403,9 @@ public class HomeController {
         // }
         // model.addAttribute("memory", si.getEMS());
         // model.addAttribute("diskspace",si.getDisk());
-        model.addAttribute("cpu", 95);
-        model.addAttribute("memory", 75);
-        model.addAttribute("diskspace", 30);
+        model.addAttribute("cpu", SystemInfo.cpu());
+        model.addAttribute("memory", SystemInfo.memory());
+        model.addAttribute("diskspace", SystemInfo.file());
         return "operation";
     }
 
@@ -684,7 +681,7 @@ public class HomeController {
         localPath = localPath + "/" + "ftp" + "/";
         LOG.debug("doFtpData localPath" + localPath);
         // 解析前一天的visitor
-        Date date = new Date();
+//        Date date = new Date();
 //        String dateKey = Util.dateFormat(date, Params.YYYYMMDD);
         String fileName = ftpFileNameHeader + dateKey + ".txt";
         boolean ftpResult = Util.downFtpFile(ftpIp, ftpPort, ftpUserName, ftpPassWord, ftpRemotePath, fileName,

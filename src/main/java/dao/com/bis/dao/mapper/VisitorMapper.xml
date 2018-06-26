@@ -371,14 +371,15 @@
 
 	<select id="getShopVisitorCount" resultType="Map">
 		select b.shopName
-		name,count(distinct a.userId) value from ${tableName} a join bi_shop b
-		join
-		bi_maps c on (a.x between least(b.xSpot*10,b.x1Spot*10) and
-		greatest(b.xSpot*10,b.x1Spot*10))
-		and (a.y between
-		least(b.ySpot*10,b.y1Spot*10) and
-		greatest(b.ySpot*10,b.y1Spot*10)) and
-		a.mapId=b.mapId and
+		name,count(distinct a.userId) value from ${tableName} a left join bi_shop b
+		on (a.x between least(b.xSpot*10,b.x1Spot*10) and
+        greatest(b.xSpot*10,b.x1Spot*10))
+        and (a.y between
+        least(b.ySpot*10,b.y1Spot*10) and
+        greatest(b.ySpot*10,b.y1Spot*10)) and
+        a.mapId=b.mapId
+		left join
+		bi_maps c on 
 		b.mapId=c.mapId where c.storeId=#{storeId} group by
 		name order by value desc
 	</select>

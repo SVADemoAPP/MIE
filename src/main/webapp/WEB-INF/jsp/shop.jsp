@@ -545,7 +545,7 @@
 								<div class="col-lg-5 col-md-5">
 									<h4 class="panel-title"style="font-size: 15px;color: white;">
 										<i class="br-chart"></i>
-										<spring:message code="trend_hour"></spring:message>
+										<spring:message code="trend_hour1"></spring:message>
 									</h4>
 								</div>
 								<div class="col-lg-4 col-md-4" style="margin-top: 5px;font-size: 12px">
@@ -573,7 +573,7 @@
 								<div class="col-lg-5 col-md-5">
 									<h4 class="panel-title"style="font-size: 15px;color: white;">
 										<i class="br-chart"></i>
-										<spring:message code="trend_day"></spring:message>
+										<spring:message code="trend_day1"></spring:message>
 									</h4>
 								</div>
 								<div class="col-lg-4 col-md-4" style="margin-top: 5px;font-size: 12px">
