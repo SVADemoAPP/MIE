@@ -95,7 +95,6 @@ public class DataAnalysisService
 //            statDao.savePeopleRoute(list);
 //        }
         statDao.savePeopleRoute(list);
-        list.clear();
         LOG.debug("插入剩余零头长度："+list.size());
         LOG.debug("人数："+allUserId.size()+"，店铺数："+shopList.size()+"，总入库记录数："+((cou*1000)+list.size()));
     }
