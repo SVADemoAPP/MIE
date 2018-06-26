@@ -9,6 +9,7 @@
 package com.bis.service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -63,6 +64,7 @@ public class DataAnalysisService
         List<ShopModel> shopList = shopDao.queryAllShop();
         // 获取所有的人
         List<String> allUserId = locDao.queryAllUserId(tableName);
+        int cou=0;
         // 遍历用户，获取其店铺轨迹
         for(String userId : allUserId){
             // 获取用户的位置信息
@@ -80,15 +82,22 @@ public class DataAnalysisService
                     list.add(temp);
                     lastShopId = newShopId;
                     temp = null;
+                    if(list.size()>999){
+                        statDao.savePeopleRoute(list);
+                        list.clear();
+                        LOG.debug("插入1000条次数："+(++cou));
+                    }
                 }
             }
         }
         // 将结果列表写入数据库
-        if(list.size()>0){
-            statDao.savePeopleRoute(list);
-        }
-        
-        LOG.debug("人数："+allUserId.size()+"，店铺数："+shopList.size()+"，总入库记录数："+list.size());
+//        if(list.size()>0){
+//            statDao.savePeopleRoute(list);
+//        }
+        statDao.savePeopleRoute(list);
+        list.clear();
+        LOG.debug("插入剩余零头长度："+list.size());
+        LOG.debug("人数："+allUserId.size()+"，店铺数："+shopList.size()+"，总入库记录数："+((cou*1000)+list.size()));
     }
     
     /** 
