@@ -806,7 +806,7 @@ public class MarketController {
             enterRate=String.valueOf(rates.getEnter(listModel.get(i)));
             overflowRate = String.valueOf(rates.getOverflow1(Integer.parseInt(listModel.get(i).getId())));
             deepRate = String.valueOf(rates.getDeep(Integer.parseInt(listModel.get(i).getId())));
-            shopName = rateDao.selectShopNameById(Integer.parseInt(listModel.get(i).getId()));
+            shopName = listModel.get(i).getShopName();
     		listEnterRate.add(enterRate);
     		listShopName.add(shopName);
     		listOverRate.add(overflowRate);
