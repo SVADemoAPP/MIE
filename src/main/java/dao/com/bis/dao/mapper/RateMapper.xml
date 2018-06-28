@@ -3,27 +3,19 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.bis.dao.RateDao">
-	<select id="selectCountByShop"  resultType="double">
+	<select id="selectCountByShop"  resultType="int">
 		SELECT COUNT(DISTINCT userId) 
 		FROM ${tableName}
-		WHERE x/10 &gt;=
-		(
-			SELECT xSpot FROM bi_shop WHERE id=#{id} 
-		) 
-		AND x/10 &lt;=
-		(
-			SELECT x1Spot FROM bi_shop WHERE id=#{id}
-		) AND y/10 &gt;=
-		(
-			SELECT ySpot FROM bi_shop WHERE id=#{id}
-		) AND y/10 &lt;=
-		(
-			SELECT y1Spot FROM bi_shop WHERE id=#{id}
-		) AND ${tableName}.mapId in 
-		(
-			SELECT mapId FROM bi_shop WHERE id =#{id}
-		)
+		WHERE x &gt;= 10*#{shop.xSpot}
+		AND x &lt;= 10*#{shop.x1Spot}
+		 AND y &gt;= 10*#{shop.ySpot}
+		 AND y &lt;= 10*#{shop.y1Spot}
+		AND mapId = #{shop.mapId}
 	</select>
+	
+	<select id="getShopInfoById" resultType="ShopModel">	
+        select * from bi_shop where id = #{id}
+    </select> 
 	
     <select id="getShopInfoByMapId" resultType="ShopModel">	
         select a.*,b.x,b.y from bi_shop a join bi_shop_category b on a.categoryId = b.id join bi_maps c on c.mapId = a.mapId and a.mapId = #{mapId}
@@ -36,6 +28,10 @@
     <select id="getShopCountByShopId" resultType="int"> 
         select count(distinct userId) from ${tableName} where mapId = #{shop.mapId} and  x &gt;= (10 * #{shop.xSpot}) and x &lt;= (10 * #{shop.x1Spot}) and y &gt;= (10 * #{shop.ySpot}) and y &lt;= (10 * #{shop.y1Spot}) 
     </select>   
+    
+     <select id="getShopCountByShopIdRound" resultType="int"> 
+        select count(distinct userId) from ${tableName} where mapId = #{shop.mapId} and  x &gt;= (10 * #{shop.xSpot}-5*#{shop.x}) and x &lt;= (10 * #{shop.x1Spot}+5*#{shop.x}) and y &gt;= (10 * #{shop.ySpot}-5*#{shop.y}) and y &lt;= (10 * #{shop.y1Spot}+5*#{shop.y}) 
+    </select>  
 	
 	<select id="selectXByCategoryId" resultType="Integer">
 		SELECT x FROM bi_shop_category WHERE id =
@@ -51,29 +47,26 @@
 		)	
 	</select>
 	
-	<select id="selectAllCountByShop" resultType="double">
+	<select id="selectAllCountByShop" resultType="int">
 		SELECT COUNT(DISTINCT userId) 
 		FROM ${tableName}
-		WHERE x/10 &gt;=
+		WHERE x &gt;=
 		(
-			(SELECT xSpot FROM bi_shop WHERE id=#{id}) - (#{x}/2)
+			10*#{shop.xSpot} - 5*#{shop.x}
 		) 
-		AND x/10 &lt;=
+		AND x &lt;=
 		(
-			(SELECT x1Spot FROM bi_shop WHERE id=#{id}) + (#{x}/2)
+			10*#{shop.x1Spot} + 5*#{shop.x}
 		) 
-		AND y/10 &gt;=
+		AND y &gt;=
 		(
-			(SELECT ySpot FROM bi_shop WHERE id=#{id}) - (#{y}/2) 
+			10*#{shop.ySpot} - 5*#{shop.y}
 		) 
-		AND y/10 &lt;=
+		AND y &lt;=
 		(
-			(SELECT y1Spot FROM bi_shop WHERE id=#{id}) + (#{y}/2)
+			10*#{shop.y1Spot} + 5*#{shop.y}
 		) 
-		AND ${tableName}.mapId in 
-		(
-			SELECT mapId FROM bi_shop WHERE id =#{id}
-		)
+		AND mapId =#{shop.mapId}
 	
 	</select>
 	
@@ -92,7 +85,7 @@
 	<select id="selectShopIdByMapId" resultType="Integer">
 		SELECT id FROM bi_shop where mapId = #{mapId}
 	</select>
-		
+	
 	<select id="selectVisitorById" resultType="double">
 		SELECT visitorNumber FROM bi_shop_category WHERE id = 
 		(
@@ -104,27 +97,21 @@
 		SELECT shopName FROM bi_shop WHERE id = #{id}
 	</select>
 	
-	<select id="selectCountDelayTime" resultType="double">
-		SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{id} AND time = #{nowDay} AND delaytime &gt;=
+	<select id="selectCountDelayTime" resultType="int">
+		SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{shop.id} AND time = #{nowDay} AND delaytime &gt;=
 		(
-			SELECT deepTime FROM bi_shop_category WHERE id =
-			(
-				SELECT categoryId FROM bi_shop WHERE id = #{id}
-			)
+			SELECT deepTime FROM bi_shop_category WHERE id = #{shop.categoryId}
 		)
 	</select>
 	
-    <select id="selectCountDelayTime1" resultType="double">
-        SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{id} AND time = #{nowDay} AND delaytime &lt;=
+    <select id="selectCountDelayTime1" resultType="int">
+        SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{shop.id} AND time = #{nowDay} AND delaytime &lt;=
         (
-            SELECT visitorNumber FROM bi_shop_category WHERE id =
-            (
-                SELECT categoryId FROM bi_shop WHERE id = #{id}
-            )
+            SELECT visitorNumber FROM bi_shop_category WHERE id = #{shop.categoryId}
         )
     </select>	
 	
-	<select id="selectCount" resultType="double">
+	<select id="selectCount" resultType="int">
 		SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{id} AND time = #{nowDay}
 	</select>
 </mapper>

@@ -895,20 +895,48 @@ public class MarketController {
     	List<String> listShopName = new ArrayList<>();
     	List<String> listOverRate = new ArrayList<>();
     	List<String> listDeepRate = new ArrayList<>();
+    	boolean isExist=false;
+    	Calendar calendar = Calendar.getInstance();
+        // 获得前一天的日期
+        calendar.add(Calendar.DATE,-1);
+//      calendar.getTimeInMillis()
+        String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
+        String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
+        String tableName = Params.LOCATION + nowDay;
+        String tableName2 = Params.SHOPLOCATION + nowMouths;
+        try {
+            if(statisticsDao.isTableExist(tableName, this.db) > 0) {
+//              System.out.println("表不存在："+tableName);
+                isExist=true;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        if(isExist){
     	String enterRate;
     	String shopName;
     	String overflowRate;
     	String deepRate;
-    	for (int i = 0; i < listModel.size(); i++) {
-            enterRate=String.valueOf(rates.getEnter(listModel.get(i)));
-            overflowRate = String.valueOf(rates.getOverflow1(Integer.parseInt(listModel.get(i).getId())));
-            deepRate = String.valueOf(rates.getDeep(Integer.parseInt(listModel.get(i).getId())));
-            shopName = listModel.get(i).getShopName();
+    	ShopModel shopModel;
+    	for (int i = 0,len=listModel.size(); i < len; i++) {
+    	    shopModel=listModel.get(i);
+            enterRate=String.valueOf(rates.getEnter(shopModel,tableName));
+            overflowRate = String.valueOf(rates.getOverflow1(shopModel,tableName2,nowDay));
+            deepRate = String.valueOf(rates.getDeep(shopModel,tableName2,nowDay));
+            shopName = shopModel.getShopName();
     		listEnterRate.add(enterRate);
     		listShopName.add(shopName);
     		listOverRate.add(overflowRate);
     		listDeepRate.add(deepRate);
 		}
+        }else{
+            for (int i = 0,len=listModel.size(); i < len; i++) {
+                listEnterRate.add("0");
+                listShopName.add(listModel.get(i).getShopName());
+                listOverRate.add("0");
+                listDeepRate.add("0");
+            }
+        }
     	map.put("shopName", listShopName);
     	map.put("eRate", listEnterRate);
     	map.put("oRate", listOverRate);
@@ -942,20 +970,49 @@ public class MarketController {
     	List<String> listShopName = new ArrayList<>();
     	List<String> listOverRate = new ArrayList<>();
     	List<String> listDeepRate = new ArrayList<>();
+    	boolean isExist=false;
+        Calendar calendar = Calendar.getInstance();
+        // 获得前一天的日期
+        calendar.add(Calendar.DATE,-1);
+//      calendar.getTimeInMillis()
+        String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
+        String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
+        String tableName = Params.LOCATION + nowDay;
+        String tableName2 = Params.SHOPLOCATION + nowMouths;
+        try {
+            if(statisticsDao.isTableExist(tableName, this.db) > 0) {
+//              System.out.println("表不存在："+tableName);
+                isExist=true;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        if(isExist){
+          
     	String enterRate;
     	String shopName;
     	String overflowRate;
     	String deepRate;
-    	for (int i = 0; i < listModel.size(); i++) {
-    		enterRate=String.valueOf(rates.getEnter(listModel.get(i)));
-    		overflowRate = String.valueOf(rates.getOverflow1(Integer.parseInt(listModel.get(i).getId())));
-    		deepRate = String.valueOf(rates.getDeep(Integer.parseInt(listModel.get(i).getId())));
-    		shopName = rateDao.selectShopNameById(Integer.parseInt(listModel.get(i).getId()));
+    	ShopModel shopModel;
+    	for (int i = 0,len=listModel.size(); i < len; i++) {
+    	    shopModel=listModel.get(i);
+    		enterRate=String.valueOf(rates.getEnter(shopModel,tableName));
+    		overflowRate = String.valueOf(rates.getOverflow1(shopModel,tableName2,nowDay));
+    		deepRate = String.valueOf(rates.getDeep(shopModel,tableName2,nowDay));
+    		shopName = shopModel.getShopName();
     		listEnterRate.add(enterRate);
     		listShopName.add(shopName);
     		listOverRate.add(overflowRate);
     		listDeepRate.add(deepRate);
 		}
+        }else{
+            for (int i = 0,len=listModel.size(); i < len; i++) {
+                listEnterRate.add("0");
+                listShopName.add(listModel.get(i).getShopName());
+                listOverRate.add("0");
+                listDeepRate.add("0");
+            }
+        }
     	map.put("shopName", listShopName);
     	map.put("eRate", listEnterRate);
     	map.put("oRate", listOverRate);

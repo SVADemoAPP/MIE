@@ -24,6 +24,7 @@ import com.bis.common.Util;
 import com.bis.common.conf.Params;
 import com.bis.dao.LocationDao;
 import com.bis.dao.MapMngDao;
+import com.bis.dao.RateDao;
 import com.bis.dao.ShopDao;
 import com.bis.model.LocationModel;
 import com.bis.model.MapMngModel;
@@ -44,6 +45,9 @@ public class HeatmapController {
     
     @Autowired
     private Rates rates;
+    
+    @Autowired
+    private RateDao rateDao;
     
     @Value("${sva.durationOfLocation}")
     private int durationOfLocation;
@@ -482,11 +486,13 @@ public class HeatmapController {
     	String enterRate;
     	String overflowRate;
     	String deepRate;
+    	ShopModel shopModel=rateDao.getShopInfoById(id);
     	for (int i = 1; i < 8; i++) {
-    		enterRate = String.valueOf(rates.getEnter(id,i));
-    		overflowRate = String.valueOf(rates.getOverflow1(id, i));
-    		deepRate = String.valueOf(rates.getDeep(id, i));
-    		calendar.add(Calendar.DATE,-1);
+    	    calendar.add(Calendar.DATE,-1);
+    		enterRate = String.valueOf(rates.getEnter(shopModel,calendar));
+    		overflowRate = String.valueOf(rates.getOverflow1(shopModel,calendar));
+    		deepRate = String.valueOf(rates.getDeep(shopModel, calendar));
+    		
     		date =Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2);
     		listDate.add(date);
     		listEnterRate.add(enterRate);

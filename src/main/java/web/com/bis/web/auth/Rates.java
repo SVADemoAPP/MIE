@@ -25,22 +25,8 @@ public class Rates {
     private StatisticsDao statisticsDao;
 	
 	//计算进店率,参数为shopId
-	public int getEnter(ShopModel model){
+	public int getEnter(ShopModel model,String tableName){
 		
-		Calendar calendar = Calendar.getInstance();
-	    // 获得前一天的日期
-	    calendar.add(Calendar.DATE,-1);
-//		calendar.getTimeInMillis()
-	    String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
-	    String tableName = Params.LOCATION + nowDay;
-	    try {
-			if(statisticsDao.isTableExist(tableName, this.db) < 1) {
-//				System.out.println("表不存在："+tableName);
-				return 0;
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 	    //统计进入店内的游客
 //	    double visitorIn = rateDao.selectCountByShop(tableName, id);
 //	    Integer x = rateDao.selectXByCategoryId(id);
@@ -48,11 +34,7 @@ public class Rates {
 	    int shopCount  = rateDao.getShopCountByShopId(tableName, model);
 	    double x = Double.valueOf(model.getX())/2;
 	    double y = Double.valueOf(model.getY())/2;
-	    model.setxSpot(String.valueOf(Double.valueOf(model.getxSpot())-x));
-	    model.setX1Spot(String.valueOf(Double.valueOf(model.getX1Spot())+x));
-	    model.setySpot(String.valueOf(Double.valueOf(model.getySpot())-y));
-	    model.setY1Spot(String.valueOf(Double.valueOf(model.getY1Spot())+y));
-	    int allCount = rateDao.getShopCountByShopId(tableName, model);
+	    int allCount = rateDao.getShopCountByShopIdRound(tableName, model);
 	    //统计经过店门的游客
 //	    double visitorAll = rateDao.selectAllCountByShop(tableName,id,x,y);
 	    double enterRateDouble = 0;
@@ -76,11 +58,8 @@ public class Rates {
 	    return enterRate;
 	}
 	//参数为shopId,向前推的天数
-	public int getEnter(int id,int i){
+	public int getEnter(ShopModel model,Calendar calendar){
 		
-		Calendar calendar = Calendar.getInstance();
-	    // 获得前一天的日期
-	    calendar.add(Calendar.DATE,-i);
 //		calendar.getTimeInMillis()
 	    String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
 	    String tableName = Params.LOCATION + nowDay;
@@ -93,17 +72,14 @@ public class Rates {
 			// TODO: handle exception
 		}
 	    //统计进入店内的游客
-	    double visitorIn = rateDao.selectCountByShop(tableName, id);
-	    Integer x = rateDao.selectXByCategoryId(id);
-	    Integer y = rateDao.selectYByCategoryId(id);
+	    double visitorIn = rateDao.selectCountByShop(tableName, model);
+//	    Integer x = rateDao.selectXByCategoryId(id);
+//	    Integer y = rateDao.selectYByCategoryId(id);
 	    //统计经过店门的游客
-	    double visitorAll = rateDao.selectAllCountByShop(tableName,id,x,y);
+	    double visitorAll = rateDao.selectAllCountByShop(tableName,model);
 	    double enterRateDouble = 0;
 	    int enterRate;
-	    if(x==null||y==null){
-//	    	 System.out.println("xxx");
-	    	 return 0;
-	    }else if(visitorAll==0){
+	   if(visitorAll==0){
 //	    	System.out.println("visitorAll=0");
 	    	return 0;
 	    }else{
@@ -121,94 +97,80 @@ public class Rates {
 	
 	
 	
-	//计算溢出率,参数为shopId
-	public int getOverflow(int id){
-		Calendar calendar = Calendar.getInstance();
-	    // 获得前一天的日期
-	    calendar.add(Calendar.DATE,-1);
-//		calendar.getTimeInMillis()
-	    String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
-	    String tableName = Params.LOCATION + nowDay;
-	    try {
-			if(statisticsDao.isTableExist(tableName, this.db) < 1) {
-				System.out.println("表不存在："+tableName);
-				return 0;
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-//	    System.out.println("表名："+tableName);
-	    //进店的人
-	    double visitorIn = rateDao.selectCountByShop(tableName,id);
-	    //溢出率的基础值
-	    double visitorNumber = rateDao.selectVisitorById(id);
-	    int overflowRate ;
-	    if(visitorIn<=visitorNumber||visitorNumber == 0){
-//	    	System.out.println("没有溢出");
-	    	return 0;
-	    }else{
-	    	BigDecimal b = new BigDecimal((visitorIn - visitorNumber)/visitorNumber);
-	    	double r = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()*100;
-	    	overflowRate = (int) r; 
-	    }
-//	    System.out.println("溢出率："+overflowRate);
-	    return overflowRate;
-	}
-	//参数为shopId,向前推的天数
-	public int getOverflow(int id,int i){
-		Calendar calendar = Calendar.getInstance();
-	    // 获得前一天的日期
-	    calendar.add(Calendar.DATE,-i);
-//		calendar.getTimeInMillis()
-	    String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
-	    String tableName = Params.LOCATION + nowDay;
-//	    System.out.println("表名："+tableName);
-	    try {
-			if(statisticsDao.isTableExist(tableName, this.db) < 1) {
-//				System.out.println("表不存在"+tableName);
-				return 0;
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	    //进店的人
-	    double visitorIn = rateDao.selectCountByShop(tableName,id);
-	    //溢出率的基础值
-	    double visitorNumber = rateDao.selectVisitorById(id);
-	    int overflowRate ;
-	    if(visitorIn<=visitorNumber||visitorNumber == 0){
-//	    	System.out.println("没有溢出");
-	    	return 0;
-	    }else{
-	    	BigDecimal b = new BigDecimal((visitorIn - visitorNumber)/visitorNumber);
-	    	double r = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()*100;
-	    	overflowRate = (int) r; 
-	    }
-//	    System.out.println("溢出率："+overflowRate);
-	    return overflowRate;
-	}
+//	//计算溢出率,参数为shopId
+//	public int getOverflow(int id,String tableName){
+////	    System.out.println("表名："+tableName);
+//	    //进店的人
+//	    double visitorIn = rateDao.selectCountByShop(tableName,id);
+//	    //溢出率的基础值
+//	    double visitorNumber = rateDao.selectVisitorById(id);
+//	    int overflowRate ;
+//	    if(visitorIn<=visitorNumber||visitorNumber == 0){
+////	    	System.out.println("没有溢出");
+//	    	return 0;
+//	    }else{
+//	    	BigDecimal b = new BigDecimal((visitorIn - visitorNumber)/visitorNumber);
+//	    	double r = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()*100;
+//	    	overflowRate = (int) r; 
+//	    }
+////	    System.out.println("溢出率："+overflowRate);
+//	    return overflowRate;
+//	}
+//	//参数为shopId,向前推的天数
+//	public int getOverflow(int id,int i){
+//		Calendar calendar = Calendar.getInstance();
+//	    // 获得前一天的日期
+//	    calendar.add(Calendar.DATE,-i);
+////		calendar.getTimeInMillis()
+//	    String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
+//	    String tableName = Params.LOCATION + nowDay;
+////	    System.out.println("表名："+tableName);
+//	    try {
+//			if(statisticsDao.isTableExist(tableName, this.db) < 1) {
+////				System.out.println("表不存在"+tableName);
+//				return 0;
+//			}
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//	    //进店的人
+//	    double visitorIn = rateDao.selectCountByShop(tableName,id);
+//	    //溢出率的基础值
+//	    double visitorNumber = rateDao.selectVisitorById(id);
+//	    int overflowRate ;
+//	    if(visitorIn<=visitorNumber||visitorNumber == 0){
+////	    	System.out.println("没有溢出");
+//	    	return 0;
+//	    }else{
+//	    	BigDecimal b = new BigDecimal((visitorIn - visitorNumber)/visitorNumber);
+//	    	double r = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()*100;
+//	    	overflowRate = (int) r; 
+//	    }
+////	    System.out.println("溢出率："+overflowRate);
+//	    return overflowRate;
+//	}
 	
 	   //计算溢出率,参数为shopId
-    public int getOverflow1(int id){
-        Calendar calendar = Calendar.getInstance();
-        // 获得前一天的日期
-        calendar.add(Calendar.DATE,-1);
-//      calendar.getTimeInMillis()
-        String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
-        String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2);
-        String tableName = Params.SHOPLOCATION + nowMouths;
-        try {
-            if(statisticsDao.isTableExist(tableName, this.db) < 1) {
-//              System.out.println("表不存在："+tableName);
-                return 0;
-            }
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
+    public int getOverflow1(ShopModel model,String tableName,String nowDay){
+//        Calendar calendar = Calendar.getInstance();
+//        // 获得前一天的日期
+//        calendar.add(Calendar.DATE,-1);
+////      calendar.getTimeInMillis()
+//        String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
+//        String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2);
+//        String tableName = Params.SHOPLOCATION + nowMouths;
+//        try {
+//            if(statisticsDao.isTableExist(tableName, this.db) < 1) {
+////              System.out.println("表不存在："+tableName);
+//                return 0;
+//            }
+//        } catch (Exception e) {
+//            // TODO: handle exception
+//        }
         //进店时间超过基本时间的人数
-        double visitorDeep = rateDao.selectCountDelayTime1(tableName, id,nowDay);
+        double visitorDeep = rateDao.selectCountDelayTime1(tableName, model,nowDay);
         //进店的总人数
-        double visitorIn = rateDao.selectCount(tableName, id,nowDay);
+        double visitorIn = rateDao.selectCount(tableName, Integer.parseInt(model.getId()),nowDay);
         int deepRate;
         if(visitorIn==0){
 //          System.out.println("深访率：进店人数为零");
@@ -223,26 +185,26 @@ public class Rates {
     }
 
 	//计算深访率,参数为shopId
-	public int getDeep(int id){
-		Calendar calendar = Calendar.getInstance();
-	    // 获得前一天的日期
-	    calendar.add(Calendar.DATE,-1);
-//		calendar.getTimeInMillis()
-	    String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
-	    String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2);
-	    String tableName = Params.SHOPLOCATION + nowMouths;
-	    try {
-			if(statisticsDao.isTableExist(tableName, this.db) < 1) {
-//				System.out.println("表不存在："+tableName);
-				return 0;
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+	public int getDeep(ShopModel model,String tableName,String nowDay){
+//		Calendar calendar = Calendar.getInstance();
+//	    // 获得前一天的日期
+//	    calendar.add(Calendar.DATE,-1);
+////		calendar.getTimeInMillis()
+//	    String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
+//	    String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2);
+//	    String tableName = Params.SHOPLOCATION + nowMouths;
+//	    try {
+//			if(statisticsDao.isTableExist(tableName, this.db) < 1) {
+////				System.out.println("表不存在："+tableName);
+//				return 0;
+//			}
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
 	    //进店时间超过基本时间的人数
-	    double visitorDeep = rateDao.selectCountDelayTime(tableName, id,nowDay);
+	    double visitorDeep = rateDao.selectCountDelayTime(tableName, model,nowDay);
 	    //进店的总人数
-	    double visitorIn = rateDao.selectCount(tableName, id,nowDay);
+	    double visitorIn = rateDao.selectCount(tableName, Integer.parseInt(model.getId()),nowDay);
 	    int deepRate;
 	    if(visitorIn==0){
 //	    	System.out.println("深访率：进店人数为零");
@@ -257,10 +219,7 @@ public class Rates {
 	}
 	
 	//参数为shopId,向前推的天数
-	public int getDeep(int id,int i){
-		Calendar calendar = Calendar.getInstance();
-	    // 获得前一天的日期
-	    calendar.add(Calendar.DATE,-i);
+	public int getDeep(ShopModel model,Calendar calendar){
 //		calendar.getTimeInMillis()
 	    String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
 	    String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2);
@@ -274,9 +233,9 @@ public class Rates {
 			// TODO: handle exception
 		}
 	    //进店时间超过基本时间的人数
-	    double visitorDeep = rateDao.selectCountDelayTime(tableName, id,nowDay);
+	    double visitorDeep = rateDao.selectCountDelayTime(tableName, model,nowDay);
 	    //进店的总人数
-	    double visitorIn = rateDao.selectCount(tableName, id,nowDay);
+	    double visitorIn = rateDao.selectCount(tableName, Integer.parseInt(model.getId()),nowDay);
 	    int deepRate;
 	    if(visitorIn==0){
 //	    	System.out.println("深访率：进店人数为零");
@@ -291,10 +250,7 @@ public class Rates {
 	}
 	
 	   //参数为shopId,向前推的天数
-    public int getOverflow1(int id,int i){
-        Calendar calendar = Calendar.getInstance();
-        // 获得前一天的日期
-        calendar.add(Calendar.DATE,-i);
+    public int getOverflow1(ShopModel model,Calendar calendar){
 //      calendar.getTimeInMillis()
         String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
         String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2);
@@ -308,9 +264,9 @@ public class Rates {
             // TODO: handle exception
         }
         //进店时间超过基本时间的人数
-        double visitorDeep = rateDao.selectCountDelayTime1(tableName, id,nowDay);
+        double visitorDeep = rateDao.selectCountDelayTime1(tableName, model,nowDay);
         //进店的总人数
-        double visitorIn = rateDao.selectCount(tableName, id,nowDay);
+        double visitorIn = rateDao.selectCount(tableName, Integer.parseInt(model.getId()),nowDay);
         int deepRate;
         if(visitorIn==0){
 //          System.out.println("深访率：进店人数为零");
