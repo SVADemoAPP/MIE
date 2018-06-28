@@ -183,7 +183,7 @@ var fuzhiFunction = function(id, id1, id2, nowArray, nowPeople, yesPeople,
 	}
 }
 var refreshTotalData = function() {
-	$.post("/sva/shop/getTotal",
+	$.post("/sva/shop/getNewTotal",
 					{
 						shopId : shopIds
 					},
@@ -195,13 +195,15 @@ var refreshTotalData = function() {
 //							var newPeople = data.newPeople;
 //							var yesNewPeople = data.yesNewPeople;
 							var nowAllPeople = data.nowAllPeople;
-							var yesAllPeople = data.yesAllPeople;
+
 							var nowTime = data.nowTime;
-							var yesTime = data.yesTime;
+
 
 //							var newArray = mapToarray(newData);
 							var allArray = mapToarray(allData);
 							var timeArray = mapToarray(timeData);
+							var yesTime = timeArray[6];
+							var yesAllPeople = allArray[6];
 //							fuzhiFunction("newPeople", "newPeopleId",
 //									"newData", newArray, newPeople,
 //									yesNewPeople, 0, 1);
@@ -774,36 +776,41 @@ var heatMap = function() {
 		});
 	}
 	var initTotalData = function() {
-		$.post("/sva/shop/getTotal",
+		$.post("/sva/shop/getNewTotal",
 						{
 							shopId : shopIds
 						},
 						function(data) {
 							if (data.error == 200) {
-								var yesss = data.yesTime1;
-								var nowData = data.nowData;
+								var weekCount = data.allWeekCount;
+								var weekTime =  data.allWeekAvgDelay;
+//								var yesss = data.yesTime1;
+//								var nowData = data.nowData;
 //								var newData = data.newData;
 								var allData = data.allData;
 								var timeData = data.timeData;
 								var nowPeople = data.nowPeople;
-								var yesPeople = data.yesPeople;
+//								var yesPeople = data.yesPeople;
 //								var newPeople = data.newPeople;
 //								var yesNewPeople = data.yesNewPeople;
 								var nowAllPeople = data.nowAllPeople;
-								var yesAllPeople = data.yesAllPeople;
+//								var yesAllPeople = data.yesAllPeople;
 								var nowTime = data.nowTime;
-								var yesTime = data.yesTime;
+//								var yesTime = data.yesTime;
 //								var newAllPeople = data.newAllPeople;
 
-								var nowArray = mapToarray(nowData);
+								var nowArray = mapToarray(allData);
 //								var newArray = mapToarray(newData);
 								var allArray = mapToarray(allData);
 								var timeArray = mapToarray(timeData);
+								var yesTime = timeArray[6];
+								var yesss = timeArray[6];
+								var yesAllPeople = allArray[6];
 								var nowArrays = mapToarray2(allData);
 								var timeArrays = mapToarray2(timeData);
 								fuzhiFunction("nowPeople", "nowPeopleId",
 										"nowData", nowArray, nowPeople,
-										yesPeople, 0, 0);
+										yesAllPeople, 0, 0);
 //								fuzhiFunction("newPeople", "newPeopleId",
 //										"newData", newArray, newPeople,
 //										yesNewPeople, 0, 1);
@@ -817,28 +824,6 @@ var heatMap = function() {
 								initChartPeople(nowArrays);
 								initChartLine(timeArrays);
 								initChartBar();
-								var chartAllCount = 0;
-								var allTimes = 0;
-								var cishu = 0;
-								var cishu1 = 0;
-								for (var int = 0; int < allArray.length; int++) {
-									if (allArray[int] != 0) {
-										cishu = cishu + 1;
-										chartAllCount += allArray[int];
-									}
-									
-									if (timeArray[int] != 0) {
-										allTimes += timeArray[int];
-										cishu1 = cishu1 + 1;
-									}
-								}
-								var allTimess;
-								if (cishu1 == 0) {
-									allTimess = "0.00";
-								} else {
-									allTimess = ((allTimes) / cishu1)
-											.toFixed(2);
-								}
 								if (nowTime == 0) {
 									nowTime = "0.00";
 								}
@@ -849,10 +834,10 @@ var heatMap = function() {
 								}
 								document.getElementById("countToday").innerHTML = nowAllPeople;
 								document.getElementById("countYesterday").innerHTML = yesAllPeople;
-								document.getElementById("countTotal").innerHTML = chartAllCount;
+								document.getElementById("countTotal").innerHTML = weekCount;
 								document.getElementById("countTodayTime").innerHTML = timeToVarchar(nowTime);
 								document.getElementById("countYesTodayTime").innerHTML = timeToVarchar(yesss);
-								document.getElementById("allCountToday").innerHTML = timeToVarchar(allTimess);
+								document.getElementById("allCountToday").innerHTML = timeToVarchar(weekTime.toFixed(2));
 								clearTimeout(charTime1);
 								intiHeatMapChart();
 								RouteLine.changeShop(shopIds,mapIds);

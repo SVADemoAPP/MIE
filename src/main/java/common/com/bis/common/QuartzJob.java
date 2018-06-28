@@ -39,6 +39,7 @@ import com.bis.model.SvaModel;
 import com.bis.model.TrendAllModel;
 import com.bis.model.TrendMapModel;
 import com.bis.model.TrendShopModel;
+import com.bis.model.VisitTimeModel;
 import com.bis.service.DataAnalysisService;
 import com.bis.web.auth.PeripheryService;
 
@@ -292,6 +293,85 @@ public class QuartzJob {
             LOG.debug("storeMouth result:" + areaResult);
         }
 
+    }
+    
+    public void saveVisitTime()
+    {
+        try {
+            String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
+            String nowMouth = Util.dateFormat(new Date(), Params.YYYYMMddHH00);
+            String tableName = Params.LOCATION + nowDay;
+            long endTime = System.currentTimeMillis();
+            long beginTime = endTime-60*60*1000;
+            String insertFloor = "replace into bi_static_floor_visitTime(time,delaytime,allcount,mapId) values";
+            String insertStore = "replace into bi_static_store_visitTime(time,delaytime,allcount,storeId) values";
+            String insertShop = "replace into bi_static_shop_visitTime(time,delaytime,allcount,shopId) values";
+            List<VisitTimeModel> list = locationDao.getMapVisitTime(tableName,beginTime,endTime);
+            List<VisitTimeModel> mapCount = locationDao.getCountGroupByMapId(tableName);
+            List<VisitTimeModel> storeCount = locationDao.getCountGroupByStoreId(tableName);
+            List<VisitTimeModel> shopCount = locationDao.getCountGroupByShopId(tableName);
+            Map<String, Long> map = getFloorVisitTime(list);
+            Map<String, Long> mapIdS = getListToMap(mapCount);
+            Map<String, Long> stores = getListToMap(storeCount);
+            Map<String, Long> shops = getListToMap(shopCount);
+            Set<String> set = map.keySet();
+            Map<String, Long> storeVisitTime = new HashMap<String, Long>();
+            for(String s:set)
+            {
+                String mapId = s.split("-")[0];
+                String storeId = s.split("-")[1];
+                long visitTime = map.get(s);
+                long allCount = mapIdS.get(mapId);
+                String floorVisit = Util.getMinute(visitTime, 1);
+                if(storeVisitTime.containsKey(storeId))
+                {
+                    long times = storeVisitTime.get(storeId);
+                    storeVisitTime.put(storeId,(times+visitTime)/2);
+                }else
+                {
+                    storeVisitTime.put(storeId,visitTime);
+                }
+                insertFloor += "('" + nowMouth + "','" + floorVisit + "','" + allCount + "','" + mapId + "'),";
+            }
+            if (set.size()>0) {
+                insertFloor = insertFloor.substring(0, insertFloor.length() - 1);
+                int areaResult = statisticsDao.doUpdate(insertFloor);
+                LOG.debug("saveVisitTime-floor result:" + areaResult);
+            }
+            
+            Set<String> storeSet = storeVisitTime.keySet();
+            for(String s:storeSet)
+            {
+                long visitTime = storeVisitTime.get(s);
+                long allCount = stores.get(s);
+                String storeVisit = Util.getMinute(visitTime, 1);
+                insertStore += "('" + nowMouth + "','" + storeVisit + "','" + allCount + "','" + s + "'),";
+            }
+            if (storeSet.size()>0) {
+                insertStore = insertStore.substring(0, insertStore.length() - 1);
+                int areaResult = statisticsDao.doUpdate(insertStore);
+                LOG.debug("saveVisitTime-store result:" + areaResult);
+            }
+            List<VisitTimeModel> shopList = locationDao.getShopVisitTime(tableName,beginTime,endTime);
+            Map<String, Long> shopMap = getShopVisitTime(shopList);
+            Set<String> shopSet = shopMap.keySet();
+            for(String s:shopSet)
+            {
+                long visitTime = shopMap.get(s);
+                long allCount = shops.get(s);
+                String shopVisit = Util.getMinute(visitTime, 1);
+                insertShop += "('" + nowMouth + "','" + shopVisit + "','" + allCount + "','" + s + "'),";
+            }
+            if (shopSet.size()>0) {
+                insertShop = insertShop.substring(0, insertShop.length() - 1);
+                int areaResult = statisticsDao.doUpdate(insertShop);
+                LOG.debug("saveVisitTime-shop result:" + areaResult);
+            }
+        } catch (Exception e) {
+           LOG.error(e.getMessage());
+           System.out.println(1);
+        }
+        
     }
 
     /**
@@ -759,6 +839,9 @@ public class QuartzJob {
         }
         return map;
     }
+    
+    
+    
     /** 
      * @Title: verificationSva 
      * @Description: sva验证
@@ -865,4 +948,113 @@ public class QuartzJob {
             LOG.debug("doFtpData downFtpFile failed result " + ftpResult);
         }
     }
+    
+    
+    private static Map<String, Long> getFloorVisitTime(List<VisitTimeModel> list)
+    {
+        HashMap<String,Long> map = new HashMap<String,Long>();
+        if (list.size()>0) {
+            int  id = list.get(0).getId();
+            int newId;
+            for (VisitTimeModel sva : list){
+                newId = sva.getId();
+                if(newId==id){
+                    long visitTime = sva.getMaxTime()-sva.getMinTime();
+                    int storeId = sva.getStoreId();
+                    String key = newId+"-"+storeId;
+                    //小於2分鐘忽略
+                    if (visitTime<120000) {
+                        continue; 
+                    }
+                    if(map.containsKey(key)){
+                        long visitTimes = (map.get(key) + visitTime)/2;
+                        map.put(key,visitTimes);
+                    }else{
+                        map.put(key,visitTime);
+                    }
+                    id = sva.getId();
+                }else{
+                    long visitTime = sva.getMaxTime()-sva.getMinTime();
+                    int storeId = sva.getStoreId();
+                    String key = newId+"-"+storeId;
+                    //小於2分鐘忽略
+                    if (visitTime<120000) {
+                        continue; 
+                    }
+                    if(map.containsKey(key)){
+                        long visitTimes = (map.get(key) + visitTime)/2;
+                        map.put(key,visitTimes);
+                    }else{
+                        map.put(key,visitTime);
+                    }
+                    id = sva.getId();
+                }
+            }
+            return map;
+        }else
+        {
+            return null; 
+        }
+    }
+    
+    private static Map<String, Long> getShopVisitTime(List<VisitTimeModel> list)
+    {
+        HashMap<String,Long> map = new HashMap<String,Long>();
+        if (list.size()>0) {
+            int  id = list.get(0).getId();
+            int newId;
+            for (VisitTimeModel sva : list){
+                newId = sva.getId();
+                if(newId==id){
+                    long visitTime = sva.getMaxTime()-sva.getMinTime();
+                    String key = newId+"";
+                    //小於2分鐘忽略
+                    if (visitTime<120000) {
+                        continue; 
+                    }
+                    if(map.containsKey(key)){
+                        long visitTimes = (map.get(key) + visitTime)/2;
+                        map.put(key,visitTimes);
+                    }else{
+                        map.put(key,visitTime);
+                    }
+                    id = sva.getId();
+                }else{
+                    long visitTime = sva.getMaxTime()-sva.getMinTime();
+                    String key = newId+"";
+                    //小於2分鐘忽略
+                    if (visitTime<120000) {
+                        continue; 
+                    }
+                    if(map.containsKey(key)){
+                        long visitTimes = (map.get(key) + visitTime)/2;
+                        map.put(key,visitTimes);
+                    }else{
+                        map.put(key,visitTime);
+                    }
+                    id = sva.getId();
+                }
+            }
+            return map;
+        }else
+        {
+            return null; 
+        }
+    }
+    
+    private static Map<String, Long> getListToMap(List<VisitTimeModel> list)
+    {
+        HashMap<String,Long> map = new HashMap<String,Long>();
+        if (list.size()>0) {
+            for (VisitTimeModel sva : list){
+              String id = String.valueOf(sva.getId());
+              long count = sva.getMaxTime();
+              map.put(id, count);
+            }
+            return map;
+        }else
+        {
+            return null; 
+        }
+    }    
 }

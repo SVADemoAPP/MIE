@@ -33,7 +33,7 @@
 		<!-- 调用的类 -->
 		<property name="targetObject" ref="quartzJob" />
 		<!-- 调用类中的方法 -->
-		<property name="targetMethod" value="doStatistics" />
+		<property name="targetMethod" value="saveVisitTime" />
 	</bean>
 
 	<bean id="jobtask3"
@@ -131,7 +131,7 @@
 		<property name="jobDetail" ref="jobtask2" />
 		<!-- cron表达式 -->
 		<!-- 每隔10秒执行一次 -->
-		<property name="cronExpression" value="30 59 23 * * ?" />
+		<property name="cronExpression" value="30 58 * * * ?" />
 	</bean>
 
 	<!-- 定义触发时间 -->

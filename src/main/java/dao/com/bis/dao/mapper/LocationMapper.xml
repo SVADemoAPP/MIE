@@ -669,5 +669,39 @@
         select * from (select a.userid,max(a.timestamp) time,b.id mapId from ${tableName} a 
         join bi_shop b on a.mapId = b.mapId where a.x &gt;(b.xSpot)*10 and  a.x &lt;(b.x1Spot)*10 and a.y &gt; (b.ySpot)*10 and a.y &lt;(b.y1Spot)*10 group by a.userId,b.id) as c 
         order by c.userId asc,c.time desc      
-    </select>            	
+    </select>
+    
+    <select id="getMapVisitTime" resultType="VisitTimeModel">
+        select * from (select max(a.timestamp) maxTime,min(a.timestamp) minTime,a.mapId id,b.storeId from  ${tableName} a 
+        join bi_maps b on a.mapId = b.mapId where a.timestamp &gt; #{beginTime} and a.timestamp &lt; #{endTime} group by a.userId,b.mapId)as c  order by c.id asc;              
+    </select>
+    
+    <select id="getCountGroupByMapId" resultType="VisitTimeModel">
+        select count(distinct a.userId) maxTime,b.mapId id from ${tableName} a join bi_maps b on a.mapId = b.mapId group by a.mapId          
+    </select>
+    
+    <select id="getCountGroupByStoreId" resultType="VisitTimeModel">
+        select count(distinct a.userId) maxTime,b.storeId id from ${tableName} a join bi_maps b on a.mapId = b.mapId group by b.storeId         
+    </select>
+    
+    <select id="getShopVisitTime" resultType="VisitTimeModel">
+        select * from (select max(a.timestamp) maxTime,min(a.timestamp) minTime,c.id id from ${tableName} a 
+        join bi_maps b on a.mapId = b.mapId join bi_shop c on c.mapId = b.mapId where a.timestamp &gt; #{beginTime} and a.timestamp &lt; #{endTime} and a.x &gt;(c.xSpot)*10 and  a.x &lt;(c.x1Spot)*10 and a.y &gt; (c.ySpot)*10 and a.y &lt;(c.y1Spot)*10 group by a.userId,c.id)as d order by d.id asc            
+    </select>
+    
+    <select id="getCountGroupByShopId" resultType="VisitTimeModel">
+       select count(distinct a.userId) maxTime,b.id id from ${tableName} a join bi_shop b on a.mapId = b.mapId where a.x &gt;(b.xSpot)*10 and  a.x &lt;(b.x1Spot)*10 and a.y &gt; (b.ySpot)*10 and a.y &lt;(b.y1Spot)*10 group by b.id       
+    </select>
+    
+    <select id="getWeekDataByStoreId" resultType="WeekTotalModel">
+       select  substring(time,3,8) mytime,storeId myId,max(allcount) allCount,round(sum(delayTime),2) averageTime from bi_static_store_visittime where storeId = #{storeId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by storeId,mytime order by mytime       
+    </select>
+    
+    <select id="getWeekDataByMapId" resultType="WeekTotalModel">
+       select  substring(time,3,8) mytime,mapId myId,max(allcount) allCount,round(sum(delayTime),2) averageTime from bi_static_floor_visittime where mapId = #{mapId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by mapId,mytime order by mytime       
+    </select>
+    
+    <select id="getWeekDataByShopId" resultType="WeekTotalModel">
+       select  substring(time,3,8) mytime,shopId myId,max(allcount) allCount,round(sum(delayTime),2) averageTime from bi_static_shop_visittime where shopId = #{shopId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by shopId,mytime order by mytime       
+    </select>                                                     	
 </mapper>

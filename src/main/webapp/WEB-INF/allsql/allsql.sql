@@ -608,3 +608,39 @@ CREATE TABLE `bi_lac` (
 	PRIMARY KEY (`id`)
 )
 COLLATE='utf8_bin';
+
+CREATE TABLE `bi_static_floor_visittime` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `time` DATETIME NOT NULL COMMENT '时间',
+    `delaytime` DECIMAL(10,2) NOT NULL COMMENT '平均驻留时长',
+    `allcount` BIGINT(20) NOT NULL COMMENT '客流总人数',
+    `mapId` INT(11) NOT NULL COMMENT '商场id',
+    PRIMARY KEY (`mapId`, `time`),
+    INDEX `Index 1` (`id`),
+    INDEX `Index 3` (`mapId`)
+)
+COLLATE='utf8_bin';
+
+CREATE TABLE `bi_static_shop_visittime` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `time` DATETIME NOT NULL COMMENT '时间',
+    `delaytime` DECIMAL(10,2) NOT NULL COMMENT '平均驻留时长',
+    `allcount` BIGINT(20) NOT NULL COMMENT '客流总人数',
+    `shopId` INT(11) NOT NULL COMMENT '商场id',
+    PRIMARY KEY (`shopId`, `time`),
+    INDEX `Index 1` (`id`),
+    INDEX `Index 3` (`shopId`)
+)
+COLLATE='utf8_bin';
+
+CREATE TABLE `bi_static_store_visittime` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `time` DATETIME NOT NULL COMMENT '时间',
+    `delaytime` DECIMAL(10,2) NOT NULL COMMENT '平均驻留时长',
+    `allcount` BIGINT(20) NOT NULL COMMENT '客流总人数',
+    `storeId` INT(11) NOT NULL COMMENT '商场id',
+    PRIMARY KEY (`storeId`, `time`),
+    INDEX `Index 1` (`id`),
+    INDEX `Index 3` (`storeId`)
+)
+COLLATE='utf8_bin';

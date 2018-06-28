@@ -29,6 +29,9 @@ import com.bis.model.ShopCostModel;
 import com.bis.model.ShopModel;
 import com.bis.model.StatisticsModel;
 import com.bis.model.UserModel;
+import com.bis.model.WeekTotalModel;
+
+import net.sf.json.JSONObject;
 
 /**
  * @ClassName: ShopController
@@ -51,6 +54,9 @@ public class ShopController {
 
     @Autowired
     private LocationDao locationDao;
+    
+    @Autowired
+    private ShopDao shopDao;
 
     private static final Logger LOG = Logger.getLogger(ShopController.class);
     
@@ -59,6 +65,9 @@ public class ShopController {
     
     @Value("${sva.coefficient}")
     private double coefficient;  
+    
+    @Value("${sva.durationOfLocation}")
+    private int durationOfLocation;
 
 
     /**
@@ -608,6 +617,67 @@ public class ShopController {
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
         modelMap.put(Params.RETURN_KEY_DATA, shopList);
 
+        return modelMap;
+    }
+    
+    @RequestMapping(value = "/getNewTotal", method = { RequestMethod.POST })
+    @ResponseBody
+    public Map<String, Object> getNewTotal(@RequestParam("shopId") String shopId) {
+        int nowUserCount = 0;
+        double nowAverageTime = 0;
+        int allWeekCount = 0;
+        float allWeekTime = 0;
+        JSONObject weekUsercount = new JSONObject();
+        JSONObject weekDelaytime = new JSONObject();
+        Calendar calendar = Calendar.getInstance();
+        String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
+        calendar.add(Calendar.DATE, -7);
+        String bigenTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
+        String[] weeks = Util.getLastNumDays(7, Params.YYMMDD);
+        List<WeekTotalModel> list = locationDao.getWeekDataByShopId(shopId, bigenTime, endTime);
+        for (int i = 0; i < weeks.length; i++) {
+            weekUsercount.put(weeks[i], 0);
+            weekDelaytime.put(String.valueOf(Util.dateFormatStringtoLong(weeks[i], Params.YYMMDD)), 0);
+        }
+        WeekTotalModel model = null;
+        for (int i = 0; i < list.size(); i++) {
+            model = list.get(i);
+            int allCount = coefficientData(model.getAllCount());
+            double averageTime = model.getAverageTime();
+            if (i!=list.size()-1) {
+                allWeekCount += allCount;
+                allWeekTime +=averageTime;
+                model = list.get(i);
+                String myTime = model.getMyTime().replace("-", "/");
+                weekUsercount.put(myTime, allCount);
+                weekDelaytime.put(String.valueOf(Util.dateFormatStringtoLong(myTime, Params.YYMMDD)), averageTime);  
+            }else
+            {
+                nowUserCount = allCount;
+                nowAverageTime = averageTime;
+            }
+        }
+        List<ShopModel> listShopModel = shopDao.getShopDataById(shopId);
+        ShopModel shopModel = listShopModel.get(0);
+        String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
+        String tableName = Params.LOCATION + nowDay;
+        long nowTimes = System.currentTimeMillis();
+        long times = nowTimes - durationOfLocation*1000;
+        int count = locationDao.getNowCount(times, tableName, shopModel);
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        modelMap.put("allData", weekUsercount);
+        modelMap.put("timeData", weekDelaytime);
+        modelMap.put("nowPeople",count );
+//        modelMap.put("yesPeople", coefficientData(yesCount));
+        
+        modelMap.put("nowAllPeople", nowUserCount);
+//        modelMap.put("yesAllPeople", weekUsercount);
+        modelMap.put("nowTime", nowAverageTime);
+//        modelMap.put("yesTime", yesAverageTime);
+//        modelMap.put("yesTime1", visitMap.get(String.valueOf(Util.dateFormatStringtoLong(yesDays, Params.YYMMDD))));
+        modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
+        modelMap.put("allWeekCount", allWeekCount);
+        modelMap.put("allWeekAvgDelay", allWeekTime/7);
         return modelMap;
     }
 

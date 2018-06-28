@@ -18,6 +18,8 @@ import com.bis.model.ShopModel;
 import com.bis.model.TrendAllModel;
 import com.bis.model.TrendMapModel;
 import com.bis.model.TrendShopModel;
+import com.bis.model.VisitTimeModel;
+import com.bis.model.WeekTotalModel;
 
 /**
  * @ClassName: LocationDao
@@ -200,4 +202,20 @@ public interface LocationDao {
     public List<TrendAllModel> getAllTrendData(@Param("tableName") String tableName);
     
     public List<TrendAllModel> getAllTrendShopData(@Param("tableName") String tableName);
+    
+    public List<VisitTimeModel> getMapVisitTime(@Param("tableName") String tableName,@Param("beginTime") long beginTime,@Param("endTime") long endTime);
+    
+    public List<VisitTimeModel> getShopVisitTime(@Param("tableName") String tableName,@Param("beginTime") long beginTime,@Param("endTime") long endTime);
+    
+    public List<VisitTimeModel> getCountGroupByMapId(@Param("tableName") String tableName);
+    
+    public List<VisitTimeModel> getCountGroupByStoreId(@Param("tableName") String tableName);
+    
+    public List<VisitTimeModel> getCountGroupByShopId(@Param("tableName") String tableName);
+    
+    public List<WeekTotalModel> getWeekDataByStoreId(@Param("storeId") String storeId,@Param("startTime") String beginTime,@Param("endTime") String endTime);
+    
+    public List<WeekTotalModel> getWeekDataByMapId(@Param("mapId") String mapId,@Param("startTime") String beginTime,@Param("endTime") String endTime);
+    
+    public List<WeekTotalModel> getWeekDataByShopId(@Param("shopId") String shopId,@Param("startTime") String beginTime,@Param("endTime") String endTime);
 }

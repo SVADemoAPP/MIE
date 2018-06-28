@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
-import org.junit.runners.Parameterized.Parameters;
 
-import com.bis.model.MapMngModel;
 import com.bis.model.NewUserModel;
 import com.bis.model.ShopCostModel;
 import com.bis.model.ShopModel;
@@ -210,4 +208,6 @@ public interface ShopDao {
 
     public Integer getShopTrendByDayOther(@Param("shopId") int shopId, @Param("sign") int sign,
             @Param("time") String time);
+    
+    public int getShopCountById(@Param("shopId") int shopId);    
 }

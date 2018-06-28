@@ -188,9 +188,9 @@ var fuzhiFunction = function(id, id1, id2, nowArray, nowPeople, yesPeople,
 var refreshTotalData = function() {
 	$
 			.post(
-					"../market/getWeekTotal",
+					"../market/getNewWeekTotalByFloor",
 					{
-						storeId : storeIds
+						mapId : mapIds
 					},
 					function(data) {
 						if (data.error == 200) {
@@ -913,7 +913,7 @@ var heatMap = function() {
 	var initTotalData = function() {
 		$
 				.post(
-						"../market/getWeekTotalByFloor",
+						"../market/getNewWeekTotalByFloor",
 						{
 							mapId : mapIds
 						},
