@@ -45,6 +45,7 @@ import com.bis.model.ShopCostModel;
 import com.bis.model.ShopModel;
 import com.bis.model.StatisticsModel;
 import com.bis.model.StringIntModel;
+import com.bis.model.WeekTotalModel;
 import com.bis.web.auth.AuthPassport;
 import com.bis.web.auth.Rates;
 import com.bis.web.auth.WeatherInfo;
@@ -707,6 +708,102 @@ public class MarketController {
         return modelMap;
     }    
     
+    @RequestMapping(value = "/getNewWeekTotal", method = { RequestMethod.POST })
+    @ResponseBody
+    public Map<String, Object> getNewWeekTotal(@RequestParam("storeId") String storeId) {
+        int nowUserCount = 0;
+        double nowAverageTime = 0;
+        int allWeekCount = 0;
+        float allWeekTime = 0;
+        JSONObject weekUsercount = new JSONObject();
+        JSONObject weekDelaytime = new JSONObject();
+        Calendar calendar = Calendar.getInstance();
+        String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
+        calendar.add(Calendar.DATE, -7);
+        String bigenTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
+        String[] weeks = Util.getLastNumDays(7, Params.YYMMDD);
+        List<WeekTotalModel> list = locationDao.getWeekDataByStoreId(storeId, bigenTime, endTime);
+        for (int i = 0; i < weeks.length; i++) {
+            weekUsercount.put(weeks[i], 0);
+            weekDelaytime.put(weeks[i], 0);
+        }
+        WeekTotalModel model = null;
+        for (int i = 0; i < list.size(); i++) {
+            model = list.get(i);
+            int allCount = coefficientData(model.getAllCount());
+            double averageTime = model.getAverageTime();
+            if (i!=list.size()-1) {
+                allWeekCount += allCount;
+                allWeekTime +=averageTime;
+                model = list.get(i);
+                String myTime = model.getMyTime().replace("-", "/");;
+                weekUsercount.put(myTime, allCount);
+                weekDelaytime.put(myTime, averageTime);  
+            }else
+            {
+                nowUserCount = allCount;
+                nowAverageTime = averageTime;
+            }
+        }
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
+        modelMap.put("todayUser", nowUserCount);
+        modelMap.put("todayAvgDelay", nowAverageTime);
+        modelMap.put("weekUsercount", weekUsercount);
+        modelMap.put("weekDelaytime", weekDelaytime);
+
+        modelMap.put("allWeekCount", allWeekCount);
+        modelMap.put("allWeekAvgDelay", allWeekTime/7);
+        return modelMap;
+    }
+    
+    @RequestMapping(value = "/getNewWeekTotalByFloor", method = { RequestMethod.POST })
+    @ResponseBody
+    public Map<String, Object> getNewWeekTotalByFloor(@RequestParam("mapId") String mapId) {
+        int nowUserCount = 0;
+        double nowAverageTime = 0;
+        int allWeekCount = 0;
+        float allWeekTime = 0;
+        JSONObject weekUsercount = new JSONObject();
+        JSONObject weekDelaytime = new JSONObject();
+        Calendar calendar = Calendar.getInstance();
+        String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
+        calendar.add(Calendar.DATE, -7);
+        String bigenTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
+        String[] weeks = Util.getLastNumDays(7, Params.YYMMDD);
+        List<WeekTotalModel> list = locationDao.getWeekDataByMapId(mapId, bigenTime, endTime);
+        for (int i = 0; i < weeks.length; i++) {
+            weekUsercount.put(weeks[i], 0);
+            weekDelaytime.put(weeks[i], 0);
+        }
+        WeekTotalModel model = null;
+        for (int i = 0; i < list.size(); i++) {
+            model = list.get(i);
+            int allCount = coefficientData(model.getAllCount());
+            double averageTime = model.getAverageTime();
+            if (i!=list.size()-1) {
+                allWeekCount += allCount;
+                allWeekTime +=averageTime;
+                model = list.get(i);
+                String myTime = model.getMyTime().replace("-", "/");;
+                weekUsercount.put(myTime, allCount);
+                weekDelaytime.put(myTime, averageTime);  
+            }else
+            {
+                nowUserCount = allCount;
+                nowAverageTime = averageTime;
+            }
+        }
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
+        modelMap.put("todayUser", nowUserCount);
+        modelMap.put("todayAvgDelay", nowAverageTime);
+        modelMap.put("weekUsercount", weekUsercount);
+        modelMap.put("weekDelaytime", weekDelaytime);
+        modelMap.put("allWeekCount", allWeekCount);
+        modelMap.put("allWeekAvgDelay", allWeekTime/7);
+        return modelMap;
+    }  
     /** 
      * @Title: getWeatherInfo 
      * @Description: 获取天气信息 
