@@ -151,12 +151,12 @@ var fuzhiFunction = function(id, id1, id2, nowArray, nowPeople, yesPeople,
 			nowBaifen = 100;
 		}
 		if (nowPeople > 0 && yesPeople > 0) {
-			nowBaifen = ((nowPeople) / yesPeople).toFixed(2)*100;
+			nowBaifen = (((nowPeople) / yesPeople)*100).toFixed(2)*100;
 		}
 	} else {
 		yanse = colours.red;
 		nowPeopleTemp = downs;
-		nowBaifen = ((yesPeople-nowPeople) / yesPeople).toFixed(2)*100;
+		nowBaifen = (((yesPeople-nowPeople) / yesPeople)*100).toFixed(2);
 	}
 	if(id!="nowPeople")
 	{
