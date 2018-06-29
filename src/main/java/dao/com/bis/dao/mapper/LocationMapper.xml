@@ -712,5 +712,17 @@
     
     <select id="getRateList" resultType="UserTimeModel">
     select a.*,c.deepTime deepTime,c.visitorNumber visitorNumber from bi_static_userid_visittime a join bi_shop b on a.shopId = b.id join bi_shop_category c on c.id = b.categoryId where storeId = #{storeId} and time = #{time} ORDER BY shopId;
-    </select>                                                             	
+    </select>
+    
+    <select id="getTop10ForMap" resultType="WeekTotalModel">
+     select max(a.allcount) allCount,b.floor myTime,a.mapId myId from bi_static_floor_visittime a join bi_maps b on a.mapId = b.mapId join bi_store c on c.id = b.storeId where time &gt; #{time} and c.id = #{storeId} group by a.mapId limit 10  
+    </select>
+    
+    <select id="getShop10ForMap" resultType="WeekTotalModel">
+    select max(a.allcount) allCount,b.shopName myTime,a.shopId myId from bi_static_shop_visittime a join bi_shop b on a.shopId = b.id join bi_maps c on c.mapId = b.mapId join bi_store d on d.id = c.storeId where time &gt; #{time} and c.id = #{storeId}  group by a.shopId limit 10
+    </select>
+    
+    <select id="getShop10Count" resultType="int">
+    select max(allcount) from bi_static_store_visittime where storeId = #{storeId}  and time &gt; #{time}
+    </select>                                                                           	
 </mapper>

@@ -460,7 +460,6 @@ public class HeatmapController {
             @RequestParam("endTime") long endTime) {
         LOG.info("HeatmapController ~ getStoreMomentCount 商场指定时间客流量");
         long startTime = endTime - durationOfLocation*1000;
-        System.out.println(startTime+" 1");
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;

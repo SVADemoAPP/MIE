@@ -130,21 +130,19 @@ var fuzhiFunction = function(id, id1, id2, nowArray, nowPeople, yesPeople,
 	if (parseInt(nowPeople) >= parseInt(yesPeople)) {
 		nowPeopleTemp = ups;
 		yanse = colours.green;
-		if (nowPeople == "0") {
+		if (nowPeople == 0) {
 			nowBaifen = 0;
 		}
-		if (!(nowPeople == "0") && yesPeople == "0") {
+		if (!nowPeople == 0 && yesPeople == 0) {
 			nowBaifen = 100;
 		}
 		if (nowPeople > 0 && yesPeople > 0) {
-			nowBaifen = (((nowPeople - yesPeople) / yesPeople) * 100)
-					.toFixed(2);
+			nowBaifen = ((nowPeople) / yesPeople).toFixed(2)*100;
 		}
 	} else {
 		yanse = colours.red;
 		nowPeopleTemp = downs;
-		nowBaifen = (((yesPeople - nowPeople) / yesPeople) * 100)
-				.toFixed(2);
+		nowBaifen = ((yesPeople-nowPeople) / yesPeople).toFixed(2)*100;
 	}
 	if (type == 0) {
 		if(id!="nowPeople")

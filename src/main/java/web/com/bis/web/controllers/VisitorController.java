@@ -12,23 +12,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cglib.core.Local;
-import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.bis.common.Util;
 import com.bis.common.conf.Params;
@@ -36,8 +31,8 @@ import com.bis.dao.LocationDao;
 import com.bis.dao.StatisticsDao;
 import com.bis.dao.VisitorDao;
 import com.bis.model.TextModel;
+import com.bis.model.WeekTotalModel;
 import com.google.gson.Gson;
-import com.jayway.jsonpath.internal.Utils;
 
 import net.sf.json.JSONObject;
 
@@ -293,6 +288,28 @@ public class VisitorController {
         }
         return modelMap;
     }
+    
+    /**
+     * 
+     * @Title: getTodayTop
+     * @Description: 获取商场当天楼层客流量排名和店铺客流量排名
+     * @param request
+     * @param storeId
+     * @return
+     */
+    @RequestMapping(value = "/getNewTodayTop", method = { RequestMethod.POST })
+    @ResponseBody
+    public Map<String, Object> getNewTodayTop(HttpServletRequest request, @RequestParam("storeId") String storeId) {
+        String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD2);
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        List<WeekTotalModel> mapList = locationDao.getTop10ForMap(storeId, nowDay);
+        List<WeekTotalModel> shopList = locationDao.getShop10ForMap(storeId, nowDay);
+        int sum = locationDao.getShop10Count(storeId,nowDay);
+        modelMap.put("mapData", newAddRation(mapList));
+        modelMap.put("shopData",sortTop10(newAddRationShop(shopList,sum)));
+        modelMap.put("status", Params.RETURN_CODE_200);
+        return modelMap;
+    }
 
     /**
      * 
@@ -430,5 +447,45 @@ public class VisitorController {
             return (int) (data*coefficient);
         }
         
+    }
+    
+    private List<Map<String, Object>> newAddRation(List<WeekTotalModel> mapList) {
+        List<Map<String, Object>> returnList = new ArrayList<>();
+        long sum = 0;
+        for (WeekTotalModel map : mapList) {
+              sum += (long) map.getAllCount();
+        }
+        float totalRation = 100;
+        if (sum == 0) {
+            return returnList;
+        }
+        for (int i = 0; i < mapList.size(); i++) {
+            WeekTotalModel map = mapList.get(i);
+            float temp = 0;
+            if (i != mapList.size() - 1) {
+                temp = Util.getTwoPointNumber((float) ((long) map.getAllCount() * 100) / sum);
+                totalRation -= temp;
+            } else {
+                temp = Util.getTwoPointNumber(totalRation);
+            }
+            Map<String, Object> newMap = new HashMap<>();
+            newMap.put("name", map.getMyTime() + ":" + temp + "%");
+            newMap.put("value", coefficientData(map.getAllCount()));
+            returnList.add(newMap);
+        }
+        return returnList;
+    }
+    
+    private List<Map<String, Object>> newAddRationShop(List<WeekTotalModel> mapList,int sum) {
+        List<Map<String, Object>> returnList = new ArrayList<>();
+        for (int i = 0; i < mapList.size(); i++) {
+            WeekTotalModel map = mapList.get(i);
+            float temp = Util.getTwoPointNumber((float) ((long) coefficientData(map.getAllCount() * 100)) / coefficientData(sum));          
+            Map<String, Object> newMap = new HashMap<>();
+            newMap.put("name", map.getMyTime() + ":" + temp + "%");
+            newMap.put("value", coefficientData(map.getAllCount()));
+            returnList.add(newMap);
+        }
+        return returnList;
     }
 }

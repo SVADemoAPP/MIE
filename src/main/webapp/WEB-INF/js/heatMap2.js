@@ -126,12 +126,12 @@ var fuzhiFunction = function(id, id1, id2, nowArray, nowPeople, yesPeople,
 			nowBaifen = 100;
 		}
 		if (nowPeople > 0 && yesPeople > 0) {
-			nowBaifen = ((nowPeople - yesPeople) / yesPeople).toFixed(2);
+			nowBaifen = ((nowPeople) / yesPeople).toFixed(2)*100;
 		}
 	} else {
 		yanse = colours.red;
 		nowPeopleTemp = downs;
-		nowBaifen = (nowPeople / yesPeople).toFixed(2);
+		nowBaifen = ((yesPeople-nowPeople) / yesPeople).toFixed(2)*100;
 	}
 	if(id!="nowPeople")
 	{
@@ -243,7 +243,7 @@ var removeOption = function(renderId) {
 };
 
 var getTodayTopData = function() {
-	$.post("../visitor/getTodayTop", {storeId:storeIds}, function(data) {
+	$.post("../visitor/getNewTodayTop", {storeId:storeIds}, function(data) {
 		if (data.status == 200) {
 			showPieCharts(data.mapData, "mall_floor_visitors", 100);
 			showBarCharts(data.shopData, "mall_shop_visitors",
@@ -1034,6 +1034,7 @@ var heatMap = function() {
 							if (data.error == 200) {
 //								var newData = data.weekNewUsercount;
 								var allData = data.weekUsercount;
+								var nowUser = data.nowUser;
 								var timeData = data.weekDelaytime;
 //								var newPeople = data.todayNewUser;
 								var nowAllPeople = data.todayUser;
@@ -1054,6 +1055,8 @@ var heatMap = function() {
 								fuzhiFunction("nowAllcount", "nowAllcountId",
 										"allDataId", allArray, nowAllPeople,
 										yesAllPeople, 0, 1);
+								fuzhiFunction("nowPeople", "nowPeopleId", "nowData",
+										allArray, nowUser, yesAllPeople, 0, 0);
 								fuzhiFunction("nowTime", "nowTimeId",
 										"timeDataId", timeArray, nowTime,
 										yesTime, 1, 0);
@@ -1076,20 +1079,20 @@ var heatMap = function() {
 		// Update interval
 //		var updateDelay = 30000; // 30秒更新一次实时统计
 //
-		updateMoment();
-		function updateMoment() {
-			$.post("../market/getMallTotal", {
-				storeId : storeIds
-			}, function(data) {
-				if (data.error == 200) {
-					var nowArray = data.weekMomentCounts;
-					var nowPeople = data.todayMomentCount;
-					var yesPeople = nowArray[6];
-					fuzhiFunction("nowPeople", "nowPeopleId", "nowData",
-							nowArray, nowPeople, yesPeople, 0, 0);
-				}
-			});
-		}
+//		updateMoment();
+//		function updateMoment() {
+//			$.post("../market/getMallTotal", {
+//				storeId : storeIds
+//			}, function(data) {
+//				if (data.error == 200) {
+//					var nowArray = data.weekMomentCounts;
+//					var nowPeople = data.todayMomentCount;
+//					var yesPeople = nowArray[6];
+//					fuzhiFunction("nowPeople", "nowPeopleId", "nowData",
+//							nowArray, nowPeople, yesPeople, 0, 0);
+//				}
+//			});
+//		}
 //
 //		id_interval2 = setInterval(updateMoment, updateDelay);
 		clearTimeout(totalTimer);

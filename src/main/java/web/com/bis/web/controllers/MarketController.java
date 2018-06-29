@@ -45,8 +45,6 @@ import com.bis.model.ShopCostModel;
 import com.bis.model.ShopModel;
 import com.bis.model.StatisticsModel;
 import com.bis.model.StringIntModel;
-import com.bis.model.UserTimeModel;
-import com.bis.model.VisitTimeModel;
 import com.bis.model.WeekTotalModel;
 import com.bis.web.auth.AuthPassport;
 import com.bis.web.auth.Rates;
@@ -98,6 +96,10 @@ public class MarketController {
     
     @Value("${sva.coefficient}")
     private double coefficient;  
+    
+    @Value("${sva.durationOfLocation}")
+    private int durationOfLocation;
+    
 
     /**
      * 
@@ -747,6 +749,12 @@ public class MarketController {
                 nowAverageTime = averageTime;
             }
         }
+        long endTimes = System.currentTimeMillis();
+        long startTime =endTimes  - durationOfLocation*1000;
+        // 表名
+        String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
+        String tableName = Params.LOCATION + nowDay;
+        long userCount = locationDao.getStoreMomentCount(startTime, endTimes, tableName, storeId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
         modelMap.put("todayUser", nowUserCount);
@@ -756,6 +764,7 @@ public class MarketController {
 
         modelMap.put("allWeekCount", allWeekCount);
         modelMap.put("allWeekAvgDelay", allWeekTime/7);
+        modelMap.put("nowUser", coefficientData(Integer.parseInt(String.valueOf(userCount))));
         return modelMap;
     }
     
@@ -796,6 +805,12 @@ public class MarketController {
                 nowAverageTime = averageTime;
             }
         }
+        long endTimes = System.currentTimeMillis();
+        long startTime =endTimes  - durationOfLocation*1000;
+        // 表名
+        String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
+        String tableName = Params.LOCATION + nowDay;
+        long userCount = locationDao.getFloorMomentCount(startTime, endTimes, tableName, mapId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
         modelMap.put("todayUser", nowUserCount);
@@ -804,6 +819,7 @@ public class MarketController {
         modelMap.put("weekDelaytime", weekDelaytime);
         modelMap.put("allWeekCount", allWeekCount);
         modelMap.put("allWeekAvgDelay", allWeekTime/7);
+        modelMap.put("nowUser", coefficientData(Integer.parseInt(String.valueOf(userCount))));
         return modelMap;
     }  
     /** 
