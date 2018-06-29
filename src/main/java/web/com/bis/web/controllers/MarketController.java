@@ -45,6 +45,8 @@ import com.bis.model.ShopCostModel;
 import com.bis.model.ShopModel;
 import com.bis.model.StatisticsModel;
 import com.bis.model.StringIntModel;
+import com.bis.model.UserTimeModel;
+import com.bis.model.VisitTimeModel;
 import com.bis.model.WeekTotalModel;
 import com.bis.web.auth.AuthPassport;
 import com.bis.web.auth.Rates;
@@ -895,26 +897,87 @@ public class MarketController {
     	List<String> listShopName = new ArrayList<>();
     	List<String> listOverRate = new ArrayList<>();
     	List<String> listDeepRate = new ArrayList<>();
+    	boolean isExist=false;
+    	Calendar calendar = Calendar.getInstance();
+        // 获得前一天的日期
+        calendar.add(Calendar.DATE,-1);
+//      calendar.getTimeInMillis()
+        String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
+        String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
+        String tableName = Params.LOCATION + nowDay;
+        String tableName2 = Params.SHOPLOCATION + nowMouths;
+        try {
+            if(statisticsDao.isTableExist(tableName, this.db) > 0) {
+//              System.out.println("表不存在："+tableName);
+                isExist=true;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        if(isExist){
     	String enterRate;
     	String shopName;
     	String overflowRate;
     	String deepRate;
-    	for (int i = 0; i < listModel.size(); i++) {
-            enterRate=String.valueOf(rates.getEnter(listModel.get(i)));
-            overflowRate = String.valueOf(rates.getOverflow1(Integer.parseInt(listModel.get(i).getId())));
-            deepRate = String.valueOf(rates.getDeep(Integer.parseInt(listModel.get(i).getId())));
-            shopName = listModel.get(i).getShopName();
+    	ShopModel shopModel;
+    	for (int i = 0,len=listModel.size(); i < len; i++) {
+    	    shopModel=listModel.get(i);
+            enterRate=String.valueOf(rates.getEnter(shopModel,tableName));
+            overflowRate = String.valueOf(rates.getOverflow1(shopModel,tableName2,nowDay));
+            deepRate = String.valueOf(rates.getDeep(shopModel,tableName2,nowDay));
+            shopName = shopModel.getShopName();
     		listEnterRate.add(enterRate);
     		listShopName.add(shopName);
     		listOverRate.add(overflowRate);
     		listDeepRate.add(deepRate);
 		}
+        }else{
+            for (int i = 0,len=listModel.size(); i < len; i++) {
+                listEnterRate.add("0");
+                listShopName.add(listModel.get(i).getShopName());
+                listOverRate.add("0");
+                listDeepRate.add("0");
+            }
+        }
     	map.put("shopName", listShopName);
     	map.put("eRate", listEnterRate);
     	map.put("oRate", listOverRate);
     	map.put("dRate", listDeepRate);
     	return map;
     }
+    
+    @RequestMapping(value = "/getNewRates", method = { RequestMethod.POST })
+    @ResponseBody
+    public Map<String,List<String>> getNewRates(@RequestParam("storeId")String storeId){
+        Map<String,List<String>> map = new HashMap<String, List<String>>();
+        String userDay = Util.dateFormat(new Date(), Params.YYYYMMDD2);
+        List<ShopModel> listModel = rateDao.getShopInfoByStore(storeId);
+        List<String> listEnterRate = new ArrayList<>();
+        List<String> listShopName = new ArrayList<>();
+        List<String> listOverRate = new ArrayList<>();
+        List<String> listDeepRate = new ArrayList<>();
+        List<UserTimeModel> list = locationDao.getRateList(storeId, userDay);
+        Map<String, String> maps = getRateData(list);
+        String enterRate;
+        String shopName;
+        String overflowRate;
+        String deepRate;
+        for (ShopModel model:listModel) {
+            shopName = model.getShopName();
+            String shopId = model.getShopId();
+//            listEnterRate.add(enterRate);
+//            listShopName.add(shopName);
+//            listOverRate.add(overflowRate);
+//            listDeepRate.add(deepRate);
+        }
+        map.put("shopName", listShopName);
+        map.put("eRate", listEnterRate);
+        map.put("oRate", listOverRate);
+        map.put("dRate", listDeepRate);
+        return map;
+    }
+    
+    
     
     /** 
      * @Title: getAllFloors 
@@ -942,20 +1005,49 @@ public class MarketController {
     	List<String> listShopName = new ArrayList<>();
     	List<String> listOverRate = new ArrayList<>();
     	List<String> listDeepRate = new ArrayList<>();
+    	boolean isExist=false;
+        Calendar calendar = Calendar.getInstance();
+        // 获得前一天的日期
+        calendar.add(Calendar.DATE,-1);
+//      calendar.getTimeInMillis()
+        String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
+        String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
+        String tableName = Params.LOCATION + nowDay;
+        String tableName2 = Params.SHOPLOCATION + nowMouths;
+        try {
+            if(statisticsDao.isTableExist(tableName, this.db) > 0) {
+//              System.out.println("表不存在："+tableName);
+                isExist=true;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        if(isExist){
+          
     	String enterRate;
     	String shopName;
     	String overflowRate;
     	String deepRate;
-    	for (int i = 0; i < listModel.size(); i++) {
-    		enterRate=String.valueOf(rates.getEnter(listModel.get(i)));
-    		overflowRate = String.valueOf(rates.getOverflow1(Integer.parseInt(listModel.get(i).getId())));
-    		deepRate = String.valueOf(rates.getDeep(Integer.parseInt(listModel.get(i).getId())));
-    		shopName = rateDao.selectShopNameById(Integer.parseInt(listModel.get(i).getId()));
+    	ShopModel shopModel;
+    	for (int i = 0,len=listModel.size(); i < len; i++) {
+    	    shopModel=listModel.get(i);
+    		enterRate=String.valueOf(rates.getEnter(shopModel,tableName));
+    		overflowRate = String.valueOf(rates.getOverflow1(shopModel,tableName2,nowDay));
+    		deepRate = String.valueOf(rates.getDeep(shopModel,tableName2,nowDay));
+    		shopName = shopModel.getShopName();
     		listEnterRate.add(enterRate);
     		listShopName.add(shopName);
     		listOverRate.add(overflowRate);
     		listDeepRate.add(deepRate);
 		}
+        }else{
+            for (int i = 0,len=listModel.size(); i < len; i++) {
+                listEnterRate.add("0");
+                listShopName.add(listModel.get(i).getShopName());
+                listOverRate.add("0");
+                listDeepRate.add("0");
+            }
+        }
     	map.put("shopName", listShopName);
     	map.put("eRate", listEnterRate);
     	map.put("oRate", listOverRate);
@@ -972,5 +1064,45 @@ public class MarketController {
             return (int) (data*coefficient);
         }
         
+    }
+    
+    private static Map<String, String> getRateData(List<UserTimeModel> list)
+    {
+        HashMap<String,String> map = new HashMap<String,String>();
+        if (list.size()>0) {
+            int  shopId = list.get(0).getShopId();
+            int newShopId;
+            int allCount = 0;
+            int minCount = 0;
+            double deepTime = 0;
+            int visitorNumber = 0;
+            for (UserTimeModel sva : list){
+                newShopId = sva.getShopId();
+                visitorNumber = sva.getVisitorNumber();
+                if(newShopId==shopId){
+                    allCount += 1;
+                    double visitTime = sva.getDelayTime();
+                    deepTime = sva.getDeepTime();
+                    if (visitTime>deepTime) {
+                        minCount+=1; 
+                    }
+                    shopId = sva.getShopId();
+                }else{
+                    map.put(shopId+"_deepTime", String.valueOf((minCount/allCount)));
+                    map.put(shopId+"_visitorNumber", String.valueOf(((allCount-visitorNumber)/visitorNumber)));
+                    allCount = 0;
+                    minCount = 0;
+                    shopId = sva.getShopId();
+                }
+            }
+            if (allCount!=0) {
+                map.put(shopId+"_deepTime", String.valueOf((minCount/allCount)));
+                map.put(shopId+"_visitorNumber", String.valueOf(((allCount-visitorNumber)/visitorNumber)));
+            }
+            return map;
+        }else
+        {
+            return null; 
+        }
     }
 }
