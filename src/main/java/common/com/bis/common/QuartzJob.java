@@ -300,7 +300,6 @@ public class QuartzJob {
         try {
             String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
             String nowMouth = Util.dateFormat(new Date(), Params.YYYYMMddHH00);
-//            String userDay = Util.dateFormat(new Date(), Params.YYYYMMDD2);
             String tableName = Params.LOCATION + nowDay;
             long endTime = System.currentTimeMillis();
             long beginTime = endTime-60*60*1000;
@@ -368,29 +367,36 @@ public class QuartzJob {
                 int areaResult = statisticsDao.doUpdate(insertShop);
                 LOG.debug("saveVisitTime-shop result:" + areaResult);
             }
-//            String insertUserid = "replace into bi_static_userid_visitTime(userId,time,delaytime,shopId,storeId,mapId) values";
-//            List<VisitTimeModel> userListModel = locationDao.getUserList(tableName);
-//            for (VisitTimeModel sva : userListModel){
-//                String userId = sva.getUserId();
-//                long visiTime = sva.getMaxTime()-sva.getMinTime();
-//                int shopId = sva.getId();
-//                int storeId = sva.getStoreId();
-//                int mapId = sva.getMapId();
-//                String shopVisit = Util.getMinute(visiTime, 1);
-//                insertUserid +="('" + userId + "','" + userDay + "','" + shopVisit + "','" + shopId + "','"+ storeId + "','" + mapId + "'),";
-//            }
-//            if (userListModel.size()>0) {
-//                insertUserid = insertUserid.substring(0, insertUserid.length() - 1);
-//                int areaResult = statisticsDao.doUpdate(insertUserid);
-//                LOG.debug("saveVisitTime-userid result:" + areaResult);
-//            }
         } catch (Exception e) {
            LOG.error(e.getMessage());
            System.out.println(1);
         }
         
     }
-
+    public void saveUserShop()
+    {
+        String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
+        String userDay = Util.dateFormat(new Date(), Params.YYYYMMDD2);
+        String tableName = Params.LOCATION + nowDay;
+        String nowMouths = Util.dateFormat(new Date(), Params.YYYYMM);
+        String shopTableName = Params.SHOPLOCATION + nowMouths;
+        String insertUserid = "replace into "+shopTableName+"(userId,time,delaytime,shopId,type) values";
+        List<VisitTimeModel> userListModel = locationDao.getUserList(tableName);
+        for (VisitTimeModel sva : userListModel){
+            String userId = sva.getUserId();
+            long visiTime = sva.getMaxTime()-sva.getMinTime();
+            int shopId = sva.getId();
+//            int storeId = sva.getStoreId();
+//            int mapId = sva.getMapId();
+            String shopVisit = Util.getMinute(visiTime, 1);
+            insertUserid +="('" + userId + "','" + userDay + "','" + shopVisit + "','" + shopId + "','"+ 0+ "'),";
+        }
+        if (userListModel.size()>0) {
+            insertUserid = insertUserid.substring(0, insertUserid.length() - 1);
+            int areaResult = statisticsDao.doUpdate(insertUserid);
+            LOG.debug("saveVisitTime-userid result:" + areaResult);
+        }
+    }
     /**
      * @Title: calcPeopleRoute
      * @Description: 预处理，获取客户的店铺轨迹信息

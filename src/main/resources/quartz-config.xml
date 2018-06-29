@@ -75,6 +75,14 @@
 		<!-- 调用类中的方法 -->
 		<property name="targetMethod" value="doFtpData" />
 	</bean>
+	
+    <bean id="jobtask8"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject" ref="quartzJob" />
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod" value="saveUserShop" />
+    </bean>	
 
 	<bean id="calcPeopleRouteTask"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -133,7 +141,7 @@
 		<!-- 每隔10秒执行一次 -->
 		<property name="cronExpression" value="30 58 * * * ?" />
 	</bean>
-
+	
 	<!-- 定义触发时间 -->
 	<bean id="doTime7"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -160,6 +168,14 @@
 		<property name="repeatCount" value="0" />
 	</bean>
 
+       <!-- 定义触发时间 -->
+    <bean id="doTime8"
+        class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobtask8" />
+        <!-- cron表达式 -->
+        <!-- 每隔10秒执行一次 -->
+        <property name="cronExpression" value="30 50 23 * * ?" />
+    </bean>
 
 	<bean id="calcPeopleRouteTimer"
 		class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
@@ -189,6 +205,7 @@
 				<ref bean="doTime5" />
 				<ref bean="doTime6" />
 				<ref bean="doTime7" />
+                <ref bean="doTime8" />				
 				<ref bean="taskJobTrigger" />
 				<ref bean="calcPeopleRouteTask1" />
 				<ref bean="calcPeopleRouteTimer" />
