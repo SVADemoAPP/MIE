@@ -685,7 +685,7 @@
     </select>
     
     <select id="getShopVisitTime" resultType="VisitTimeModel">
-        select * from (select max(a.timestamp) maxTime,min(a.timestamp) minTime,c.id id from ${tableName} a 
+        select * from (select a.userid userid,max(a.timestamp) maxTime,min(a.timestamp) minTime,c.id id from ${tableName} a 
         join bi_maps b on a.mapId = b.mapId join bi_shop c on c.mapId = b.mapId where a.timestamp &gt; #{beginTime} and a.timestamp &lt; #{endTime} and a.x &gt;(c.xSpot)*10 and  a.x &lt;(c.x1Spot)*10 and a.y &gt; (c.ySpot)*10 and a.y &lt;(c.y1Spot)*10 group by a.userId,c.id)as d order by d.id asc            
     </select>
     
@@ -703,5 +703,14 @@
     
     <select id="getWeekDataByShopId" resultType="WeekTotalModel">
        select  substring(time,3,8) mytime,shopId myId,max(allcount) allCount,round(sum(delayTime),2) averageTime from bi_static_shop_visittime where shopId = #{shopId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by shopId,mytime order by mytime       
-    </select>                                                     	
+    </select>
+    
+    <select id="getUserList" resultType="VisitTimeModel">
+     select * from (select a.userid userid,b.storeId storeId,b.mapId mapId,max(a.timestamp) maxTime,min(a.timestamp) minTime,c.id id from ${tableName} a 
+        join bi_maps b on a.mapId = b.mapId join bi_shop c on c.mapId = b.mapId where a.x &gt;(c.xSpot)*10 and  a.x &lt;(c.x1Spot)*10 and a.y &gt; (c.ySpot)*10 and a.y &lt;(c.y1Spot)*10 group by a.userId,c.id)as d order by d.id asc                  
+    </select>
+    
+    <select id="getRateList" resultType="UserTimeModel">
+    select a.*,c.deepTime deepTime,c.visitorNumber visitorNumber from bi_static_userid_visittime a join bi_shop b on a.shopId = b.id join bi_shop_category c on c.id = b.categoryId where storeId = #{storeId} and time = #{time} ORDER BY shopId;
+    </select>                                                             	
 </mapper>

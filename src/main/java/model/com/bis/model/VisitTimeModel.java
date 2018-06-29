@@ -1,11 +1,29 @@
 package com.bis.model;
 
 public class VisitTimeModel {
-
+    private String userId;
     private long minTime;
     private long maxTime;
     private int id;
     private int storeId;
+    private int mapId;
+    
+    
+    public int getMapId() {
+        return mapId;
+    }
+
+    public void setMapId(int mapId) {
+        this.mapId = mapId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public int getStoreId() {
         return storeId;

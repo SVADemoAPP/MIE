@@ -946,38 +946,6 @@ public class MarketController {
     	return map;
     }
     
-    @RequestMapping(value = "/getNewRates", method = { RequestMethod.POST })
-    @ResponseBody
-    public Map<String,List<String>> getNewRates(@RequestParam("storeId")String storeId){
-        Map<String,List<String>> map = new HashMap<String, List<String>>();
-        String userDay = Util.dateFormat(new Date(), Params.YYYYMMDD2);
-        List<ShopModel> listModel = rateDao.getShopInfoByStore(storeId);
-        List<String> listEnterRate = new ArrayList<>();
-        List<String> listShopName = new ArrayList<>();
-        List<String> listOverRate = new ArrayList<>();
-        List<String> listDeepRate = new ArrayList<>();
-        List<UserTimeModel> list = locationDao.getRateList(storeId, userDay);
-        Map<String, String> maps = getRateData(list);
-        String enterRate;
-        String shopName;
-        String overflowRate;
-        String deepRate;
-        for (ShopModel model:listModel) {
-            shopName = model.getShopName();
-            String shopId = model.getShopId();
-//            listEnterRate.add(enterRate);
-//            listShopName.add(shopName);
-//            listOverRate.add(overflowRate);
-//            listDeepRate.add(deepRate);
-        }
-        map.put("shopName", listShopName);
-        map.put("eRate", listEnterRate);
-        map.put("oRate", listOverRate);
-        map.put("dRate", listDeepRate);
-        return map;
-    }
-    
-    
     
     /** 
      * @Title: getAllFloors 
@@ -1066,43 +1034,43 @@ public class MarketController {
         
     }
     
-    private static Map<String, String> getRateData(List<UserTimeModel> list)
-    {
-        HashMap<String,String> map = new HashMap<String,String>();
-        if (list.size()>0) {
-            int  shopId = list.get(0).getShopId();
-            int newShopId;
-            int allCount = 0;
-            int minCount = 0;
-            double deepTime = 0;
-            int visitorNumber = 0;
-            for (UserTimeModel sva : list){
-                newShopId = sva.getShopId();
-                visitorNumber = sva.getVisitorNumber();
-                if(newShopId==shopId){
-                    allCount += 1;
-                    double visitTime = sva.getDelayTime();
-                    deepTime = sva.getDeepTime();
-                    if (visitTime>deepTime) {
-                        minCount+=1; 
-                    }
-                    shopId = sva.getShopId();
-                }else{
-                    map.put(shopId+"_deepTime", String.valueOf((minCount/allCount)));
-                    map.put(shopId+"_visitorNumber", String.valueOf(((allCount-visitorNumber)/visitorNumber)));
-                    allCount = 0;
-                    minCount = 0;
-                    shopId = sva.getShopId();
-                }
-            }
-            if (allCount!=0) {
-                map.put(shopId+"_deepTime", String.valueOf((minCount/allCount)));
-                map.put(shopId+"_visitorNumber", String.valueOf(((allCount-visitorNumber)/visitorNumber)));
-            }
-            return map;
-        }else
-        {
-            return null; 
-        }
-    }
+//    private static Map<String, String> getRateData(List<UserTimeModel> list)
+//    {
+//        HashMap<String,String> map = new HashMap<String,String>();
+//        if (list.size()>0) {
+//            int  shopId = list.get(0).getShopId();
+//            int newShopId;
+//            int allCount = 0;
+//            int minCount = 0;
+//            double deepTime = 0;
+//            int visitorNumber = 0;
+//            for (UserTimeModel sva : list){
+//                newShopId = sva.getShopId();
+//                visitorNumber = sva.getVisitorNumber();
+//                if(newShopId==shopId){
+//                    allCount += 1;
+//                    double visitTime = sva.getDelayTime();
+//                    deepTime = sva.getDeepTime();
+//                    if (visitTime>deepTime) {
+//                        minCount+=1; 
+//                    }
+//                    shopId = sva.getShopId();
+//                }else{
+//                    map.put(shopId+"_deepTime", String.valueOf((minCount/allCount)));
+//                    map.put(shopId+"_visitorNumber", String.valueOf(((allCount-visitorNumber)/visitorNumber)));
+//                    allCount = 0;
+//                    minCount = 0;
+//                    shopId = sva.getShopId();
+//                }
+//            }
+//            if (allCount!=0) {
+//                map.put(shopId+"_deepTime", String.valueOf((minCount/allCount)));
+//                map.put(shopId+"_visitorNumber", String.valueOf(((allCount-visitorNumber)/visitorNumber)));
+//            }
+//            return map;
+//        }else
+//        {
+//            return null; 
+//        }
+//    }
 }

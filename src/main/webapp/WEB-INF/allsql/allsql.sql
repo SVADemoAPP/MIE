@@ -644,3 +644,15 @@ CREATE TABLE `bi_static_store_visittime` (
     INDEX `Index 3` (`storeId`)
 )
 COLLATE='utf8_bin';
+
+CREATE TABLE `bi_static_userid_visittime` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `time` DATE NOT NULL COMMENT '时间',
+    `delaytime` DECIMAL(10,2) NOT NULL COMMENT '平均驻留时长',
+    `shopId` INT(11) NOT NULL COMMENT '商场id',
+    `userId` VARCHAR(200) NOT NULL COLLATE 'utf8_bin',
+    PRIMARY KEY (`shopId`, `time`, `userId`),
+    INDEX `Index 1` (`id`),
+    INDEX `Index 3` (`shopId`)
+)
+COLLATE='utf8_bin';

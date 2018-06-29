@@ -18,6 +18,7 @@ import com.bis.model.ShopModel;
 import com.bis.model.TrendAllModel;
 import com.bis.model.TrendMapModel;
 import com.bis.model.TrendShopModel;
+import com.bis.model.UserTimeModel;
 import com.bis.model.VisitTimeModel;
 import com.bis.model.WeekTotalModel;
 
@@ -218,4 +219,8 @@ public interface LocationDao {
     public List<WeekTotalModel> getWeekDataByMapId(@Param("mapId") String mapId,@Param("startTime") String beginTime,@Param("endTime") String endTime);
     
     public List<WeekTotalModel> getWeekDataByShopId(@Param("shopId") String shopId,@Param("startTime") String beginTime,@Param("endTime") String endTime);
+    
+    public List<VisitTimeModel> getUserList(@Param("tableName") String tableName);
+    
+    public List<UserTimeModel> getRateList(@Param("storeId") String storeId,@Param("time") String time);
 }
