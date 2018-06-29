@@ -31,10 +31,10 @@ public class Rates {
 //	    double visitorIn = rateDao.selectCountByShop(tableName, id);
 //	    Integer x = rateDao.selectXByCategoryId(id);
 //	    Integer y = rateDao.selectYByCategoryId(id);
-	    int shopCount  = rateDao.getShopCountByShopId(tableName, model);
+	    double shopCount  = rateDao.getShopCountByShopId(tableName, model);
 	    double x = Double.valueOf(model.getX())/2;
 	    double y = Double.valueOf(model.getY())/2;
-	    int allCount = rateDao.getShopCountByShopIdRound(tableName, model);
+	    double allCount = rateDao.getShopCountByShopIdRound(tableName, model);
 	    //统计经过店门的游客
 //	    double visitorAll = rateDao.selectAllCountByShop(tableName,id,x,y);
 	    double enterRateDouble = 0;
