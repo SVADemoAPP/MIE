@@ -299,6 +299,7 @@ public class QuartzJob {
     {
         try {
             String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
+//            String nowDay1 = Util.dateFormat(new Date(), Params.YYYYMMDD2);
             String nowMouth = Util.dateFormat(new Date(), Params.YYYYMMddHH00);
             String tableName = Params.LOCATION + nowDay;
             long endTime = System.currentTimeMillis();
@@ -367,6 +368,20 @@ public class QuartzJob {
                 int areaResult = statisticsDao.doUpdate(insertShop);
                 LOG.debug("saveVisitTime-shop result:" + areaResult);
             }
+//            List<WeekTotalModel> shopXYCount = locationDao.getCountGroupByShopIdAndXY(tableName);
+//            String insertShopCount = "replace into bi_static_shop_count(time,shopName,allcount,shopId) values";
+//            for (int i = 0; i < shopXYCount.size(); i++) {
+//                WeekTotalModel model = shopXYCount.get(i);
+//                String shopName = model.getMyTime();
+//                int allcount = model.getAllCount();
+//                int myId= model.getMyId();
+//                insertShopCount += "('" + nowDay1 + "','" + shopName + "','" + allcount + "','" + myId + "'),";
+//            }
+//            if (shopXYCount.size()>0) {
+//                insertShopCount = insertShopCount.substring(0, insertShopCount.length() - 1);
+//                int areaResult = statisticsDao.doUpdate(insertShopCount);
+//                LOG.debug("saveVisitTime-shopXY result:" + areaResult); 
+//            }
         } catch (Exception e) {
            LOG.error(e.getMessage());
            System.out.println(1);

@@ -214,6 +214,10 @@ public interface LocationDao {
     
     public List<VisitTimeModel> getCountGroupByShopId(@Param("tableName") String tableName);
     
+    public List<WeekTotalModel> getCountGroupByShopIdAndXY(@Param("tableName") String tableName);
+    
+    public List<WeekTotalModel> getXYCountAndCount(@Param("time") String time);
+    
     public List<WeekTotalModel> getWeekDataByStoreId(@Param("storeId") String storeId,@Param("startTime") String beginTime,@Param("endTime") String endTime);
     
     public List<WeekTotalModel> getWeekDataByMapId(@Param("mapId") String mapId,@Param("startTime") String beginTime,@Param("endTime") String endTime);

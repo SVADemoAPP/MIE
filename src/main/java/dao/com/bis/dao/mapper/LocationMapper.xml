@@ -724,5 +724,13 @@
     
     <select id="getShop10Count" resultType="int">
     select max(allcount) from bi_static_store_visittime where storeId = #{storeId}  and time &gt; #{time}
-    </select>                                                                           	
+    </select>
+    
+    <select id="getCountGroupByShopIdAndXY" resultType="WeekTotalModel">
+       select count(distinct a.userId) allcount,b.id myId,b.shopName myTime from ${tableName} a join bi_shop b on a.mapId = b.mapId join bi_shop_category c on c.id = b.categoryId  where a.x &gt; (b.xSpot-c.x/2)*10 and  a.x &lt; (b.x1Spot+c.x/2)*10 and a.y &gt;(b.ySpot-c.y/2)*10 and a.y &lt; (b.y1Spot+c.y/2)*10  group by b.id        
+    </select>
+    
+    <select id="getXYCountAndCount" resultType="WeekTotalModel">
+       select a.allcount allCount,max(b.allcount) averageTime,a.shopId myId from bi_static_shop_count a left join bi_static_shop_visittime b on a.shopId = b.shopId where b.time &gt;#{time} and a.time &gt;#{time} group by a.shopId
+    </select>                                                                                   	
 </mapper>
