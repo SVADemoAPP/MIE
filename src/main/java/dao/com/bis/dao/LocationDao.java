@@ -231,5 +231,5 @@ public interface LocationDao {
     public List<WeekTotalModel> getTop10ForMap(@Param("storeId") String storeId,@Param("time") String beginTime);
     
     public List<WeekTotalModel> getShop10ForMap(@Param("storeId") String storeId,@Param("time") String beginTime);
-    public int getShop10Count(@Param("storeId") String storeId,@Param("time") String beginTime);
+    public String getShop10Count(@Param("storeId") String storeId,@Param("time") String beginTime);
 }

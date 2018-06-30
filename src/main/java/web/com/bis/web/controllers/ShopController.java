@@ -630,11 +630,13 @@ public class ShopController {
         JSONObject weekUsercount = new JSONObject();
         JSONObject weekDelaytime = new JSONObject();
         Calendar calendar = Calendar.getInstance();
-        String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
+        String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
+        String endTime1 = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -7);
         String bigenTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String[] weeks = Util.getLastNumDays(7, Params.YYMMDD);
         List<WeekTotalModel> list = locationDao.getWeekDataByShopId(shopId, bigenTime, endTime);
+        List<WeekTotalModel> list1 = locationDao.getWeekDataByShopId(shopId, endTime, endTime1);
         for (int i = 0; i < weeks.length; i++) {
             weekUsercount.put(weeks[i], 0);
             weekDelaytime.put(String.valueOf(Util.dateFormatStringtoLong(weeks[i], Params.YYMMDD)), 0);
@@ -644,18 +646,16 @@ public class ShopController {
             model = list.get(i);
             int allCount = coefficientData(model.getAllCount());
             double averageTime = model.getAverageTime();
-            if (i!=list.size()-1) {
-                allWeekCount += allCount;
-                allWeekTime +=averageTime;
-                model = list.get(i);
-                String myTime = model.getMyTime().replace("-", "/");
-                weekUsercount.put(myTime, allCount);
-                weekDelaytime.put(String.valueOf(Util.dateFormatStringtoLong(myTime, Params.YYMMDD)), averageTime);  
-            }else
-            {
-                nowUserCount = allCount;
-                nowAverageTime = averageTime;
-            }
+            allWeekCount += allCount;
+            allWeekTime +=averageTime;
+            model = list.get(i);
+            String myTime = model.getMyTime().replace("-", "/");
+            weekUsercount.put(myTime, allCount);
+            weekDelaytime.put(String.valueOf(Util.dateFormatStringtoLong(myTime, Params.YYMMDD)), averageTime);  
+        }
+        if (list1.size()>0) {
+            nowUserCount = list1.get(0).getAllCount();
+            nowAverageTime = list1.get(0).getAverageTime();
         }
         List<ShopModel> listShopModel = shopDao.getShopDataById(shopId);
         ShopModel shopModel = listShopModel.get(0);

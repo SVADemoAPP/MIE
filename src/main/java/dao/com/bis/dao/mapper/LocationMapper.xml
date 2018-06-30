@@ -722,7 +722,7 @@
     select max(a.allcount) allCount,b.shopName myTime,a.shopId myId from bi_static_shop_visittime a join bi_shop b on a.shopId = b.id join bi_maps c on c.mapId = b.mapId join bi_store d on d.id = c.storeId where time &gt; #{time} and c.id = #{storeId}  group by a.shopId limit 10
     </select>
     
-    <select id="getShop10Count" resultType="int">
+    <select id="getShop10Count" resultType="String">
     select max(allcount) from bi_static_store_visittime where storeId = #{storeId}  and time &gt; #{time}
     </select>
     

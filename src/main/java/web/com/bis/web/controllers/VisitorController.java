@@ -304,9 +304,13 @@ public class VisitorController {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         List<WeekTotalModel> mapList = locationDao.getTop10ForMap(storeId, nowDay);
         List<WeekTotalModel> shopList = locationDao.getShop10ForMap(storeId, nowDay);
-        int sum = locationDao.getShop10Count(storeId,nowDay);
+        String sum = locationDao.getShop10Count(storeId,nowDay);
+        int sumAll = 0;
+        if (sum!=null) {
+            sumAll = Integer.parseInt(sum);
+        }
         modelMap.put("mapData", newAddRation(mapList));
-        modelMap.put("shopData",sortTop10(newAddRationShop(shopList,sum)));
+        modelMap.put("shopData",sortTop10(newAddRationShop(shopList,sumAll)));
         modelMap.put("status", Params.RETURN_CODE_200);
         return modelMap;
     }

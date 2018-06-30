@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.bis.common.SystemInfo;
 import com.bis.common.Util;
 import com.bis.common.conf.Params;
 import com.bis.dao.LocationDao;
@@ -138,9 +137,9 @@ public class MarketController {
 //    	}
 //        modelAndView.addObject("memory", si.getEMS());
 //        modelAndView.addObject("diskspace", si.getDisk());
-        modelAndView.addObject("cpu", SystemInfo.cpu());
-        modelAndView.addObject("memory", SystemInfo.memory());
-        modelAndView.addObject("diskspace", SystemInfo.file());
+//        modelAndView.addObject("cpu", SystemInfo.cpu());
+//        modelAndView.addObject("memory", SystemInfo.memory());
+//        modelAndView.addObject("diskspace", SystemInfo.file());
         modelAndView.setViewName("/market2");
         return modelAndView;
     }
@@ -722,11 +721,13 @@ public class MarketController {
         JSONObject weekUsercount = new JSONObject();
         JSONObject weekDelaytime = new JSONObject();
         Calendar calendar = Calendar.getInstance();
-        String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
+        String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
+        String endTime1 = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -7);
         String bigenTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String[] weeks = Util.getLastNumDays(7, Params.YYMMDD);
         List<WeekTotalModel> list = locationDao.getWeekDataByStoreId(storeId, bigenTime, endTime);
+        List<WeekTotalModel> list1 = locationDao.getWeekDataByStoreId(storeId, endTime, endTime1);
         for (int i = 0; i < weeks.length; i++) {
             weekUsercount.put(weeks[i], 0);
             weekDelaytime.put(weeks[i], 0);
@@ -736,18 +737,16 @@ public class MarketController {
             model = list.get(i);
             int allCount = coefficientData(model.getAllCount());
             double averageTime = model.getAverageTime();
-            if (i!=list.size()-1) {
-                allWeekCount += allCount;
-                allWeekTime +=averageTime;
-                model = list.get(i);
-                String myTime = model.getMyTime().replace("-", "/");;
-                weekUsercount.put(myTime, allCount);
-                weekDelaytime.put(myTime, averageTime);  
-            }else
-            {
-                nowUserCount = allCount;
-                nowAverageTime = averageTime;
-            }
+            allWeekCount += allCount;
+            allWeekTime +=averageTime;
+            model = list.get(i);
+            String myTime = model.getMyTime().replace("-", "/");;
+            weekUsercount.put(myTime, allCount);
+            weekDelaytime.put(myTime, averageTime);  
+        }
+        if (list1.size()>0) {
+            nowUserCount = list1.get(0).getAllCount();
+            nowAverageTime = list1.get(0).getAverageTime();
         }
         long endTimes = System.currentTimeMillis();
         long startTime =endTimes  - durationOfLocation*1000;
@@ -778,11 +777,13 @@ public class MarketController {
         JSONObject weekUsercount = new JSONObject();
         JSONObject weekDelaytime = new JSONObject();
         Calendar calendar = Calendar.getInstance();
-        String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
+        String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
+        String endTime1 = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -7);
         String bigenTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String[] weeks = Util.getLastNumDays(7, Params.YYMMDD);
         List<WeekTotalModel> list = locationDao.getWeekDataByMapId(mapId, bigenTime, endTime);
+        List<WeekTotalModel> list1 = locationDao.getWeekDataByMapId(mapId, endTime, endTime1);
         for (int i = 0; i < weeks.length; i++) {
             weekUsercount.put(weeks[i], 0);
             weekDelaytime.put(weeks[i], 0);
@@ -792,18 +793,17 @@ public class MarketController {
             model = list.get(i);
             int allCount = coefficientData(model.getAllCount());
             double averageTime = model.getAverageTime();
-            if (i!=list.size()-1) {
-                allWeekCount += allCount;
-                allWeekTime +=averageTime;
-                model = list.get(i);
-                String myTime = model.getMyTime().replace("-", "/");;
-                weekUsercount.put(myTime, allCount);
-                weekDelaytime.put(myTime, averageTime);  
-            }else
-            {
-                nowUserCount = allCount;
-                nowAverageTime = averageTime;
-            }
+            allWeekCount += allCount;
+            allWeekTime +=averageTime;
+            model = list.get(i);
+            String myTime = model.getMyTime().replace("-", "/");;
+            weekUsercount.put(myTime, allCount);
+            weekDelaytime.put(myTime, averageTime);  
+            
+        }
+        if (list1.size()>0) {
+            nowUserCount = list1.get(0).getAllCount();
+            nowAverageTime = list1.get(0).getAverageTime();
         }
         long endTimes = System.currentTimeMillis();
         long startTime =endTimes  - durationOfLocation*1000;

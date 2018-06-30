@@ -141,7 +141,7 @@
 			</ul>
 			<!-- End #sideNav -->
 			<!-- Start .sidebar-panel -->
-			<div class="sidebar-panel">
+		<!-- 	<div class="sidebar-panel">
 				<h4 class="sidebar-panel-title">
 					<i class="im-meter"></i>
 					<spring:message code="mall_user"></spring:message>
@@ -163,7 +163,7 @@
 							<div class="pie-chart" data-percent="${memory}"></div></li>
 					</ul>
 				</div>
-			</div>
+			</div> -->
 			<!-- End .sidebar-panel -->
 		</div>
 		<!-- End .sidebar-inner -->

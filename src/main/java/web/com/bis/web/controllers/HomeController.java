@@ -26,7 +26,6 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.RequestContext;
 
-import com.bis.common.SystemInfo;
 import com.bis.common.Util;
 import com.bis.common.conf.Params;
 import com.bis.dao.VisitorDao;
@@ -85,9 +84,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("storeMng", true);
-        model.addAttribute("cpu", SystemInfo.cpu());
-        model.addAttribute("memory", SystemInfo.memory());
-        model.addAttribute("diskspace", SystemInfo.file());
+//        model.addAttribute("cpu", SystemInfo.cpu());
+//        model.addAttribute("memory", SystemInfo.memory());
+//        model.addAttribute("diskspace", SystemInfo.file());
         return "config/storeConfig";
     }
 
@@ -129,9 +128,9 @@ public class HomeController {
         model.addAttribute("infoMng", true);
         model.addAttribute("mapMng", true);
         model.addAttribute("info", info);
-        model.addAttribute("cpu", SystemInfo.cpu());
-        model.addAttribute("memory", SystemInfo.memory());
-        model.addAttribute("diskspace", SystemInfo.file());
+//        model.addAttribute("cpu", SystemInfo.cpu());
+//        model.addAttribute("memory", SystemInfo.memory());
+//        model.addAttribute("diskspace", SystemInfo.file());
         return "config/mapConfig";
     }
 
@@ -170,9 +169,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("categoryMng", true);
-        model.addAttribute("cpu", SystemInfo.cpu());
-        model.addAttribute("memory", SystemInfo.memory());
-        model.addAttribute("diskspace", SystemInfo.file());
+//        model.addAttribute("cpu", SystemInfo.cpu());
+//        model.addAttribute("memory", SystemInfo.memory());
+//        model.addAttribute("diskspace", SystemInfo.file());
         return "config/categoryConfig";
     }
 
@@ -211,9 +210,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("InputMng", true);
-        model.addAttribute("cpu", SystemInfo.cpu());
-        model.addAttribute("memory", SystemInfo.memory());
-        model.addAttribute("diskspace", SystemInfo.file());
+//        model.addAttribute("cpu", SystemInfo.cpu());
+//        model.addAttribute("memory", SystemInfo.memory());
+//        model.addAttribute("diskspace", SystemInfo.file());
         return "config/shopConfig";
     }
 
@@ -252,9 +251,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("InputMng", true);
-        model.addAttribute("cpu", SystemInfo.cpu());
-        model.addAttribute("memory", SystemInfo.memory());
-        model.addAttribute("diskspace", SystemInfo.file());
+//        model.addAttribute("cpu", SystemInfo.cpu());
+//        model.addAttribute("memory", SystemInfo.memory());
+//        model.addAttribute("diskspace", SystemInfo.file());
         return "config/ticketConfig";
     }
 
@@ -287,9 +286,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("InputMng", true);
-        model.addAttribute("cpu", SystemInfo.cpu());
-        model.addAttribute("memory", SystemInfo.memory());
-        model.addAttribute("diskspace", SystemInfo.file());
+//        model.addAttribute("cpu", SystemInfo.cpu());
+//        model.addAttribute("memory", SystemInfo.memory());
+//        model.addAttribute("diskspace", SystemInfo.file());
         return "config/mixingConfig";
     }
 
@@ -329,9 +328,9 @@ public class HomeController {
         // model.addAttribute("cpu",si.getCpuRatioForWindows());
         // model.addAttribute("memory", si.getEMS());
         // model.addAttribute("diskspace",si.getDisk());
-        model.addAttribute("cpu", SystemInfo.cpu());
-        model.addAttribute("memory", SystemInfo.memory());
-        model.addAttribute("diskspace", SystemInfo.file());
+//        model.addAttribute("cpu", SystemInfo.cpu());
+//        model.addAttribute("memory", SystemInfo.memory());
+//        model.addAttribute("diskspace", SystemInfo.file());
         return "shop";
     }
 
@@ -362,9 +361,9 @@ public class HomeController {
         // }
         model.addAttribute("infoMng", true);
         model.addAttribute("InputMng", true);
-        model.addAttribute("cpu", SystemInfo.cpu());
-        model.addAttribute("memory", SystemInfo.memory());
-        model.addAttribute("diskspace", SystemInfo.file());
+//        model.addAttribute("cpu", SystemInfo.cpu());
+//        model.addAttribute("memory", SystemInfo.memory());
+//        model.addAttribute("diskspace", SystemInfo.file());
         // model.addAttribute("cpu",si.getCpuRatioForWindows());
         // model.addAttribute("memory", si.getEMS());
         // model.addAttribute("diskspace",si.getDisk());
@@ -403,9 +402,9 @@ public class HomeController {
         // }
         // model.addAttribute("memory", si.getEMS());
         // model.addAttribute("diskspace",si.getDisk());
-        model.addAttribute("cpu", SystemInfo.cpu());
-        model.addAttribute("memory", SystemInfo.memory());
-        model.addAttribute("diskspace", SystemInfo.file());
+//        model.addAttribute("cpu", SystemInfo.cpu());
+//        model.addAttribute("memory", SystemInfo.memory());
+//        model.addAttribute("diskspace", SystemInfo.file());
         return "operation";
     }
 
