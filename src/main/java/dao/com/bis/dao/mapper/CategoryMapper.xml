@@ -5,7 +5,7 @@
 <mapper namespace="com.bis.dao.CategoryDao">
 
 	<select id="doquery" resultType="CategoryModel">
-		SELECT * FROM bi_shop_category
+		SELECT id,name,updateTime,createTime,x,y,deepTime1 deepTime,visitorNumber1 visitorNumber FROM bi_shop_category
 	</select>
 
 	<select id="queryCategoryByStore" resultType="CategoryModel">
@@ -52,13 +52,17 @@
 		x,
 		y,
 		deepTime,
-		visitorNumber
+		visitorNumber,
+		deepTime1,
+		visitorNumber1		
 		)
 		VALUES(
 		#{name},
 		#{createTime},
 		#{x},
 		#{y},
+		#{deepTime}/60,
+		#{visitorNumber}/60,
 		#{deepTime},
 		#{visitorNumber}
 		)
@@ -69,7 +73,8 @@
 		UPDATE bi_shop_category
 		SET name = #{name}, updateTime
 		= #{updateTime},
-		x= #{x},y=#{y},deepTime= #{deepTime},visitorNumber=
+		x= #{x},y=#{y},deepTime= #{deepTime}/60,visitorNumber=
+		#{visitorNumber}/60,deepTime1= #{deepTime},visitorNumber1=
 		#{visitorNumber}
 		WHERE id = #{id}
 	</update>
