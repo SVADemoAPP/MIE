@@ -7,8 +7,6 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,11 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.ftp.FTPClient;
@@ -129,7 +122,6 @@ public class Util {
      */
     public static String convertIp(String ip) {
         String[] iplist = ip.split("\\.");
-        Logger.getLogger(Util.class).error("123456789ip:" + iplist);
         int ip0 = Integer.parseInt(iplist[0]);
         int ip1 = Integer.parseInt(iplist[1]);
         int ip2 = Integer.parseInt(iplist[2]);
@@ -377,8 +369,6 @@ public class Util {
      * @return
      */
     public static List<String> getPeriodMonthList(String startTime, String endTime) {
-        Map<String, Object> result = new HashMap<String, Object>();
-
         Date start = Util.dateStringFormat(startTime, Params.YYYYMMDD2);
         Date end = Util.dateStringFormat(endTime, Params.YYYYMMDD2);
         List<String> dateList = new ArrayList<>();
