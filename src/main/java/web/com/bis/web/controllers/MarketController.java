@@ -12,6 +12,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -939,41 +942,63 @@ public class MarketController {
             int len=listModel.size();
             for(int i=0;i<len;i++){
                 listEnterRate.add("");
-                listShopName.add("");
+                listShopName.add(listModel.get(i).getShopName());
                 listOverRate.add("");
                 listDeepRate.add("");
             }
+            ExecutorService executorService = Executors.newFixedThreadPool(len);
+            final CountDownLatch end=new CountDownLatch(len);
             
-        Thread[] threadList=new Thread[len];
+            
+//        Thread[] threadList=new Thread[len];
         for (int i = 0; i < len; i++) {
-//          shopModel=listModel.get(i);
             final int j=i;
-            threadList[i]=new Thread(new Runnable() {
+            executorService.submit(new Runnable() {
                 
                 @Override
                 public void run() {
                     // TODO Auto-generated method stub
-//                    enterRate=String.valueOf(rates.getEnter(listModel.get(j),tableName));
-//                    overflowRate = String.valueOf(rates.getOverflow1(listModel.get(j),tableName2,nowDay));
-//                    deepRate = String.valueOf(rates.getDeep(listModel.get(j),tableName2,nowDay));
-//                    shopName = listModel.get(j).getShopName();
                     listEnterRate.set(j,String.valueOf(rates.getEnter(listModel.get(j),tableName)));
                     listOverRate.set(j,String.valueOf(rates.getOverflow1(listModel.get(j),tableName2,nowDay)));
                     listDeepRate.set(j,String.valueOf(rates.getDeep(listModel.get(j),tableName2,nowDay)));
-                    listShopName.set(j,listModel.get(j).getShopName());
+                    end.countDown();
                 }
             });
-            threadList[i].start();
+           
+//          shopModel=listModel.get(i);
+//            final int j=i;
+//            threadList[i]=new Thread(new Runnable() {
+//                
+//                @Override
+//                public void run() {
+//                    // TODO Auto-generated method stub
+////                    enterRate=String.valueOf(rates.getEnter(listModel.get(j),tableName));
+////                    overflowRate = String.valueOf(rates.getOverflow1(listModel.get(j),tableName2,nowDay));
+////                    deepRate = String.valueOf(rates.getDeep(listModel.get(j),tableName2,nowDay));
+////                    shopName = listModel.get(j).getShopName();
+//                    listEnterRate.set(j,String.valueOf(rates.getEnter(listModel.get(j),tableName)));
+//                    listOverRate.set(j,String.valueOf(rates.getOverflow1(listModel.get(j),tableName2,nowDay)));
+//                    listDeepRate.set(j,String.valueOf(rates.getDeep(listModel.get(j),tableName2,nowDay)));
+//                }
+//            });
+//            threadList[i].start();
            
         }
-        for(Thread t:threadList){
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        try {
+            end.await();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+        executorService.shutdown();
+//        for(Thread t:threadList){
+//            try {
+//                t.join();
+//            } catch (InterruptedException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//        }
         
         }else{
             for (int i = 0,len=listModel.size(); i < len; i++) {
