@@ -33,7 +33,7 @@
 		<!-- 调用的类 -->
 		<property name="targetObject" ref="quartzJob" />
 		<!-- 调用类中的方法 -->
-		<property name="targetMethod" value="saveVisitTime" />
+		<property name="targetMethod" value="newSaveVisitTime" />
 	</bean>
 
 	<bean id="jobtask3"

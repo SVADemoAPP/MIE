@@ -336,7 +336,7 @@ function showBarCharts(list, target, thisColor) {
 				type : 'none'
 			},
 			formatter : function(params) {
-				return params[0].axisValue.split(":")[0] + ': ' + params[0].value;
+				return params[0].axisValue + ': ' + params[0].value;
 			}
 		},
 		xAxis : {

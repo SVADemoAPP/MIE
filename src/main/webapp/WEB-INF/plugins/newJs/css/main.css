@@ -1003,7 +1003,7 @@ body.full-screen #header {
    Sidebar styles
 ----------------------------------------- */
 #sidebar {
-  width: 185px;
+  width: 140px;
   height: auto;
   position: absolute;
   left: 0;
@@ -1033,7 +1033,7 @@ body.full-screen #header {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 185px;
+  width: 140px;
   background: #f3f5f6;
   border-right: 1px solid #e7e7e2;
   z-index: -1;
@@ -1258,7 +1258,7 @@ body.full-screen #header {
    Content
 ----------------------------------------- */
 #content {
-  margin-left: 185px;
+  margin-left: 140px;
   padding: 50px 15px 25px 15px;
 }
 #content.sidebar-page {

@@ -388,6 +388,81 @@ public class QuartzJob {
         }
         
     }
+    public void newSaveVisitTime()
+    {
+        try {
+            String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
+            String nowMouth = Util.dateFormat(new Date(), Params.YYYYMMddHH00);
+            String tableName = Params.LOCATION + nowDay;
+            long endTime = System.currentTimeMillis();
+            long beginTime = endTime-60*60*1000;
+            String insertFloor = "replace into bi_static_floor_visitTime(time,delaytime,allcount,mapId,allcounts) values";
+            String insertStore = "replace into bi_static_store_visitTime(time,delaytime,allcount,storeId,allcounts) values";
+            String insertShop = "replace into bi_static_shop_visitTime(time,delaytime,allcount,shopId,allcounts) values";
+
+
+            List<VisitTimeModel> listMapId = locationDao.getMapVisitTime(tableName,beginTime,endTime);
+            Map<String, String> mapFloor = getNewMap(listMapId);
+//            List<VisitTimeModel> mapCount = locationDao.getCountGroupByMapId(tableName);
+//            6Map<String, Long> mapIdS = getListToMap(mapCount);
+            Set<String> mapSet = mapFloor.keySet();
+            for(String s:mapSet)
+            {
+                String mapId = s.split("-")[0];
+                String allcount = s.split("-")[1];
+                String visitTime = mapFloor.get(s);
+                int allCounts = locationDao.getOneDayData(mapId, tableName);
+                insertFloor += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + mapId + "','"+ allCounts+"'),";
+            }
+            if (mapSet.size()>0) {
+                insertFloor = insertFloor.substring(0, insertFloor.length() - 1);
+                int areaResult = statisticsDao.doUpdate(insertFloor);
+                LOG.debug("saveVisitTime-floor result:" + areaResult);
+            }
+            List<VisitTimeModel> listStore = locationDao.getStoreVisitTime(tableName,beginTime,endTime);
+            Map<String, String> mapStore = getNewMap(listStore);
+//            List<VisitTimeModel> storeCount = locationDao.getCountGroupByStoreId(tableName);
+//            Map<String, Long> stores = getListToMap(storeCount);
+            Set<String> storeSet = mapStore.keySet();
+            for(String s:storeSet)
+            {
+                String storeId = s.split("-")[0];
+                String allcount = s.split("-")[1];
+                String visitTime = mapStore.get(s);
+                int allCounts = locationDao.getStoreAllCount(storeId,tableName);
+                insertStore += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + storeId + "','"+ allCounts+"'),";
+            }
+            if (storeSet.size()>0) {
+                insertStore = insertStore.substring(0, insertStore.length() - 1);
+                int areaResult = statisticsDao.doUpdate(insertStore);
+                LOG.debug("saveVisitTime-store result:" + areaResult);
+            }
+            
+            List<VisitTimeModel> shopList = locationDao.getShopVisitTime(tableName,beginTime,endTime);
+            Map<String, String> mapShop = getNewMap(shopList);
+//            List<VisitTimeModel> shopCount = locationDao.getCountGroupByShopId(tableName);
+//            Map<String, Long> shops = getListToMap(shopCount);
+            Set<String> shopSet = mapShop.keySet();
+            for(String s:shopSet)
+            {
+                String shopId = s.split("-")[0];
+                String allcount = s.split("-")[1];
+                String visitTime = mapShop.get(s);
+                int allCounts = locationDao.getShopAllCount(shopId, tableName);
+                insertShop += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + shopId +  "','"+ allCounts+"'),";
+            }
+            if (shopSet.size()>0) {
+                insertShop = insertShop.substring(0, insertShop.length() - 1);
+                int areaResult = statisticsDao.doUpdate(insertShop);
+                LOG.debug("saveVisitTime-shop result:" + areaResult);
+            }
+        } catch (Exception e) {
+           LOG.error(e.getMessage());
+           System.out.println(1);
+        }
+        
+    }
+    
     public void saveUserShop()
     {
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
@@ -1061,7 +1136,7 @@ public class QuartzJob {
                     long visitTime = sva.getMaxTime()-sva.getMinTime();
                     String key = newId+"";
                     //小於2分鐘忽略
-                    if (visitTime<120000) {
+                    if (visitTime<300000) {
                         continue; 
                     }
                     if(map.containsKey(key)){
@@ -1094,7 +1169,47 @@ public class QuartzJob {
         {
             return null; 
         }
-    } 
-    
-     
+    }
+    private static Map<String, String> getNewMap(List<VisitTimeModel> list)
+    {
+        HashMap<String,String> map = new HashMap<String,String>();
+        if (list.size()>0) {
+            int  id = list.get(0).getId();
+            int newId;
+            int count = 0 ;
+            int allCount = 0;
+            long tempVistTime = 0;
+            String key = null;
+            for (VisitTimeModel sva : list){
+                newId = sva.getId();
+                if(newId==id){
+                    allCount = allCount+1;
+                    long visitTime = sva.getMaxTime()-sva.getMinTime();
+                    key = newId+"";
+                    //小於2分鐘忽略
+                    if (visitTime>300000) {
+                        count = count+1;
+                        tempVistTime = tempVistTime+visitTime;
+                    }
+                    id = sva.getId();
+                }else{
+                    key = key+"-"+allCount;
+                    map.put(key,Util.getMinute(tempVistTime, count));
+                    count = 0 ;
+                    allCount = 0;
+                    tempVistTime = 0;
+                    key = null;
+                    id = sva.getId();
+                }
+            }
+            if (count!=0) {
+                key = key+"-"+allCount;
+                map.put(key,Util.getMinute(tempVistTime, count));
+            }
+            return map;
+        }else
+        {
+            return null; 
+        }
+    }
 }

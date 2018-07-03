@@ -672,9 +672,14 @@
     </select>
     
     <select id="getMapVisitTime" resultType="VisitTimeModel">
-        select * from (select max(a.timestamp) maxTime,min(a.timestamp) minTime,a.mapId id,b.storeId from  ${tableName} a 
+        select * from (select max(a.timestamp) maxTime,min(a.timestamp) minTime,a.mapId id from  ${tableName} a 
         join bi_maps b on a.mapId = b.mapId where a.timestamp &gt; #{beginTime} and a.timestamp &lt; #{endTime} group by a.userId,b.mapId)as c  order by c.id asc;              
     </select>
+    
+    <select id="getStoreVisitTime" resultType="VisitTimeModel">
+        select * from (select max(a.timestamp) maxTime,min(a.timestamp) minTime,b.storeId id from  ${tableName} a 
+        join bi_maps b on a.mapId = b.mapId where a.timestamp &gt; #{beginTime} and a.timestamp &lt; #{endTime} group by a.userId,b.storeId)as c  order by c.id asc;              
+    </select>    
     
     <select id="getCountGroupByMapId" resultType="VisitTimeModel">
         select count(distinct a.userId) maxTime,b.mapId id from ${tableName} a join bi_maps b on a.mapId = b.mapId group by a.mapId          
@@ -694,15 +699,15 @@
     </select>
     
     <select id="getWeekDataByStoreId" resultType="WeekTotalModel">
-       select  substring(time,3,8) mytime,storeId myId,max(allcount) allCount,round(sum(delayTime),2) averageTime from bi_static_store_visitTime where storeId = #{storeId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by storeId,mytime order by mytime       
+       select  substring(time,3,8) mytime,storeId myId,max(allcounts) allCount,round(sum(delayTime*allCount)/sum(allCount),2) averageTime from bi_static_store_visitTime where storeId = #{storeId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by storeId,mytime order by mytime       
     </select>
     
     <select id="getWeekDataByMapId" resultType="WeekTotalModel">
-       select  substring(time,3,8) mytime,mapId myId,max(allcount) allCount,round(sum(delayTime),2) averageTime from bi_static_floor_visitTime where mapId = #{mapId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by mapId,mytime order by mytime       
+       select  substring(time,3,8) mytime,mapId myId,max(allcounts) allCount,round(sum(delayTime*allCount)/sum(allCount),2) averageTime from bi_static_floor_visitTime where mapId = #{mapId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by mapId,mytime order by mytime       
     </select>
     
     <select id="getWeekDataByShopId" resultType="WeekTotalModel">
-       select  substring(time,3,8) mytime,shopId myId,max(allcount) allCount,round(sum(delayTime),2) averageTime from bi_static_shop_visitTime where shopId = #{shopId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by shopId,mytime order by mytime       
+       select  substring(time,3,8) mytime,shopId myId,max(allcounts) allCount,round(sum(delayTime*allCount)/sum(allCount),2) averageTime from bi_static_shop_visitTime where shopId = #{shopId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by shopId,mytime order by mytime       
     </select>
     
     <select id="getUserList" resultType="VisitTimeModel">
@@ -732,5 +737,13 @@
     
     <select id="getXYCountAndCount" resultType="WeekTotalModel">
        select a.allcount allCount,max(b.allcount) averageTime,a.shopId myId from bi_static_shop_count a left join bi_static_shop_visitTime b on a.shopId = b.shopId where b.time &gt;#{time} and a.time &gt;#{time} group by a.shopId
-    </select>                                                                                   	
+    </select>
+
+    <select id="getStoreAllCount" resultType="int">
+        select count(distinct a.userid) from ${tableName} a join bi_maps c on c.mapId = a.mapId join bi_store b on b.id = c.storeId where b.id = #{storeId}
+    </select>
+    
+    <select id="getShopAllCount" resultType="int">
+        select count(distinct a.userid) from ${tableName} a join bi_shop b on a.mapId = b.mapId where b.id = #{shopId} and  a.x &gt;(b.xSpot)*10 and  a.x &lt;(b.x1Spot)*10 and a.y &gt; (b.ySpot)*10 and a.y &lt;(b.y1Spot)*10 
+    </select>                                                                                                       	
 </mapper>

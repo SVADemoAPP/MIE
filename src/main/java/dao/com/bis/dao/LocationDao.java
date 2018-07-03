@@ -206,6 +206,8 @@ public interface LocationDao {
     
     public List<VisitTimeModel> getMapVisitTime(@Param("tableName") String tableName,@Param("beginTime") long beginTime,@Param("endTime") long endTime);
     
+    public List<VisitTimeModel> getStoreVisitTime(@Param("tableName") String tableName,@Param("beginTime") long beginTime,@Param("endTime") long endTime);
+    
     public List<VisitTimeModel> getShopVisitTime(@Param("tableName") String tableName,@Param("beginTime") long beginTime,@Param("endTime") long endTime);
     
     public List<VisitTimeModel> getCountGroupByMapId(@Param("tableName") String tableName);
@@ -232,4 +234,9 @@ public interface LocationDao {
     
     public List<WeekTotalModel> getShop10ForMap(@Param("storeId") String storeId,@Param("time") String beginTime);
     public String getShop10Count(@Param("storeId") String storeId,@Param("time") String beginTime);
+    
+    public int getStoreAllCount(@Param("storeId") String storeId, @Param("tableName") String tableName);
+    
+    public int getShopAllCount(@Param("shopId") String shopId, @Param("tableName") String tableName);
+    
 }
