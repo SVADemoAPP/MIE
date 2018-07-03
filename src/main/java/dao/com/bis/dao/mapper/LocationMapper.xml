@@ -720,15 +720,15 @@
     </select>
     
     <select id="getTop10ForMap" resultType="WeekTotalModel">
-     select max(a.allcount) allCount,b.floor myTime,a.mapId myId from bi_static_floor_visitTime a join bi_maps b on a.mapId = b.mapId join bi_store c on c.id = b.storeId where time &gt; #{time} and c.id = #{storeId} group by a.mapId limit 10  
+     select max(a.allcounts) allCount,b.floor myTime,a.mapId myId from bi_static_floor_visitTime a join bi_maps b on a.mapId = b.mapId join bi_store c on c.id = b.storeId where time &gt; #{time} and c.id = #{storeId} group by a.mapId limit 10  
     </select>
     
     <select id="getShop10ForMap" resultType="WeekTotalModel">
-    select max(a.allcount) allCount,b.shopName myTime,a.shopId myId from bi_static_shop_visitTime a join bi_shop b on a.shopId = b.id join bi_maps c on c.mapId = b.mapId join bi_store d on d.id = c.storeId where time &gt; #{time} and c.id = #{storeId}  group by a.shopId limit 10
+    select max(a.allcounts) allCount,b.shopName myTime,a.shopId myId from bi_static_shop_visitTime a join bi_shop b on a.shopId = b.id join bi_maps c on c.mapId = b.mapId join bi_store d on d.id = c.storeId where time &gt; #{time} and c.id = #{storeId}  group by a.shopId limit 10
     </select>
     
     <select id="getShop10Count" resultType="String">
-    select max(allcount) from bi_static_store_visitTime where storeId = #{storeId}  and time &gt; #{time}
+    select max(allcounts) from bi_static_store_visitTime where storeId = #{storeId}  and time &gt; #{time}
     </select>
     
     <select id="getCountGroupByShopIdAndXY" resultType="WeekTotalModel">
@@ -736,7 +736,7 @@
     </select>
     
     <select id="getXYCountAndCount" resultType="WeekTotalModel">
-       select a.allcount allCount,max(b.allcount) averageTime,a.shopId myId from bi_static_shop_count a left join bi_static_shop_visitTime b on a.shopId = b.shopId where b.time &gt;#{time} and a.time &gt;#{time} group by a.shopId
+       select a.allcount allCount,max(b.allcounts) averageTime,a.shopId myId from bi_static_shop_count a left join bi_static_shop_visitTime b on a.shopId = b.shopId where b.time &gt;#{time} and a.time &gt;#{time} group by a.shopId
     </select>
 
     <select id="getStoreAllCount" resultType="int">

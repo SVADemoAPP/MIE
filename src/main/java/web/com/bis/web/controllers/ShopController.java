@@ -670,7 +670,7 @@ public class ShopController {
         modelMap.put("nowPeople",count );
 //        modelMap.put("yesPeople", coefficientData(yesCount));
         
-        modelMap.put("nowAllPeople", nowUserCount);
+        modelMap.put("nowAllPeople", coefficientData(nowUserCount));
 //        modelMap.put("yesAllPeople", weekUsercount);
         modelMap.put("nowTime", nowAverageTime);
 //        modelMap.put("yesTime", yesAverageTime);

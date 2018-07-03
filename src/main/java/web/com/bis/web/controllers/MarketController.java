@@ -759,7 +759,7 @@ public class MarketController {
         long userCount = locationDao.getStoreMomentCount(startTime, endTimes, tableName, storeId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
-        modelMap.put("todayUser", nowUserCount);
+        modelMap.put("todayUser", coefficientData(nowUserCount));
         modelMap.put("todayAvgDelay", nowAverageTime);
         modelMap.put("weekUsercount", weekUsercount);
         modelMap.put("weekDelaytime", weekDelaytime);
@@ -816,7 +816,7 @@ public class MarketController {
         long userCount = locationDao.getFloorMomentCount(startTime, endTimes, tableName, mapId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
-        modelMap.put("todayUser", nowUserCount);
+        modelMap.put("todayUser", coefficientData(nowUserCount));
         modelMap.put("todayAvgDelay", nowAverageTime);
         modelMap.put("weekUsercount", weekUsercount);
         modelMap.put("weekDelaytime", weekDelaytime);

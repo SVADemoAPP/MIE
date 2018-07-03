@@ -409,10 +409,12 @@ public class QuartzJob {
             for(String s:mapSet)
             {
                 String mapId = s.split("-")[0];
-                String allcount = s.split("-")[1];
-                String visitTime = mapFloor.get(s);
-                int allCounts = locationDao.getOneDayData(mapId, tableName);
-                insertFloor += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + mapId + "','"+ allCounts+"'),";
+                if (mapId!=null&&mapId!="null"&&mapId!="") {
+                    String allcount = s.split("-")[1];
+                    String visitTime = mapFloor.get(s);
+                    int allCounts = locationDao.getOneDayData(mapId, tableName);
+                    insertFloor += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + mapId + "','"+ allCounts+"'),";
+                }
             }
             if (mapSet.size()>0) {
                 insertFloor = insertFloor.substring(0, insertFloor.length() - 1);
@@ -427,10 +429,12 @@ public class QuartzJob {
             for(String s:storeSet)
             {
                 String storeId = s.split("-")[0];
-                String allcount = s.split("-")[1];
-                String visitTime = mapStore.get(s);
-                int allCounts = locationDao.getStoreAllCount(storeId,tableName);
-                insertStore += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + storeId + "','"+ allCounts+"'),";
+                if (storeId!=null&&storeId!="null"&&storeId!="") {
+                    String allcount = s.split("-")[1];
+                    String visitTime = mapStore.get(s);
+                    int allCounts = locationDao.getStoreAllCount(storeId,tableName);
+                    insertStore += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + storeId + "','"+ allCounts+"'),";
+                }
             }
             if (storeSet.size()>0) {
                 insertStore = insertStore.substring(0, insertStore.length() - 1);
@@ -446,10 +450,12 @@ public class QuartzJob {
             for(String s:shopSet)
             {
                 String shopId = s.split("-")[0];
-                String allcount = s.split("-")[1];
-                String visitTime = mapShop.get(s);
-                int allCounts = locationDao.getShopAllCount(shopId, tableName);
-                insertShop += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + shopId +  "','"+ allCounts+"'),";
+                if (shopId!=null&&shopId!="null"&&shopId!="") {
+                    String allcount = s.split("-")[1];
+                    String visitTime = mapShop.get(s);
+                    int allCounts = locationDao.getShopAllCount(shopId, tableName);
+                    insertShop += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + shopId +  "','"+ allCounts+"'),";  
+                }
             }
             if (shopSet.size()>0) {
                 insertShop = insertShop.substring(0, insertShop.length() - 1);

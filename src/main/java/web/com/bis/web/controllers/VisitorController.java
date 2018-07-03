@@ -300,7 +300,7 @@ public class VisitorController {
     @RequestMapping(value = "/getNewTodayTop", method = { RequestMethod.POST })
     @ResponseBody
     public Map<String, Object> getNewTodayTop(HttpServletRequest request, @RequestParam("storeId") String storeId) {
-        String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD2);
+        String nowDay = Util.dateFormat(new Date(), Params.YYYYMMdd0000);
         Map<String, Object> modelMap = new HashMap<String, Object>();
         List<WeekTotalModel> mapList = locationDao.getTop10ForMap(storeId, nowDay);
         List<WeekTotalModel> shopList = locationDao.getShop10ForMap(storeId, nowDay);
