@@ -905,26 +905,137 @@ public class MarketController {
     }
     
     
+//    @RequestMapping(value = "/getRates", method = { RequestMethod.POST })
+//    @ResponseBody
+//    public Map<String,List<String>> getRates(@RequestParam("storeId")String storeId){
+//        Map<String,List<String>> map = new HashMap<String, List<String>>();
+////      List<Integer> list = new ArrayList<>();
+//        final List<ShopModel> listModel = rateDao.getShopInfoByStore(storeId);
+////      list = rateDao.selectShopIdByStoreId(storeId);
+//        final List<String> listEnterRate = new ArrayList<>();
+//        final List<String> listShopName = new ArrayList<>();
+//        final List<String> listOverRate = new ArrayList<>();
+//        final List<String> listDeepRate = new ArrayList<>();
+//        boolean isExist=false;
+//        Calendar calendar = Calendar.getInstance();
+//        // 获得前一天的日期
+//        calendar.add(Calendar.DATE,-1);
+////      calendar.getTimeInMillis()
+//        final String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
+//        String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
+//        final String tableName = Params.LOCATION + nowDay;
+//        final String tableName2 = Params.SHOPLOCATION + nowMouths;
+//        try {
+//            if(statisticsDao.isTableExist(tableName, this.db) > 0) {
+////              System.out.println("表不存在："+tableName);
+//                isExist=true;
+//            }
+//        } catch (Exception e) {
+//            // TODO: handle exception
+//        }
+//        if(isExist){
+////      String enterRate;
+////      String shopName;
+////      String overflowRate;
+////      String deepRate;
+////      ShopModel shopModel;
+//            int len=listModel.size();
+//            for(int i=0;i<len;i++){
+//                listEnterRate.add("");
+//                listShopName.add(listModel.get(i).getShopName());
+//                listOverRate.add("");
+//                listDeepRate.add("");
+//            }
+//            ExecutorService executorService = Executors.newFixedThreadPool(len);
+//            final CountDownLatch end=new CountDownLatch(len);
+//            
+//            
+////        Thread[] threadList=new Thread[len];
+//        for (int i = 0; i < len; i++) {
+//            final int j=i;
+//            executorService.submit(new Runnable() {
+//                
+//                @Override
+//                public void run() {
+//                    // TODO Auto-generated method stub
+//                    listEnterRate.set(j,String.valueOf(rates.getEnter(listModel.get(j),tableName)));
+//                    listOverRate.set(j,String.valueOf(rates.getOverflow1(listModel.get(j),tableName2,nowDay)));
+//                    listDeepRate.set(j,String.valueOf(rates.getDeep(listModel.get(j),tableName2,nowDay)));
+//                    end.countDown();
+//                }
+//            });
+//           
+////          shopModel=listModel.get(i);
+////            final int j=i;
+////            threadList[i]=new Thread(new Runnable() {
+////                
+////                @Override
+////                public void run() {
+////                    // TODO Auto-generated method stub
+//////                    enterRate=String.valueOf(rates.getEnter(listModel.get(j),tableName));
+//////                    overflowRate = String.valueOf(rates.getOverflow1(listModel.get(j),tableName2,nowDay));
+//////                    deepRate = String.valueOf(rates.getDeep(listModel.get(j),tableName2,nowDay));
+//////                    shopName = listModel.get(j).getShopName();
+////                    listEnterRate.set(j,String.valueOf(rates.getEnter(listModel.get(j),tableName)));
+////                    listOverRate.set(j,String.valueOf(rates.getOverflow1(listModel.get(j),tableName2,nowDay)));
+////                    listDeepRate.set(j,String.valueOf(rates.getDeep(listModel.get(j),tableName2,nowDay)));
+////                }
+////            });
+////            threadList[i].start();
+//           
+//        }
+//        try {
+//            end.await();
+//        } catch (InterruptedException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        executorService.shutdown();
+////        for(Thread t:threadList){
+////            try {
+////                t.join();
+////            } catch (InterruptedException e) {
+////                // TODO Auto-generated catch block
+////                e.printStackTrace();
+////            }
+////        }
+//        
+//        }else{
+//            for (int i = 0,len=listModel.size(); i < len; i++) {
+//                listEnterRate.add("0");
+//                listShopName.add(listModel.get(i).getShopName());
+//                listOverRate.add("0");
+//                listDeepRate.add("0");
+//            }
+//        }
+//        map.put("shopName", listShopName);
+//        map.put("eRate", listEnterRate);
+//        map.put("oRate", listOverRate);
+//        map.put("dRate", listDeepRate);
+//        return map;
+//    }
+    
+
     @RequestMapping(value = "/getRates", method = { RequestMethod.POST })
     @ResponseBody
     public Map<String,List<String>> getRates(@RequestParam("storeId")String storeId){
         Map<String,List<String>> map = new HashMap<String, List<String>>();
 //      List<Integer> list = new ArrayList<>();
-        final List<ShopModel> listModel = rateDao.getShopInfoByStore(storeId);
+         List<ShopModel> listModel = rateDao.getShopInfoByStore(storeId);
 //      list = rateDao.selectShopIdByStoreId(storeId);
-        final List<String> listEnterRate = new ArrayList<>();
-        final List<String> listShopName = new ArrayList<>();
-        final List<String> listOverRate = new ArrayList<>();
-        final List<String> listDeepRate = new ArrayList<>();
+         List<String> listEnterRate = new ArrayList<>();
+         List<String> listShopName = new ArrayList<>();
+         List<String> listOverRate = new ArrayList<>();
+         List<String> listDeepRate = new ArrayList<>();
         boolean isExist=false;
         Calendar calendar = Calendar.getInstance();
         // 获得前一天的日期
         calendar.add(Calendar.DATE,-1);
 //      calendar.getTimeInMillis()
-        final String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
+         String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
         String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
-        final String tableName = Params.LOCATION + nowDay;
-        final String tableName2 = Params.SHOPLOCATION + nowMouths;
+         String tableName = Params.LOCATION + nowDay;
+         String tableName2 = Params.SHOPLOCATION + nowMouths;
         try {
             if(statisticsDao.isTableExist(tableName, this.db) > 0) {
 //              System.out.println("表不存在："+tableName);
@@ -938,32 +1049,34 @@ public class MarketController {
 //      String shopName;
 //      String overflowRate;
 //      String deepRate;
-//      ShopModel shopModel;
+      ShopModel shopModel;
             int len=listModel.size();
-            for(int i=0;i<len;i++){
-                listEnterRate.add("");
-                listShopName.add(listModel.get(i).getShopName());
-                listOverRate.add("");
-                listDeepRate.add("");
-            }
-            ExecutorService executorService = Executors.newFixedThreadPool(len);
-            final CountDownLatch end=new CountDownLatch(len);
+//            for(int i=0;i<len;i++){
+//                listEnterRate.add("");
+//                listShopName.add(listModel.get(i).getShopName());
+//                listOverRate.add("");
+//                listDeepRate.add("");
+//            }
+//            ExecutorService executorService = Executors.newFixedThreadPool(len);
+//            final CountDownLatch end=new CountDownLatch(len);
             
             
 //        Thread[] threadList=new Thread[len];
         for (int i = 0; i < len; i++) {
-            final int j=i;
-            executorService.submit(new Runnable() {
-                
-                @Override
-                public void run() {
+            shopModel=listModel.get(i);
+//            final int j=i;
+//            executorService.submit(new Runnable() {
+//                
+//                @Override
+//                public void run() {
                     // TODO Auto-generated method stub
-                    listEnterRate.set(j,String.valueOf(rates.getEnter(listModel.get(j),tableName)));
-                    listOverRate.set(j,String.valueOf(rates.getOverflow1(listModel.get(j),tableName2,nowDay)));
-                    listDeepRate.set(j,String.valueOf(rates.getDeep(listModel.get(j),tableName2,nowDay)));
-                    end.countDown();
-                }
-            });
+                    listEnterRate.add(String.valueOf(rates.getEnter(shopModel,tableName)));
+                    listOverRate.add(String.valueOf(rates.getOverflow1(shopModel,tableName2,nowDay)));
+                    listDeepRate.add(String.valueOf(rates.getDeep(shopModel,tableName2,nowDay)));
+                    listShopName.add(shopModel.getShopName());
+//                    end.countDown();
+//                }
+//            });
            
 //          shopModel=listModel.get(i);
 //            final int j=i;
@@ -984,13 +1097,13 @@ public class MarketController {
 //            threadList[i].start();
            
         }
-        try {
-            end.await();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        executorService.shutdown();
+//        try {
+//            end.await();
+//        } catch (InterruptedException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        executorService.shutdown();
 //        for(Thread t:threadList){
 //            try {
 //                t.join();
@@ -1062,26 +1175,137 @@ public class MarketController {
         return map;
     }
     
+//    @RequestMapping(value = "/getRatesByMapId", method = { RequestMethod.POST })
+//    @ResponseBody
+//    public Map<String,List<String>> getRatesByMapId(@RequestParam("mapId") String mapId){
+//    	Map<String,List<String>> map = new HashMap<String, List<String>>();
+////    	List<Integer> list = new ArrayList<>();
+//    	final List<ShopModel> listModel = rateDao.getShopInfoByMapId(mapId);
+////      list = rateDao.selectShopIdByStoreId(storeId);
+//        final List<String> listEnterRate = new ArrayList<>();
+//        final List<String> listShopName = new ArrayList<>();
+//        final List<String> listOverRate = new ArrayList<>();
+//        final List<String> listDeepRate = new ArrayList<>();
+//        boolean isExist=false;
+//        Calendar calendar = Calendar.getInstance();
+//        // 获得前一天的日期
+//        calendar.add(Calendar.DATE,-1);
+////      calendar.getTimeInMillis()
+//        final String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
+//        String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
+//        final String tableName = Params.LOCATION + nowDay;
+//        final String tableName2 = Params.SHOPLOCATION + nowMouths;
+//        try {
+//            if(statisticsDao.isTableExist(tableName, this.db) > 0) {
+////              System.out.println("表不存在："+tableName);
+//                isExist=true;
+//            }
+//        } catch (Exception e) {
+//            // TODO: handle exception
+//        }
+//        if(isExist){
+////      String enterRate;
+////      String shopName;
+////      String overflowRate;
+////      String deepRate;
+////      ShopModel shopModel;
+//            int len=listModel.size();
+//            for(int i=0;i<len;i++){
+//                listEnterRate.add("");
+//                listShopName.add(listModel.get(i).getShopName());
+//                listOverRate.add("");
+//                listDeepRate.add("");
+//            }
+//            
+//            ExecutorService executorService = Executors.newFixedThreadPool(len);
+//            final CountDownLatch end=new CountDownLatch(len);
+//            
+//            
+////        Thread[] threadList=new Thread[len];
+//        for (int i = 0; i < len; i++) {
+//            final int j=i;
+//            executorService.submit(new Runnable() {
+//                
+//                @Override
+//                public void run() {
+//                    // TODO Auto-generated method stub
+//                    listEnterRate.set(j,String.valueOf(rates.getEnter(listModel.get(j),tableName)));
+//                    listOverRate.set(j,String.valueOf(rates.getOverflow1(listModel.get(j),tableName2,nowDay)));
+//                    listDeepRate.set(j,String.valueOf(rates.getDeep(listModel.get(j),tableName2,nowDay)));
+//                    end.countDown();
+//                }
+//            });
+//           
+////          shopModel=listModel.get(i);
+////            final int j=i;
+////            threadList[i]=new Thread(new Runnable() {
+////                
+////                @Override
+////                public void run() {
+////                    // TODO Auto-generated method stub
+//////                    enterRate=String.valueOf(rates.getEnter(listModel.get(j),tableName));
+//////                    overflowRate = String.valueOf(rates.getOverflow1(listModel.get(j),tableName2,nowDay));
+//////                    deepRate = String.valueOf(rates.getDeep(listModel.get(j),tableName2,nowDay));
+//////                    shopName = listModel.get(j).getShopName();
+////                    listEnterRate.set(j,String.valueOf(rates.getEnter(listModel.get(j),tableName)));
+////                    listOverRate.set(j,String.valueOf(rates.getOverflow1(listModel.get(j),tableName2,nowDay)));
+////                    listDeepRate.set(j,String.valueOf(rates.getDeep(listModel.get(j),tableName2,nowDay)));
+////                }
+////            });
+////            threadList[i].start();
+//           
+//        }
+//        try {
+//            end.await();
+//        } catch (InterruptedException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        executorService.shutdown();
+////        for(Thread t:threadList){
+////            try {
+////                t.join();
+////            } catch (InterruptedException e) {
+////                // TODO Auto-generated catch block
+////                e.printStackTrace();
+////            }
+////        }
+//        
+//        }else{
+//            for (int i = 0,len=listModel.size(); i < len; i++) {
+//                listEnterRate.add("0");
+//                listShopName.add(listModel.get(i).getShopName());
+//                listOverRate.add("0");
+//                listDeepRate.add("0");
+//            }
+//        }
+//        map.put("shopName", listShopName);
+//        map.put("eRate", listEnterRate);
+//        map.put("oRate", listOverRate);
+//        map.put("dRate", listDeepRate);
+//        return map;
+//    }
+
     @RequestMapping(value = "/getRatesByMapId", method = { RequestMethod.POST })
     @ResponseBody
     public Map<String,List<String>> getRatesByMapId(@RequestParam("mapId") String mapId){
-    	Map<String,List<String>> map = new HashMap<String, List<String>>();
-//    	List<Integer> list = new ArrayList<>();
-    	final List<ShopModel> listModel = rateDao.getShopInfoByMapId(mapId);
+        Map<String,List<String>> map = new HashMap<String, List<String>>();
+//      List<Integer> list = new ArrayList<>();
+         List<ShopModel> listModel = rateDao.getShopInfoByMapId(mapId);
 //      list = rateDao.selectShopIdByStoreId(storeId);
-        final List<String> listEnterRate = new ArrayList<>();
-        final List<String> listShopName = new ArrayList<>();
-        final List<String> listOverRate = new ArrayList<>();
-        final List<String> listDeepRate = new ArrayList<>();
+         List<String> listEnterRate = new ArrayList<>();
+         List<String> listShopName = new ArrayList<>();
+         List<String> listOverRate = new ArrayList<>();
+         List<String> listDeepRate = new ArrayList<>();
         boolean isExist=false;
         Calendar calendar = Calendar.getInstance();
         // 获得前一天的日期
         calendar.add(Calendar.DATE,-1);
 //      calendar.getTimeInMillis()
-        final String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
+         String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
         String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
-        final String tableName = Params.LOCATION + nowDay;
-        final String tableName2 = Params.SHOPLOCATION + nowMouths;
+         String tableName = Params.LOCATION + nowDay;
+       String tableName2 = Params.SHOPLOCATION + nowMouths;
         try {
             if(statisticsDao.isTableExist(tableName, this.db) > 0) {
 //              System.out.println("表不存在："+tableName);
@@ -1095,33 +1319,35 @@ public class MarketController {
 //      String shopName;
 //      String overflowRate;
 //      String deepRate;
-//      ShopModel shopModel;
+      ShopModel shopModel;
             int len=listModel.size();
-            for(int i=0;i<len;i++){
-                listEnterRate.add("");
-                listShopName.add(listModel.get(i).getShopName());
-                listOverRate.add("");
-                listDeepRate.add("");
-            }
-            
-            ExecutorService executorService = Executors.newFixedThreadPool(len);
-            final CountDownLatch end=new CountDownLatch(len);
+//            for(int i=0;i<len;i++){
+//                listEnterRate.add("");
+//                listShopName.add(listModel.get(i).getShopName());
+//                listOverRate.add("");
+//                listDeepRate.add("");
+//            }
+//            
+//            ExecutorService executorService = Executors.newFixedThreadPool(len);
+//            final CountDownLatch end=new CountDownLatch(len);
             
             
 //        Thread[] threadList=new Thread[len];
         for (int i = 0; i < len; i++) {
-            final int j=i;
-            executorService.submit(new Runnable() {
-                
-                @Override
-                public void run() {
+            shopModel=listModel.get(i);
+//            final int j=i;
+//            executorService.submit(new Runnable() {
+//                
+//                @Override
+//                public void run() {
                     // TODO Auto-generated method stub
-                    listEnterRate.set(j,String.valueOf(rates.getEnter(listModel.get(j),tableName)));
-                    listOverRate.set(j,String.valueOf(rates.getOverflow1(listModel.get(j),tableName2,nowDay)));
-                    listDeepRate.set(j,String.valueOf(rates.getDeep(listModel.get(j),tableName2,nowDay)));
-                    end.countDown();
-                }
-            });
+                    listEnterRate.add(String.valueOf(rates.getEnter(shopModel,tableName)));
+                    listOverRate.add(String.valueOf(rates.getOverflow1(shopModel,tableName2,nowDay)));
+                    listDeepRate.add(String.valueOf(rates.getDeep(shopModel,tableName2,nowDay)));
+                    listShopName.add(shopModel.getShopName());
+//                    end.countDown();
+//                }
+//            });
            
 //          shopModel=listModel.get(i);
 //            final int j=i;
@@ -1142,13 +1368,13 @@ public class MarketController {
 //            threadList[i].start();
            
         }
-        try {
-            end.await();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        executorService.shutdown();
+//        try {
+//            end.await();
+//        } catch (InterruptedException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        executorService.shutdown();
 //        for(Thread t:threadList){
 //            try {
 //                t.join();
@@ -1172,7 +1398,7 @@ public class MarketController {
         map.put("dRate", listDeepRate);
         return map;
     }
-
+    
     private int coefficientData(int data){
         if(coefficientSwitch==0)
         {

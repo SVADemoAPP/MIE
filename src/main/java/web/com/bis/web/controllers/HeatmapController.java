@@ -476,26 +476,27 @@ public class HeatmapController {
     @ResponseBody
     public Map<String,Object> getRates(@RequestParam("id") int id){
         Map<String,Object> map = new HashMap<String, Object>();
-        final List<String> listDate = new ArrayList<>();
-        final List<String> listEnterRate = new ArrayList<>();
-        final List<String> listOverRate = new ArrayList<>();
-        final List<String> listDeepRate = new ArrayList<>();
+        List<String> listDate = new ArrayList<>();
+         List<String> listEnterRate = new ArrayList<>();
+        List<String> listOverRate = new ArrayList<>();
+         List<String> listDeepRate = new ArrayList<>();
 //      Calendar calendar = Calendar.getInstance();
         // 获得前一天的日期
 //      calendar.add(Calendar.DATE,-i);
 //      calendar.getTimeInMillis()
-           for(int i=1;i<8;i++){
-               listDate.add("");
-               listEnterRate.add("");
-               listOverRate.add("");
-               listDeepRate.add("");
-           }
+//           for(int i=1;i<8;i++){
+//               listDate.add("");
+//               listEnterRate.add("");
+//               listOverRate.add("");
+//               listDeepRate.add("");
+//           }
 //       Thread[] threadList=new Thread[7];
-       ExecutorService executorService = Executors.newFixedThreadPool(7);
-       final CountDownLatch end=new CountDownLatch(7);
-        final ShopModel shopModel=rateDao.getShopInfoById(id);
+//       ExecutorService executorService = Executors.newFixedThreadPool(7);
+//       final CountDownLatch end=new CountDownLatch(7);
+       ShopModel shopModel=rateDao.getShopInfoById(id);
+        Calendar calendar = Calendar.getInstance();
         for (int i = 0; i < 7; i++) {
-            final int j=i;
+//            final int j=i;
 //            threadList[i]=new Thread(new Runnable() {
 //                
 //                @Override
@@ -511,28 +512,28 @@ public class HeatmapController {
 //                }
 //            });
 //           threadList[i].start();
-           executorService.submit(new Runnable() {
-               
-               @Override
-               public void run() {
+//           executorService.submit(new Runnable() {
+//               
+//               @Override
+//               public void run() {
                    // TODO Auto-generated method stub
-                   Calendar calendar = Calendar.getInstance();
-                   calendar.add(Calendar.DATE,-j-1);
-                   listDate.set(j,Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2));
-                   listEnterRate.set(j,String.valueOf(rates.getEnter(shopModel,calendar)));
-                   listOverRate.set(j,String.valueOf(rates.getOverflow1(shopModel,calendar)));
-                   listDeepRate.set(j,String.valueOf(rates.getDeep(shopModel, calendar))); 
-                   end.countDown();
-               }
-           });
+//                   Calendar calendar = Calendar.getInstance();
+                   calendar.add(Calendar.DATE,-1);
+                   listDate.add(Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2));
+                   listEnterRate.add(String.valueOf(rates.getEnter(shopModel,calendar)));
+                   listOverRate.add(String.valueOf(rates.getOverflow1(shopModel,calendar)));
+                   listDeepRate.add(String.valueOf(rates.getDeep(shopModel, calendar))); 
+//                   end.countDown();
+//               }
+//           });
         }
-        try {
-            end.await();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        executorService.shutdown();
+//        try {
+//            end.await();
+//        } catch (InterruptedException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        executorService.shutdown();
         map.put("date", listDate);
         map.put("eRate", listEnterRate);
         map.put("oRate", listOverRate);
