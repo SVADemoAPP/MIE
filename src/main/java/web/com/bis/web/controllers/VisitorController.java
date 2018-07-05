@@ -255,9 +255,9 @@ public class VisitorController {
 
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put("genderList", addRation(genderList));
-        modelMap.put("localAddressList", sortTop10(addRation(localAddressList)));
-        modelMap.put("homeAddressList", sortTop10(addRation(homeAddressList)));
-        modelMap.put("workAddressList", sortTop10(addRation(workAddressList)));
+        modelMap.put("localAddressList", (addRation(localAddressList)));
+        modelMap.put("homeAddressList", sortTop15(addRation(homeAddressList)));
+        modelMap.put("workAddressList", sortTop15(addRation(workAddressList)));
         modelMap.put("ageList", addRation(ageList));
         modelMap.put("abilityList", addRation(abilityList));
         modelMap.put("status", Params.RETURN_CODE_200);
@@ -343,6 +343,39 @@ public class VisitorController {
         });
         if (list.size() > 10) {
             return list.subList(0, 10);
+        } else {
+            return list;
+        }
+    }
+    
+    /**
+     * 
+     * @Title: sortTop15
+     * @Description: 按value从大到小排序并取前15名
+     * @param list
+     * @return
+     */
+    private List<Map<String, Object>> sortTop15(List<Map<String, Object>> list) {
+        Collections.sort(list, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                // TODO Auto-generated method stub
+                String str1=String.valueOf(o1.get("value"));
+                String str2=String.valueOf(o2.get("value"));
+                long l1=Long.parseLong(str1);
+                long l2=Long.parseLong(str2);
+                if (l1 >l2) {
+                    return -1;
+                } else if (l1< l2) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+                
+            }
+        });
+        if (list.size() > 15) {
+            return list.subList(0, 15);
         } else {
             return list;
         }
