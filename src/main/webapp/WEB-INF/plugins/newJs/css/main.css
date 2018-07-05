@@ -1159,6 +1159,7 @@ body.full-screen #header {
 #sidebar #sideNav li .sub {
   display: none;
   margin-right: -1px;
+  width:100%;
 }
 #sidebar #sideNav li .sub a {
   background: #fcfcfd;
