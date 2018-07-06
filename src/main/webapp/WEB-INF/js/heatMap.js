@@ -193,15 +193,14 @@ var refreshTotalData = function() {
 //							var newPeople = data.newPeople;
 //							var yesNewPeople = data.yesNewPeople;
 							var nowAllPeople = data.nowAllPeople;
-
+							var yesAllPeople = data.yesAllPeople;
 							var nowTime = data.nowTime;
+							var yesTime = data.yesTime;
 
 
 //							var newArray = mapToarray(newData);
 							var allArray = mapToarray(allData);
 							var timeArray = mapToarray(timeData);
-							var yesTime = timeArray[6];
-							var yesAllPeople = allArray[6];
 //							fuzhiFunction("newPeople", "newPeopleId",
 //									"newData", newArray, newPeople,
 //									yesNewPeople, 0, 1);
@@ -792,18 +791,18 @@ var heatMap = function() {
 //								var newPeople = data.newPeople;
 //								var yesNewPeople = data.yesNewPeople;
 								var nowAllPeople = data.nowAllPeople;
-//								var yesAllPeople = data.yesAllPeople;
+								var yesAllPeople = data.yesAllPeople;
 								var nowTime = data.nowTime;
-//								var yesTime = data.yesTime;
+								var yesTime = data.yesTime;
 //								var newAllPeople = data.newAllPeople;
 
 								var nowArray = mapToarray(allData);
 //								var newArray = mapToarray(newData);
 								var allArray = mapToarray(allData);
 								var timeArray = mapToarray(timeData);
-								var yesTime = timeArray[6];
+//								var yesTime = timeArray[6];
 								var yesss = timeArray[6];
-								var yesAllPeople = allArray[6];
+//								var yesAllPeople = allArray[6];
 								var nowArrays = mapToarray2(allData);
 								var timeArrays = mapToarray2(timeData);
 								fuzhiFunction("nowPeople", "nowPeopleId",

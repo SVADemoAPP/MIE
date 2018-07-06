@@ -625,6 +625,8 @@ public class ShopController {
     public Map<String, Object> getNewTotal(@RequestParam("shopId") String shopId) {
         int nowUserCount = 0;
         double nowAverageTime = 0;
+        int yesUserCount = 0;
+        double yesAverageTime = 0;
         int allWeekCount = 0;
         float allWeekTime = 0;
         JSONObject weekUsercount = new JSONObject();
@@ -632,11 +634,15 @@ public class ShopController {
         Calendar calendar = Calendar.getInstance();
         String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String endTime1 = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
-        calendar.add(Calendar.DATE, -7);
+        calendar.add(Calendar.DATE, -1);
+        String yesStartTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
+        String yesEndTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
+        calendar.add(Calendar.DATE, -6);
         String bigenTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String[] weeks = Util.getLastNumDays(7, Params.YYMMDD);
         List<WeekTotalModel> list = locationDao.getWeekDataByShopId(shopId, bigenTime, endTime);
         List<WeekTotalModel> list1 = locationDao.getWeekDataByShopId(shopId, endTime, endTime1);
+        List<WeekTotalModel> list2 = locationDao.getWeekDataByShopId(shopId, yesStartTime, yesEndTime);
         for (int i = 0; i < weeks.length; i++) {
             weekUsercount.put(weeks[i], 0);
             weekDelaytime.put(String.valueOf(Util.dateFormatStringtoLong(weeks[i], Params.YYMMDD)), 0);
@@ -657,6 +663,10 @@ public class ShopController {
             nowUserCount = list1.get(0).getAllCount();
             nowAverageTime = list1.get(0).getAverageTime();
         }
+        if (list2.size()>0) {
+            yesUserCount = list2.get(0).getAllCount();
+            yesAverageTime = list2.get(0).getAverageTime();
+        }
         List<ShopModel> listShopModel = shopDao.getShopDataById(shopId);
         ShopModel shopModel = listShopModel.get(0);
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
@@ -670,6 +680,8 @@ public class ShopController {
         modelMap.put("nowPeople",count );
 //        modelMap.put("yesPeople", coefficientData(yesCount));
         
+        modelMap.put("yesAllPeople", coefficientData(yesUserCount));
+        modelMap.put("yesTime", yesAverageTime);        
         modelMap.put("nowAllPeople", coefficientData(nowUserCount));
 //        modelMap.put("yesAllPeople", weekUsercount);
         modelMap.put("nowTime", nowAverageTime);

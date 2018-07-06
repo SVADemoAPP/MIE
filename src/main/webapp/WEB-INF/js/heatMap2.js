@@ -180,8 +180,8 @@ var refreshTotalData = function() {
 							var allArray = mapToarray(allData);
 							var timeArray = mapToarray(timeData);
 //							var yesNewPeople = newArray[5];
-							var yesAllPeople = allArray[6];
-							var yesTime = timeArray[6];
+							var yesAllPeople = data.yesUser;
+							var yesTime = data.yesAvgDelay;
 //							fuzhiFunction("newPeople", "newPeopleId",
 //									"newData", newArray, newPeople,
 //									yesNewPeople, 0, 1);
@@ -1044,8 +1044,8 @@ var heatMap = function() {
 								var allArray = mapToarray(allData);
 								var timeArray = mapToarray(timeData);
 //								var yesNewPeople = newArray[5];
-								var yesAllPeople = allArray[6];
-								var yesTime = timeArray[6];
+								var yesAllPeople = data.yesUser;
+								var yesTime = data.yesAvgDelay;
 								var weekTime = data.allWeekAvgDelay;
 								var allArrays = mapToarray2(allData);
 								var timeArrays = mapToarray2(timeData);
