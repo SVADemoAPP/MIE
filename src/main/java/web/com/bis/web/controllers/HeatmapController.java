@@ -499,6 +499,7 @@ public class HeatmapController {
 //            final int j=i;
 //            threadList[i]=new Thread(new Runnable() {
 //                
+            
 //                @Override
 //                public void run() {
 //                    // TODO Auto-generated method stub
