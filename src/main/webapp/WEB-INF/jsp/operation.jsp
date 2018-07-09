@@ -269,14 +269,14 @@
 								onclick="getDatePicker1('select_time_end_tab1');">
 						</div>
 						<div id="confirmId" class="col-lg-2 col-md-2 myhide">
-							<button class="btn btn-success" id="heatMapConfirm">
+							<button class="btn btn-success" id="heatMapConfirm" style="padding-top:2%;padding-bottom:2%;">
 								<spring:message code="store_confirm"></spring:message>
 							</button>
 						</div>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-6 col-md-12 left-css">
+					<div class="col-lg-12 col-md-12 left-css">
 						<!-- Start col-lg-6 -->
 						<div class="panel-info toggle">
 							<!-- Start .panel -->
@@ -294,7 +294,9 @@
 						</div>
 						<!-- End .panel -->
 					</div>
-					<div class="col-lg-6 col-md-12 right-css">
+					</div>
+					<div class="row">
+					<div class="col-lg-12 col-md-12 left-css">
 						<!-- Start col-lg-6 -->
 						<div class="panel-success toggle">
 							<!-- Start .panel -->
@@ -314,7 +316,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-6 col-md-12 left-css">
+					<div class="col-lg-12 col-md-12 left-css">
 						<!-- Start col-lg-6 -->
 						<div class="panel-primary toggle">
 							<!-- Start .panel -->
@@ -332,7 +334,9 @@
 						</div>
 						<!-- End .panel -->
 					</div>
-					<div class="col-lg-6 col-md-12 right-css">
+					</div>
+						<div class="row">
+					<div class="col-lg-12 col-md-12 left-css">
 						<!-- Start col-lg-6 -->
 						<div class="panel-danger toggle">
 							<!-- Start .panel -->
@@ -353,7 +357,7 @@
 				</div>
 				
 				<div class="row">
-					<div class="col-lg-6 col-md-12 left-css">
+					<div class="col-lg-12 col-md-12 left-css">
 						<!-- Start col-lg-6 -->
 						<div class="panel-success toggle">
 							<!-- Start .panel -->
@@ -371,7 +375,9 @@
 						</div>
 						<!-- End .panel -->
 					</div>
-					<div class="col-lg-6 col-md-12 right-css">
+					</div>
+						<div class="row">
+					<div class="col-lg-12 col-md-12 left-css">
 						<!-- Start col-lg-6 -->
 						<div class="panel-info toggle">
 							<!-- Start .panel -->

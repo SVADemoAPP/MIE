@@ -206,7 +206,7 @@
 	<!-- Start #content -->
 	<div id="content">
 		<!-- Start .content-wrapper -->
-		<div class="content-wrapper">
+		<div class="content-wrapper" >
 			<div class="row">
 				<!-- Start .row -->
 				<!-- Start .page-header -->
