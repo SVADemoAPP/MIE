@@ -1625,7 +1625,7 @@ body.full-screen #header {
 .tile .tile-content .spark .percent {
   float: left;
   font-size: 16px;
-  width: 60%;
+  width: 100%;
 }
 .tile .tile-content .spark .sparkline {
   /* float: right; */
@@ -3525,7 +3525,7 @@ pre {
 
 
 
-/*自己添加的*/
+/*鑷繁娣诲姞鐨�*/
 .search-form-label{
   float: left;
   line-height: 34px;

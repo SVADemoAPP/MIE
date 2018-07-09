@@ -251,7 +251,7 @@
 							</div>
 							<div class="panel-body">
 								<div class="row">
-									<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 										<!-- col-lg-3 start here -->
 										<div class="tile gray-spr m0 mb20"
 											style="background-color: #f68484; color: white">
@@ -264,7 +264,7 @@
 												</div>
 												<div class="spark clearfix">
 													<div id="nowPeopleId" class="percent"></div>
-													<div id="nowData" class="sparkline sparkline-positive"></div>
+											<!-- 	<div id="nowData" class="sparkline sparkline-positive"></div> -->	
 												</div>
 											</div>
 										</div>
@@ -292,7 +292,7 @@
 									</div> -->
 
 									<!-- col-lg-3 end here -->
-									<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 										<!-- col-lg-3 start here -->
 										<div class="tile gray-spr m0 mb20"
 											style="background-color: #71d398; color: white">
@@ -305,13 +305,13 @@
 												</div>
 												<div class="spark clearfix">
 													<div id="nowAllcountId" class="percent"></div>
-													<div id="allDataId"
-														class="sparkline sparkline-bar-negative"></div>
+													<!-- <div id="allDataId"
+														class="sparkline sparkline-bar-negative"></div> -->
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 										<!-- col-lg-3 start here -->
 										<div class="tile gray-spr m0 mb20"
 											style="background-color: #97d3c5; color: white">
@@ -324,7 +324,7 @@
 												</div>
 												<div class="spark clearfix">
 													<div id="nowTimeId" class="percent"></div>
-													<div id="timeDataId" class="sparkline sparkline-negative"></div>
+												<!-- 	<div id="timeDataId" class="sparkline sparkline-negative"></div> -->
 												</div>
 											</div>
 										</div>
@@ -339,7 +339,7 @@
 				</div>
 				
 				<div class="row">
-					<div class="col-lg-6 col-md-12" style="padding: 0 0px 0px 5px;">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 " style="padding: 0 0px 0px 5px;">
 						<!-- Start col-lg-6 -->
 						<div class="panel-success toggle">
 							<!-- Start .panel -->
@@ -359,14 +359,14 @@
 						</div>
 						<!-- End .panel -->
 					</div>
-					<div class="col-lg-6 col-md-12" style="padding: 0px 5px 0px 0px;">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding: 0px 5px 0px 0px;">
 						<!-- Start col-lg-6 -->
 						<div class="panel-success toggle">
 							<!-- Start .panel -->
 							<div class="panel-heading"  style="background-color: #97d3c5; color: white; border-color: #97d3c5">
 								<h4 class="panel-title"style="font-size: 15px;color: white;">
 									<i class="st-connection-full"></i>
-									<spring:message code="mall_shop_visitors"> TOP10</spring:message>
+									<spring:message code="mall_shop_visitors"> TOP15</spring:message>
 								</h4>
 							</div>
 							<div class="panel-body" style="">
@@ -383,7 +383,7 @@
 				
 				<div class="row">
 					<!-- Start .row -->
-					<div class="col-lg-12 col-md-12">
+					<div class="col-lg-12 col-md-12  col-sm-12 col-xs-12">
 						<!-- Start col-lg-12 -->
 						<div class="panel-default toggle">
 							<!-- Start .panel -->
@@ -404,7 +404,7 @@
 				<!-- End .row -->
 				<div class="row">
 					<!-- Start .row -->
-					<div class="col-lg-6 col-md-12 left-css">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 left-css">
 						<!-- Start col-lg-6 -->
 						<div class="panel-danger plain toggle ">
 							<!-- Start .panel -->
@@ -420,7 +420,7 @@
 							</div>
 							<div class="panel-footer teal-bg"
 								style="background-color: #f68484; color: white; border-color: #f68484">
-								<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 									<div class="tile teal m0"
 										style="background-color: #f68484; color: white; border-color: #f68484">
 										<div class="tile-content text-center pl0 pr0">
@@ -431,7 +431,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 									<div class="tile teal m0"
 										style="background-color: #f68484; color: white; border-color: #f68484">
 										<div class="tile-content text-center pl0 pr0">
@@ -442,7 +442,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 									<div class="tile teal m0"
 										style="background-color: #f68484; color: white; border-color: #f68484">
 										<div class="tile-content text-center pl0 pr0">
@@ -456,7 +456,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-lg-6 col-md-12 right-css ">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 right-css ">
 						<!-- Start col-lg-6 -->
 						<div class="panel-primary plain toggle">
 							<!-- Start .panel -->
@@ -470,7 +470,7 @@
 								<div id="line-chart-filled" style="width: 100%; height: 250px;"></div>
 							</div>
 							<div class="panel-footer blue-bg">
-								<div class="col-lg-4 col-md-4 col-sm-6">
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 									<div class="tile body m0">
 										<div class="tile-content text-center pl0 pr0">
 											<div id="countToday2" class="number">
@@ -482,7 +482,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-lg-4 col-md-4 col-sm-6">
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 									<div class="tile body m0">
 										<div class="tile-content text-center pl0 pr0">
 											<div id="countYesterday2" class="number">
@@ -494,7 +494,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-lg-4 col-md-4 col-sm-6">
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 									<div class="tile body m0">
 										<div class="tile-content text-center pl0 pr0">
 											<div id="countTotal2" class="number">
@@ -515,7 +515,7 @@
 				</div>
 
 				<div class="row">
-					<div class="col-lg-12 col-md-12">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						<!-- Start col-lg-6 -->
 						<div class="panel-teal toggle  ">
 							<!-- Start .panel -->
@@ -548,60 +548,7 @@
                             </div>
                         </div>
                     </div> -->
-					<div class="col-lg-12 col-md-12 ">
-						<div
-							class="weather-widget panel-primary plain toggle panelMove panelClose panelRefresh">
-							<!-- Start .panel -->
-							<div class="panel-heading">
-								<h4 class="panel-title" style="font-size: 15px; color: white;">
-									<spring:message code="mall_weather"></spring:message>
-								</h4>
-							</div>
-							<div class="panel-body blue-bg text-center">
-								<canvas id="weather-now" width="128" height="128"></canvas>
-								<p class="weather-location">
-									<strong id="date_0"></strong> <span id="week_0"></span>
-								</p>
-								<p class="weather-location">
-									<strong id="temperature"></strong> <span id="city"></span>
-								</p>
-							</div>
-							<div class="panel-footer white-bg text-center" id="wea">
-								<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-									<!-- col-lg-3 start here -->
-									<p class="weather-day" id="week_1"></p>
-									<p id="date_1" class="day"></p>
-									<canvas id="forecast-now" width="64" height="64"></canvas>
-									<p class="weather-degree" id="temperature_1"></p>
-								</div>
-								<!-- col-lg-3 end here -->
-								<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-									<!-- col-lg-3 start here -->
-									<p class="weather-day" id="week_2"></p>
-									<p id="date_2" class="day"></p>
-									<canvas id="forecast-day1" width="64" height="64"></canvas>
-									<p class="weather-degree" id="temperature_2"></p>
-								</div>
-								<!-- col-lg-3 end here -->
-								<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-									<!-- col-lg-3 start here -->
-									<p class="weather-day" id="week_3"></p>
-									<p id="date_3" class="day"></p>
-									<canvas id="forecast-day2" width="64" height="64"></canvas>
-									<p class="weather-degree" id="temperature_3"></p>
-								</div>
-								<!-- col-lg-3 end here -->
-								<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-									<!-- col-lg-3 start here -->
-									<p class="weather-day" id="week_4"></p>
-									<p id="date_4" class="day"></p>
-									<canvas id="forecast-day3" width="64" height="64"></canvas>
-									<p class="weather-degree" id="temperature_4"></p>
-								</div>
-								<!-- col-lg-3 end here -->
-							</div>
-						</div>
-					</div>
+					
 				</div>
 
 
@@ -698,96 +645,8 @@
 		var echardanwei = '<spring:message code="echart_danwei"/>';
 		var DeepRate = '<spring:message code="DeepRate"/>';
 		var operation_count = '<spring:message code="operation_count"/>';
+		var title_yes = '<spring:message code="title_jiao_zuori"/>';
 		var objColors, colours;
-		$(document)
-				.ready(
-						function() {
-							$
-									.getScript(
-											'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js',
-											function(_result) {
-												var a
-												var param
-												if (remote_ip_info.ret == '1') {
-													a = remote_ip_info.city
-													param = {
-														"name" : a
-													};
-												} else {
-													a = "北京"
-													param = {
-														"name" : a
-													};
-												}
-												$
-														.ajax({
-															"dataType" : 'json',
-															"type" : "POST",
-															"url" : "/sva/market/getWeatherInfo",
-															"data" : param,
-															"success" : function(
-																	data) {
-																$("#date_0")
-																		.html(
-																				data.date[0]);
-																$("#week_0")
-																		.html(
-																				data.week[0]);
-																$("#city")
-																		.html(
-																				data.city[0]);
-																$(
-																		"#temperature")
-																		.html(
-																				data.temperature[0]);
-																$("#date_1")
-																		.html(
-																				data.date[1]);
-																$(
-																		"#temperature_1")
-																		.html(
-																				data.temperature[1]);
-																$("#week_1")
-																		.html(
-																				data.week[1]);
-																$("#date_2")
-																		.html(
-																				data.date[2]);
-																$(
-																		"#temperature_2")
-																		.html(
-																				data.temperature[2]);
-																$("#week_2")
-																		.html(
-																				data.week[2]);
-																$("#date_3")
-																		.html(
-																				data.date[3]);
-																$(
-																		"#temperature_3")
-																		.html(
-																				data.temperature[3]);
-																$("#week_3")
-																		.html(
-																				data.week[3]);
-																$("#date_4")
-																		.html(
-																				data.date[4]);
-																$(
-																		"#temperature_4")
-																		.html(
-																				data.temperature[4]);
-																$("#week_4")
-																		.html(
-																				data.week[4]);
-																//显示天气图标
-																showWeatherIcons(data.temperature);
-															}
-														});
-
-											});
-
-						});
 	</script>
 </body>
 </html>

@@ -102,8 +102,8 @@ var timeToString = function(f) {
 // id:当前数据，id1:百分比;id2：曲线图，nowArray:曲线图数据，nowPeople：今天人数,yesPeople:昨天人数，type:0为人，1位驻留，type1：0位曲线图，1为柱状图
 var fuzhiFunction = function(id, id1, id2, nowArray, nowPeople, yesPeople,
 		type, type1) {
-	var downs = '<i class="im-arrow-down-right2 color-white"></i>';
-	var ups = '<i class="im-arrow-up-right3 color-white"></i>';
+	var downs = title_yes+'<i class="im-arrow-down-right2 color-white"></i>';
+	var ups = title_yes+'<i class="im-arrow-up-right3 color-white"></i>';
 	var peoples = '<i class="ec-users"></i>';
 	var times = '<i class="ec-clock"></i>';
 	var nowPeopleTemp;
@@ -462,7 +462,7 @@ var initChartPeople = function(data1) {
 			defaultTheme : false
 		},
 		yaxis : {
-			show : false
+			min : 0
 		},
 		xaxis : {
 			mode : "categories",
@@ -471,7 +471,7 @@ var initChartPeople = function(data1) {
 	}
 
 	var plot = $.plot($("#stats-pageviews"), [ {
-		label : passenger,
+//		label : passenger,
 		data : data1
 	} ], options);
 }
@@ -662,7 +662,7 @@ var initChartLine = function(data1) {
 	}
 
 	var plot = $.plot($("#line-chart-filled"), [ {
-		label : "Average stay",
+//		label : "Average stay",
 		data : data1
 	} ], options);
 
@@ -916,7 +916,7 @@ var heatMap = function() {
 							colors : [ colours.blue ],
 							tooltip : true, // activate tooltip
 							tooltipOpts : {
-								content : passenger+" : %y.0",
+								content : "  %y.0",
 								shifts : {
 									x : -30,
 									y : -50
@@ -996,7 +996,7 @@ var heatMap = function() {
 									colors : [ colours.blue ],
 									tooltip : true, // activate tooltip
 									tooltipOpts : {
-										content :  passenger+" : %y.0",
+										content :  " %y.0",
 										shifts : {
 											x : -30,
 											y : -50

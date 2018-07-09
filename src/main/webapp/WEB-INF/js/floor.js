@@ -127,8 +127,8 @@ var timeToString = function(f) {
 // id:当前数据，id1:百分比;id2：曲线图，nowArray:曲线图数据，nowPeople：今天人数,yesPeople:昨天人数，type:0为人，1位驻留，type1：0位曲线图，1为柱状图
 var fuzhiFunction = function(id, id1, id2, nowArray, nowPeople, yesPeople,
 		type, type1) {
-	var downs = '<i class="im-arrow-down-right2 color-white"></i>';
-	var ups = '<i class="im-arrow-up-right3 color-white"></i>';
+	var downs = title_yes+'<i class="im-arrow-down-right2 color-white"></i>';
+	var ups = title_yes+'<i class="im-arrow-up-right3 color-white"></i>';
 	var peoples = '<i class="ec-users"></i>';
 	var times = '<i class="ec-clock"></i>';
 	var nowPeopleTemp;
@@ -164,25 +164,25 @@ var fuzhiFunction = function(id, id1, id2, nowArray, nowPeople, yesPeople,
 	}
 	document.getElementById(id1).innerHTML = nowPeopleTemp + nowBaifen
 			+ '%';
-	if (type1 == 0) {
-		$("#" + id2).sparkline(nowArray, {
-			width : '55px',
-			height : '20px',
-			lineColor : colours.white,
-			fillColor : false,
-			spotColor : false,
-			minSpotColor : false,
-			maxSpotColor : false,
-			lineWidth : 2
-		});
-	} else {
-		$("#" + id2).sparkline(nowArray, {
-			type : 'bar',
-			width : '100%',
-			height : '18px',
-			barColor : colours.white,
-		});
-	}
+//	if (type1 == 0) {
+//		$("#" + id2).sparkline(nowArray, {
+//			width : '55px',
+//			height : '20px',
+//			lineColor : colours.white,
+//			fillColor : false,
+//			spotColor : false,
+//			minSpotColor : false,
+//			maxSpotColor : false,
+//			lineWidth : 2
+//		});
+//	} else {
+//		$("#" + id2).sparkline(nowArray, {
+//			type : 'bar',
+//			width : '100%',
+//			height : '18px',
+//			barColor : colours.white,
+//		});
+//	}
 }
 
 var refreshTotalData = function() {
@@ -344,7 +344,7 @@ var initChartPeople = function(data1) {
 			defaultTheme : false
 		},
 		yaxis : {
-			show : false
+			min : 0
 		},
 		xaxis : {
 			mode : "categories",
@@ -353,7 +353,7 @@ var initChartPeople = function(data1) {
 	}
 
 	var plot = $.plot($("#stats-pageviews"), [ {
-		label : passenger,
+//		label : passenger,
 		data : data1
 	} ], options);
 }
@@ -802,7 +802,7 @@ var heatMap = function() {
 							colors : [ colours.blue ],
 							tooltip : true, // activate tooltip
 							tooltipOpts : {
-								content : passenger+" : %y.0",
+								content : "  %y.0",
 								shifts : {
 									x : -30,
 									y : -50
@@ -829,32 +829,13 @@ var heatMap = function() {
 								mapId : mapIds,
 								endTime : timestamp - 28800000
 							}, function(data) {
-								// if (data.error == 200) {
-								// nowUserCount = data.todayMomentCount;
-								// if (data.length > 0)
-								// data = data.slice(1);
-								//
-								// // do a random walk
-								// while (data.length < totalPoints) {
-								// // var prev = data.length > 0 ?
-								// data[data.length
-								// // - 1] : 50;
-								// // var y = prev + Math.random() * 10 - 5;
-								// // if (y < 0)
-								// // y = 0;
-								// // if (y > 100)
-								// // y = 100;
-								// data.push(0);
-								// }
-
-								// zip the generated y values with the x values
 								var countsss= data.data;
 								document.getElementById("nowPeople").innerHTML = '<i class="ec-users"></i>'
 									+ countsss;
 								res.shift();
 								res.push([ timestamp, countsss ]);
 								// setup plot
-								var options = {
+								var optionss = {
 									series : {
 										shadowSize : 0, // drawing is faster
 										// without
@@ -883,7 +864,7 @@ var heatMap = function() {
 									colors : [ colours.blue ],
 									tooltip : true, // activate tooltip
 									tooltipOpts : {
-										content :  passenger+" : %y.0",
+										content :  " %y.0",
 										shifts : {
 											x : -30,
 											y : -50
@@ -897,8 +878,10 @@ var heatMap = function() {
 										show : true
 									}
 								};
-								var plot = $.plot($("#autoupdate-chart"),
-										[ res ], options);
+								$.plot($("#autoupdate-chart"), [ res ],
+										optionss);
+//								var plot = $.plot($("#autoupdate-chart"),
+//										[ res ], options);
 								// }
 							});
 
