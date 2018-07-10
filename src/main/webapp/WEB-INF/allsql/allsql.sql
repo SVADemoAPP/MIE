@@ -671,3 +671,13 @@ CREATE TABLE `bi_static_shop_count` (
     INDEX `Index 3` (`shopId`)
 )
 COLLATE='utf8_bin';
+CREATE TABLE `bi_static_shop_enter` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	`time` DATE NOT NULL COMMENT '时间',
+	`allcount` BIGINT(20) NOT NULL COMMENT '人数',
+	`allcounts` BIGINT(20) NOT NULL COMMENT '总人数',
+	`shopId` INT(11) NOT NULL COMMENT '商场id',
+	INDEX `Index 1` (`id`),
+	INDEX `Index 3` (`shopId`)
+)
+COLLATE='utf8_bin';

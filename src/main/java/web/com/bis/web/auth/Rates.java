@@ -1,7 +1,9 @@
 package com.bis.web.auth;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +14,7 @@ import com.bis.common.conf.Params;
 import com.bis.dao.RateDao;
 import com.bis.dao.StatisticsDao;
 import com.bis.model.ShopModel;
+import com.bis.model.WeekTotalModel;
 
 @Service
 public class Rates {
@@ -25,6 +28,23 @@ public class Rates {
     private StatisticsDao statisticsDao;
 	
 	//计算进店率,参数为shopId
+    
+	public String getNewEnter(ShopModel model,String nowDaya){
+		List<WeekTotalModel> list = rateDao.getShopEnterData(nowDaya, model.getId());
+	    String enterRate;
+	    if(list.size()<1){
+	    	 return "0";
+	    }else{
+	    	//进店率
+	    	WeekTotalModel models = list.get(0);
+	    	int shopCount = models.getMyId();
+	    	int allCount = models.getAllCount();
+			DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
+		    enterRate = df.format((float)shopCount/allCount*100);//返回的是String类型 
+		    
+	    }
+	    return enterRate;
+	}
 	public int getEnter(ShopModel model,String tableName){
 		
 	    //统计进入店内的游客

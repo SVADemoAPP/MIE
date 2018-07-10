@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.bis.model.ShopModel;
+import com.bis.model.WeekTotalModel;
 
 public interface RateDao {
 	public int selectCountByShop(@Param("tableName") String tableName,@Param("shop") ShopModel shop);
@@ -42,5 +43,7 @@ public interface RateDao {
 	public int getShopCountByShopId(@Param("tableName")String tableName,@Param("shop")ShopModel shop);
 	
 	public int getShopCountByShopIdRound(@Param("tableName")String tableName,@Param("shop")ShopModel shop);
+	
+	public List<WeekTotalModel> getShopEnterData(@Param("mytime")String mytime,@Param("shopId")String shopId);
 	
 }

@@ -91,6 +91,14 @@
 		<!-- 调用类中的方法 -->
 		<property name="targetMethod" value="calcPeopleRoute" />
 	</bean>
+	
+	<bean id="deleteTable"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject" ref="quartzJob" />
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod" value="deleteTable" />
+	</bean>	
 
 	<!-- 定义触发时间 -->
 	<bean id="doTime1"
@@ -192,6 +200,22 @@
 		<!-- 每隔10秒执行一次 -->
 		<property name="cronExpression" value="00 56 23 * * ?" />
 	</bean>
+	
+	<bean id="deleteTable1"
+		class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail" ref="deleteTable" />
+		<property name="repeatInterval" value="1000" />
+		<property name="repeatCount" value="0" />
+	</bean>
+
+	<!-- 定义触发时间 -->
+	<bean id="deleteTable2"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="deleteTable" />
+		<!-- cron表达式 -->
+		<!-- 每隔10秒执行一次 -->
+		<property name="cronExpression" value="00 00 02 * * ?" />
+	</bean>	
 
 	<!--设置调度 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序 -->
 	<bean id="startQuertz" lazy-init="false" autowire="no"
@@ -208,7 +232,9 @@
                 <ref bean="doTime8" />				
 				<ref bean="taskJobTrigger" />
 				<ref bean="calcPeopleRouteTask1" />
-				<ref bean="calcPeopleRouteTimer" />
+				<ref bean="deleteTable2" />
+				<ref bean="deleteTable1" />
+				<!-- <ref bean="calcPeopleRouteTimer" />-->
 				<ref bean="verificationSva" />
 			</list>
 		</property>

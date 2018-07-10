@@ -114,4 +114,7 @@
 	<select id="selectCount" resultType="int">
 		SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{id} AND time = #{nowDay}
 	</select>
+	<select id="getShopEnterData" resultType="WeekTotalModel">
+		select allcount myId,allcounts allCount from bi_static_shop_enter where shopId = #{shopId} and time = #{mytime} limit 1
+	</select>
 </mapper>

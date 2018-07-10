@@ -1054,6 +1054,7 @@ public class MarketController {
 //      calendar.getTimeInMillis()
          String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
         String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
+        String nowDays = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2);
          String tableName = Params.LOCATION + nowDay;
          String tableName2 = Params.SHOPLOCATION + nowMouths;
         try {
@@ -1090,7 +1091,7 @@ public class MarketController {
 //                @Override
 //                public void run() {
                     // TODO Auto-generated method stub
-                    listEnterRate.add(String.valueOf(rates.getEnter(shopModel,tableName)));
+                    listEnterRate.add(rates.getNewEnter(shopModel,nowDays));
                     listOverRate.add(String.valueOf(rates.getOverflow1(shopModel,tableName2,nowDay)));
                     listDeepRate.add(String.valueOf(rates.getDeep(shopModel,tableName2,nowDay)));
                     listShopName.add(shopModel.getShopName());
@@ -1324,6 +1325,7 @@ public class MarketController {
 //      calendar.getTimeInMillis()
          String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
         String nowMouths = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMM);
+        String nowDays = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2);
          String tableName = Params.LOCATION + nowDay;
        String tableName2 = Params.SHOPLOCATION + nowMouths;
         try {
@@ -1361,7 +1363,7 @@ public class MarketController {
 //                @Override
 //                public void run() {
                     // TODO Auto-generated method stub
-                    listEnterRate.add(String.valueOf(rates.getEnter(shopModel,tableName)));
+                    listEnterRate.add(rates.getNewEnter(shopModel,nowDays));
                     listOverRate.add(String.valueOf(rates.getOverflow1(shopModel,tableName2,nowDay)));
                     listDeepRate.add(String.valueOf(rates.getDeep(shopModel,tableName2,nowDay)));
                     listShopName.add(shopModel.getShopName());

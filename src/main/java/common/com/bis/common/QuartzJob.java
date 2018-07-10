@@ -393,6 +393,7 @@ public class QuartzJob {
         try {
             String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
             String nowMouth = Util.dateFormat(new Date(), Params.YYYYMMddHH00);
+            String nowDays = Util.dateFormat(new Date(), Params.YYYYMMDD2);
             String tableName = Params.LOCATION + nowDay;
             long endTime = System.currentTimeMillis();
             long beginTime = endTime-60*60*1000;
@@ -441,12 +442,13 @@ public class QuartzJob {
                 int areaResult = statisticsDao.doUpdate(insertStore);
                 LOG.debug("saveVisitTime-store result:" + areaResult);
             }
-            
+            String insertEntersql = "insert into bi_static_shop_enter(time,allcount,shopId,allcounts) values";
             List<VisitTimeModel> shopList = locationDao.getShopVisitTime(tableName,beginTime,endTime);
             Map<String, String> mapShop = getNewMap(shopList);
 //            List<VisitTimeModel> shopCount = locationDao.getCountGroupByShopId(tableName);
 //            Map<String, Long> shops = getListToMap(shopCount);
             Set<String> shopSet = mapShop.keySet();
+            String endTimes = nowMouth.split(" ")[1];
             for(String s:shopSet)
             {
                 String shopId = s.split("-")[0];
@@ -454,7 +456,11 @@ public class QuartzJob {
                     String allcount = s.split("-")[1];
                     String visitTime = mapShop.get(s);
                     int allCounts = locationDao.getShopAllCount(shopId, tableName);
-                    insertShop += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + shopId +  "','"+ allCounts+"'),";  
+                    insertShop += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + shopId +  "','"+ allCounts+"'),"; 
+                    if (endTimes.equals("23:00:00")) {
+                    	int allCountss = locationDao.getShopAllCount1(shopId, tableName);
+                    	insertEntersql +="('" + nowDays +  "','" + allCounts + "','" + shopId +  "','"+ allCountss+"'),"; 
+					}
                 }
             }
             if (shopSet.size()>0) {
@@ -462,6 +468,11 @@ public class QuartzJob {
                 int areaResult = statisticsDao.doUpdate(insertShop);
                 LOG.debug("saveVisitTime-shop result:" + areaResult);
             }
+            if (endTimes.equals("23:00:00")) {
+            	insertEntersql = insertEntersql.substring(0, insertEntersql.length() - 1);
+                int areaResult = statisticsDao.doUpdate(insertEntersql);
+                LOG.debug("saveVisitTime-shop-enter result:" + areaResult);
+			}
         } catch (Exception e) {
            LOG.error(e.getMessage());
            System.out.println(1);
@@ -1218,4 +1229,18 @@ public class QuartzJob {
             return null; 
         }
     }
+    
+    public void deleteTable()
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -7);
+        String time = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
+    	String deletSql = "delete from bi_static_floor_visittime where time <  '"+time+"'";
+    	String deletSql1 = "delete from bi_static_shop_visittime where time <  '"+time+"'";
+    	String deletSql2 = "delete from bi_static_store_visittime where time <  '"+time+"'";
+    	statisticsDao.doUpdate(deletSql);
+    	statisticsDao.doUpdate(deletSql1);
+    	statisticsDao.doUpdate(deletSql2);
+    }
+    
 }

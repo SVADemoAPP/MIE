@@ -237,6 +237,13 @@ public interface LocationDao {
     
     public int getStoreAllCount(@Param("storeId") String storeId, @Param("tableName") String tableName);
     
+    public int getStoreNowCount(@Param("storeId") String storeId, @Param("tableName") String tableName,@Param("startTime") long beginTime,@Param("endTime") long endTime);
+    
     public int getShopAllCount(@Param("shopId") String shopId, @Param("tableName") String tableName);
+    public int getShopAllCount1(@Param("shopId") String shopId, @Param("tableName") String tableName);
+    
+    public int getShopNowCount(@Param("shopId") String shopId, @Param("tableName") String tableName,@Param("startTime") long beginTime,@Param("endTime") long endTime);
+    
+    public int getMapNowCount(@Param("mapId") String mapId, @Param("tableName") String tableName,@Param("startTime") long beginTime,@Param("endTime") long endTime);
     
 }
