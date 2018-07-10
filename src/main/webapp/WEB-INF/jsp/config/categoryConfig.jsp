@@ -62,14 +62,12 @@
 		<div class="container-fluid">
 			<div class="navbar">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="../market/getMarketInfo"> <img
-						src="../images/svalogo.png"
-						style="margin: -7px 5px 0 20%; height: 35px;"></img><span
-						class="text-logo">IVAS</span><span class="text-slogan"></span>
+					<a class="navbar-brand" href="../market/getMarketInfo"><span
+						class="text-logo" style="margin: 14px 5px 0 18%; height: 35px;color: #E9D7B5">航洋国际慧商平台</span><span class="text-slogan"></span>
 					</a>
 				</div>
 				<nav class="top-nav" role="navigation">
-				<ul class="nav navbar-nav pull-left">
+				<ul class="nav navbar-nav pull-left"style="margin-top: 15px;">
 					<li id="toggle-sidebar-li"><a href="#" id="toggle-sidebar"><i
 							class="en-arrow-left2"></i> </a></li>
 					<li><a href="#" class="full-screen"><i
