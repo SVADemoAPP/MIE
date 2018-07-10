@@ -82,9 +82,9 @@
 		select ${columnName} name,count(${columnName}) value from
 		(select
 		${columnName},time,ipv4 from
-		bi_visitor
+		bi_visitor where gender!='不详'
 		<if test="endTime != null">
-			where time &gt;= #{startTime} and
+			and time &gt;= #{startTime} and
 			time &lt;= #{endTime}
 		</if>
 		) a join (select userId,time from ${tableName} where shopId=#{shopId})
@@ -163,9 +163,9 @@
 		select ${columnName} name,count(${columnName}) value from
 		(select
 		${columnName},time,ipv4 from
-		bi_visitor
+		bi_visitor where gender!='不详'
 		<if test="endTime != null">
-			where time &gt;= #{startTime} and
+			and time &gt;= #{startTime} and
 			time &lt;= #{endTime}
 		</if>
 		) a join (select userId,time from ${tableName} c join bi_shop d on
@@ -274,9 +274,9 @@
 		select ${columnName} name,count(${columnName}) value from
 		(select
 		${columnName},time,ipv4 from
-		bi_visitor
+		bi_visitor where gender!='不详'
 		<if test="endTime != null">
-			where time &gt;= #{startTime} and
+			and time &gt;= #{startTime} and
 			time &lt;= #{endTime}
 		</if>
 		) a join (select userId,time from ${tableName} c join bi_shop d on

@@ -99,7 +99,7 @@
                     colors: [colours.blue],
                     tooltip: true, //activate tooltip
                     tooltipOpts: {
-                        content: passenger+" : %y.0",
+                        content: "  %y.0",
                         shifts: {
                             x: -30,
                             y: -50

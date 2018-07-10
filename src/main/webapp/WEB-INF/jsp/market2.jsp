@@ -339,7 +339,11 @@
 				</div>
 				
 				<div class="row">
+<<<<<<< HEAD
 					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding: 0 0px 0px 5px;">
+=======
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 " style="padding: 0 0px 0px 5px;">
+>>>>>>> branch 'master' of https://github.com/SVADemoAPP/MIE.git
 						<!-- Start col-lg-6 -->
 						<div class="panel-success toggle">
 							<!-- Start .panel -->
