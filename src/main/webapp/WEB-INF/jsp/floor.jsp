@@ -719,13 +719,13 @@ color: white;
 	<script type="text/javascript">
 		var passenger = '<spring:message code="passenger"/>';
 		var home = '<spring:message code="home"/>';
-		var EnteringRate = '<spring:message code="EnteringRate"/>';
-		var OverflowRate ='<spring:message code="OverflowRate"/>';
+		var EnteringRate = '<spring:message code="EnteringRate1"/>';
+		var OverflowRate ='<spring:message code="OverflowRate1"/>';
         var echarAverage ='<spring:message code="echart_average"/>';
         var echarMax ='<spring:message code="echart_max"/>';
         var echarMin ='<spring:message code="echart_min"/>';
         var echardanwei ='<spring:message code="echart_danwei"/>';
-		var DeepRate = '<spring:message code="DeepRate"/>';
+		var DeepRate = '<spring:message code="DeepRate1"/>';
 		var title_yes = '<spring:message code="title_jiao_zuori"/>';
 		var objColors, colours;
 		RouteLine.init();

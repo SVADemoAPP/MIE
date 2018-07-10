@@ -359,6 +359,14 @@ var initChartPeople = function(data1) {
 }
 var initChartBar = function()
 {
+	$("#ordered-bars-chart").css(
+			{
+			"background-size": "100% auto",
+			"background-repeat": "repeat-x",
+//				"margin" : "0 auto",
+				"background-position":"center ",
+			"background-image":"url("+"../image/loading4.gif"+")"
+			});		
 	  $.post("/sva/market/getRatesByMapId?mapId="+mapIds,function(data) {
 //		  for (var i = 0; i <= data.eRate.length; i += 1){
 //				d1.push([data.shopName[i], data.eRate[i]]);
@@ -372,11 +380,37 @@ var initChartBar = function()
 		  var titile = [EnteringRate,OverflowRate,DeepRate]; 
 		  var myChart = echarts.init(document.getElementById("ordered-bars-chart")); 
 		  option = {
-				    tooltip : {
-				        trigger: 'axis'
+				    tooltip: {
+						trigger: 'axis',
+				        formatter: function (params, ticket, callback) {
+				            //x轴名称
+//				            var name = params[0].name
+				            //图表title名称
+				            var seriesName = params[0].seriesName.split("：")[0]+":"
+				            //值
+				            var value = params[0].value
+				            var seriesName1 = params[1].seriesName.split("：")[0]+":"
+				            //值
+				            var value1 = params[1].value
+				            var seriesName2 = params[2].seriesName.split("：")[0]+":"
+				            //值
+				            var value2 = params[2].value
+				            var lengths = seriesName+value+'<br />'+seriesName1+value1+'<br />'+seriesName2+value2
+				            return lengths
+				        }
 				    },
+				    
+//				    legend: {
+//				        data:titile
+//				    },
 				    legend: {
-				        data:titile
+				    	data:titile,
+				        formatter: function (name) {
+				            return name.split("：")[0];
+				        },
+				        tooltip: {
+				            show: true
+				        }
 				    },
 				    toolbox: {
 				        show : true,
@@ -1267,6 +1301,17 @@ var heatMap = function() {
 					});
 
 			$("#heatMapConfirm").on("click", function(e) {
+				
+				$("#heatmap1").html('');
+				$("#divCon1").css("background-image", "");
+				$("#divCon1").css(
+						{
+						"background-size": "100% auto",
+						"background-repeat": "repeat-x",
+//							"margin" : "0 auto",
+							"background-position":"center ",
+						"background-image":"url("+"../image/loading4.gif"+")"
+						});		
 				var startTime = $("#select_time_begin_tab1").val();
 				var endTime = $("#select_time_end_tab1").val();
 				var startSplit = startTime.split(" ");

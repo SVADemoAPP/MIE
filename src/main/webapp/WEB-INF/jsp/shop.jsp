@@ -530,7 +530,7 @@
                                   <h4 class="panel-title" style="font-size: 15px;color: white;"><i class="im-bars"></i><spring:message code="echart_tongji"></spring:message></h4>
                               </div>
                               <div class="panel-body">
-                                  <div id="ordered-bars-chart" style="width: 100%; height:350px;"></div>
+                                  <div id="ordered-bars-chart" style="width: 100%; height:450px;"></div>
                               </div>
                           </div>
                           <!-- End .panel -->
@@ -703,13 +703,13 @@
 	<script type="text/javascript">
 		var home = '<spring:message code="home"/>';
 		var passenger = '<spring:message code="passenger"/>';
-		var EnteringRate = '<spring:message code="EnteringRate"/>';
-		var OverflowRate ='<spring:message code="OverflowRate"/>';
+		var EnteringRate = '<spring:message code="EnteringRate1"/>';
+		var OverflowRate ='<spring:message code="OverflowRate1"/>';
         var echarAverage ='<spring:message code="echart_average"/>';
         var echarMax ='<spring:message code="echart_max"/>';
         var echarMin ='<spring:message code="echart_min"/>';
         var echardanwei ='<spring:message code="echart_danwei"/>';
-		var DeepRate = '<spring:message code="DeepRate"/>';
+		var DeepRate = '<spring:message code="DeepRate1"/>';
 		var title_yes = '<spring:message code="title_jiao_zuori"/>';
 		var objColors, colours;
 	</script>

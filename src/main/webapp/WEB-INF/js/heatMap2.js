@@ -126,7 +126,7 @@ var fuzhiFunction = function(id, id1, id2, nowArray, nowPeople, yesPeople,
 			nowBaifen = 100;
 		}
 		if (nowPeople > 0 && yesPeople > 0) {
-			nowBaifen = (((nowPeople) / yesPeople)).toFixed(2)*100;
+			nowBaifen = ((((nowPeople) / yesPeople))*100).toFixed(2);
 		}
 	} else {
 		yanse = colours.red;
@@ -477,6 +477,14 @@ var initChartPeople = function(data1) {
 }
 var initChartBar = function()
 {
+	$("#ordered-bars-chart").css(
+			{
+			"background-size": "100% auto",
+			"background-repeat": "repeat-x",
+//				"margin" : "0 auto",
+				"background-position":"center ",
+			"background-image":"url("+"../image/loading4.gif"+")"
+			});		
 	  $.post("/sva/market/getRates?storeId="+storeIds,function(data) {
 //		  for (var i = 0; i <= data.eRate.length; i += 1){
 //				d1.push([data.shopName[i], data.eRate[i]]);
@@ -490,11 +498,37 @@ var initChartBar = function()
 		  var titile = [EnteringRate,OverflowRate,DeepRate]; 
 		  var myChart = echarts.init(document.getElementById("ordered-bars-chart")); 
 		  option = {
-				    tooltip : {
-				        trigger: 'axis'
+				    tooltip: {
+						trigger: 'axis',
+				        formatter: function (params, ticket, callback) {
+				            //x轴名称
+//				            var name = params[0].name
+				            //图表title名称
+				            var seriesName = params[0].seriesName.split("：")[0]+":"
+				            //值
+				            var value = params[0].value
+				            var seriesName1 = params[1].seriesName.split("：")[0]+":"
+				            //值
+				            var value1 = params[1].value
+				            var seriesName2 = params[2].seriesName.split("：")[0]+":"
+				            //值
+				            var value2 = params[2].value
+				            var lengths = seriesName+value+'<br />'+seriesName1+value1+'<br />'+seriesName2+value2
+				            return lengths
+				        }
 				    },
+				    
+//				    legend: {
+//				        data:titile
+//				    },
 				    legend: {
-				        data:titile
+				    	data:titile,
+				        formatter: function (name) {
+				            return name.split("：")[0];
+				        },
+				        tooltip: {
+				            show: true
+				        }
 				    },
 				    toolbox: {
 				        show : true,

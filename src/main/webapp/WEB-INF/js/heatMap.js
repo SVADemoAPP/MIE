@@ -440,29 +440,71 @@ var initChartLine = function(data1) {
 
 var initChartBar = function()
 {
+	var mydiv = document.getElementById("ordered-bars-chart");
 		//some data
 		var param = $("#shopId").val();
-		
-		
+//		$("#ordered-bars-chart").css("background-image","url("+"../image/loading.gif"+")")
+		$("#ordered-bars-chart").css(
+				{
+				"background-size": "100% auto",
+				"background-repeat": "repeat-x",
+//					"margin" : "0 auto",
+					"background-position":"center ",
+				"background-image":"url("+"../image/loading4.gif"+")"
+				});		
 		$.post("/sva/heatmap/api/getRates",{id:param},function(data){
 //			for (var i = 0; i <= data.date.length; i += 1){
 //				d1.push([data.date[i], data.eRate[i]]);
 //				d2.push([data.date[i],data.oRate[i]]);
 //				d3.push([data.date[i], data.dRate[i]]);
 //		  }
-		  
+			  
 			  var shopName = data.date;
 			  var eRate = data.eRate; //进店率
 			  var oRate = data.oRate;//溢出率
 			  var dRate = data.dRate;//深访率
 			  var titile = [EnteringRate,OverflowRate,DeepRate]; 
-			  var myChart = echarts.init(document.getElementById("ordered-bars-chart")); 
+//			  var titile1 = ["进店率：进入商铺的人数总和/进入商铺周围大区域的人数总和","深访率：进入商铺驻留时长大于深访基本时间的人数总和/进入商铺的人数总和","溢出率：进入商铺驻留时长小于溢出基本时间的人数总和/进入商铺的人数总和"]; 
+//			  进店率：进入商铺的人数总和/进入商铺周围大区域的人数总和
+//			  深访率：进入商铺驻留时长大于深访基本时间的人数总和/进入商铺的人数总和
+//			  溢出率：进入商铺驻留时长小于溢出基本时间的人数总和/进入商铺的人数总和
+			  var myChart = echarts.init(mydiv); 
 			  option = {
-					    tooltip : {
-					        trigger: 'axis'
+//					    tooltip : {
+//					        trigger: 'axis',
+//					        formatter: '{a0}: {c0}<br />{a1}: {c1}<br />{a2}: {c2}'
+//					    },
+					    tooltip: {
+							trigger: 'axis',
+					        formatter: function (params, ticket, callback) {
+					            //x轴名称
+//					            var name = params[0].name
+					            //图表title名称
+					            var seriesName = params[0].seriesName.split("：")[0]+":"
+					            //值
+					            var value = params[0].value
+					            var seriesName1 = params[1].seriesName.split("：")[0]+":"
+					            //值
+					            var value1 = params[1].value
+					            var seriesName2 = params[2].seriesName.split("：")[0]+":"
+					            //值
+					            var value2 = params[2].value
+					            var lengths = seriesName+value+'<br />'+seriesName1+value1+'<br />'+seriesName2+value2
+					            return lengths
+					        }
 					    },
+					    
+//					    legend: {
+//					        data:titile
+//					    },
 					    legend: {
-					        data:titile
+					    	data:titile,
+					        formatter: function (name) {
+					            return name.split("：")[0];
+					        },
+					        tooltip: {
+					            show: true
+					        }
 					    },
 					    toolbox: {
 					        show : true,
@@ -1143,6 +1185,14 @@ var heatMap = function() {
 			});
 
 			$("#heatMapConfirm").on("click", function(e) {
+				$("#divCon1").css(
+						{
+						"background-size": "100% auto",
+						"background-repeat": "repeat-x",
+//							"margin" : "0 auto",
+							"background-position":"center ",
+						"background-image":"url("+"../image/loading4.gif"+")"
+						});	
 				var startTime = $("#select_time_begin_tab1").val();
 				var endTime = $("#select_time_end_tab1").val();
 				var startSplit = startTime.split(" ");
