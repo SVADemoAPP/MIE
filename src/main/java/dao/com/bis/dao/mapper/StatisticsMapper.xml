@@ -154,4 +154,13 @@
         and time
         &lt;= #{endTime}
     </select>                    
+    
+    <select id="findTableForDel" resultType="String">
+        SELECT table_name  
+        FROM information_schema.tables 
+        WHERE 
+            table_name like "bi_location_20%" 
+            and table_name &lt; #{tableName}
+            and TABLE_SCHEMA = #{schema}
+    </select>
 </mapper>

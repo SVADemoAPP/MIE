@@ -40,6 +40,7 @@ import com.bis.model.TrendAllModel;
 import com.bis.model.TrendMapModel;
 import com.bis.model.TrendShopModel;
 import com.bis.model.VisitTimeModel;
+import com.bis.service.CleanTableService;
 import com.bis.service.DataAnalysisService;
 import com.bis.web.auth.PeripheryService;
 
@@ -64,6 +65,9 @@ public class QuartzJob {
 
     @Autowired
     private DataAnalysisService analysisService;
+    
+    @Autowired
+    private CleanTableService cleanTableService;
 
     @Autowired
     private LocationDao locationDao;
@@ -216,6 +220,9 @@ public class QuartzJob {
             visitorDao.clearData1();
             visitorDao.saveData1(list);
         }
+        
+        // 数据库清理
+        cleanTableService.cleanTableInDb();
     }
 
     public void doStatistics() {

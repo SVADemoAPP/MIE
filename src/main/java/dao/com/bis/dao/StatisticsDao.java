@@ -135,4 +135,13 @@ public interface StatisticsDao {
     
     public List<String> getMapIdUser(@Param("tableName")String tableName,@Param("mapId")String mapId);
     public List<NewUserModel> getNewUserByMapId(@Param("mapId")String mapId,@Param("startTime")String startTime,@Param("endTime")String endTime);
+    
+    /**
+     * @Title: findTableForDel 
+     * @Description: 获取需要删除的数据表列表
+     * @param tableName
+     * @param schema
+     * @return
+     */
+    public List<String> findTableForDel(@Param("tableName") String tableName, @Param("schema") String schema);
 }
