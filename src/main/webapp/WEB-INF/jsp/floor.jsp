@@ -228,7 +228,7 @@ color: white;
 			<div class="outlet" style="font-size: 15px;">
 				<div class="row" style="margin-bottom: 8px;">
 					<label style="text-align: center; margin-top: 7px;"
-						class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><spring:message
+						class="col-lg-1 col-md-1 col-sm-1 col-xs-1 control-label"><spring:message
 							code="map_floor"></spring:message> </label>
 					<div class="col-lg-4 col-md-4">
 						<select data-type="storeSelect" class="form-control select2"
@@ -245,7 +245,7 @@ color: white;
 						<!-- col-lg- start here -->
 						<div class="panel-default toggle">
 							<!-- Start .panel -->
-							<div class="panel-heading " style="background-color: #75b9e6;">
+							<div class="panel-heading " style="background-color: #f68484;">
 								<h4 class="panel-title" style="font-size: 15px;color: white;"  >
 									<i class="im-copy2"></i>
 									<spring:message code="mall_situation"></spring:message>
@@ -255,7 +255,7 @@ color: white;
 								<div class="row">
 									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
 										<!-- col-lg-3 start here -->
-										<div class="tile gray-spr m0 mb20" style="background-color: #f68484;color: white">
+										<div class="tile gray-spr m0 mb20" style="background-color: #75b9e6;color: white">
 											<div class="tile-content text-center clearfix">
 												<div class="label" style="color: white">
 													<spring:message code="mall_current"></spring:message>
@@ -361,7 +361,7 @@ color: white;
 				<!-- End .row -->
 				<div class="row">
 					<!-- Start .row -->
-					<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 sortable-layout left-css">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 sortable-layout left-css">
 						<!-- Start col-lg-6 -->
 						<div class="panel-danger toggle ">
 							<!-- Start .panel -->
@@ -496,7 +496,7 @@ color: white;
 						<div class="panel-default toggle">
 							<!-- Start .panel -->
 							<div class="panel-heading" style="background-color: #71d398;">
-								<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 									<h4 class="panel-title"style="font-size: 15px;color: white;">
 										<i class="im-fire"></i>
 										<spring:message code="mall_time_heatMap"></spring:message>
@@ -513,7 +513,7 @@ color: white;
 										id="select_time_end_tab1" onclick="getDatePicker1(this)"
 										readonly />
 								</div>
-								<div id="ConfirmId" class="col-lg-3 col-md-3 col-sm-3 col-xs-3
+								<div id="ConfirmId" class="col-lg-2 col-md-2 col-sm-2 col-xs-2
 									style="margin-top: 5px;">
 									<button class="btn btn-success" id="heatMapConfirm" style="padding: 2px 5px 2px 5px;font-size: 13px;background-image: linear-gradient(#01ff67, #061300);">
 										<spring:message code="store_confirm"></spring:message>
@@ -552,7 +552,7 @@ color: white;
 							<!-- Start col-lg-6 -->
 							<div class="panel-default toggle ">
 								<!-- Start .panel -->
-								<div class="panel-heading"style="background-color: #75b9e6;">
+								<div class="panel-heading"style="background-color: #f68484;">
 									<div class="col-lg-5 col-md-5  col-sm-5 col-xs-5">
 										<h4 class="panel-title"style="font-size: 15px;color: white;">
 											<i class="br-chart"></i>

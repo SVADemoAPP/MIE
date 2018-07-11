@@ -685,10 +685,10 @@ body.full-screen #header {
   position: fixed;
 }
 #header .navbar {
-  height: 50px;
+  height: 60px;
   margin-bottom: 0;
   padding-right: 20px;
-  background: #411d1d;;
+  background: #1c689c;;
   border-radius: 0;
   border: none;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
@@ -1009,7 +1009,7 @@ body.full-screen #header {
   position: absolute;
   left: 0;
   bottom: 0;
-  top: 50px;
+  top: 60px;
   z-index: 99;
   /*Fixed sidebar*/
   /*Hided Sidebar*/
@@ -1261,7 +1261,7 @@ body.full-screen #header {
 ----------------------------------------- */
 #content {
   margin-left: 140px;
-  padding: 50px 15px 25px 15px;
+  padding: 60px 15px 25px 15px;
 }
 #content.sidebar-page {
   margin-left: 140px;
@@ -1294,12 +1294,12 @@ body.full-screen #header {
   clear: both;
 }
 #content .content-wrapper .heading h1.page-header {
-  font-size: 20px;
+  font-size: 19px;
   border-bottom: none;
   margin: 5.5px 0 5.5px 0;
   padding: 0;
   background: #ffffff;
-  font-weight: 300;
+  
   width: auto;
 }
 #content .content-wrapper .heading h1.page-header i {
@@ -1625,7 +1625,7 @@ body.full-screen #header {
 }
 .tile .tile-content .spark .percent {
   float: left;
-  font-size: 16px;
+  font-size: 13px;
   width: 100%;
 }
 .tile .tile-content .spark .sparkline {

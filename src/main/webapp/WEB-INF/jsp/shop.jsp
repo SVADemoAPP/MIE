@@ -219,7 +219,7 @@
 			<div class="outlet"style="font-size: 15px;">
 				<div class="row" style="margin-bottom: 10px;">
 					<label style="text-align: center; margin-top: 7px;"
-						class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label"><spring:message
+						class="col-lg-1 col-md-1 col-sm-1 col-xs-1 control-label"><spring:message
 							code="shop_name"></spring:message></label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 						<select data-type="shopSelect" class="form-control select2"
@@ -236,7 +236,7 @@
 						<!-- col-lg- start here -->
 						<div class="panel-default toggle">
 							<!-- Start .panel -->
-							<div class="panel-heading"style="background-color: #75b9e6;">
+							<div class="panel-heading"style="background-color: #f68484;">
 								<h4 class="panel-title"style="font-size: 15px;color: white;">
 									<i class="im-copy2"></i>
 									<spring:message code="mall_situation"></spring:message>
@@ -246,7 +246,7 @@
 								<div class="row">
 									<div class="col-lg-4 col-md-4  col-sm-4 col-xs-4">
 										<!-- col-lg-3 start here -->
-										<div class="tile gray-spr m0 mb20"style="background-color: #f68484;color: white">
+										<div class="tile gray-spr m0 mb20"style="background-color: #75b9e6;color: white">
 											<div class="tile-content text-center clearfix">
 												<div class="label"style="color: white">
 													<spring:message code="mall_current"></spring:message>
