@@ -222,6 +222,14 @@ var operation = function() {
 }();
 
 function showPieCharts(list, target, size) {
+	$("#"+target).css(
+			{
+			"background-size": "100% auto",
+			"background-repeat": "repeat-x",
+//				"margin" : "0 auto",
+				"background-position":"center ",
+			"background-image":"url("+"../image/loading4.gif"+")"
+			});		
 	var dataX = [];
 	for (i = 0; i < list.length; i++) {
 		dataX.push(list[i].name);
@@ -282,6 +290,14 @@ function showPieCharts(list, target, size) {
 }
 
 function showBarCharts(list, target, thisColor) {
+	$("#"+target).css(
+			{
+			"background-size": "100% auto",
+			"background-repeat": "repeat-x",
+//				"margin" : "0 auto",
+				"background-position":"center ",
+			"background-image":"url("+"../image/loading4.gif"+")"
+			});	
 	var pieChart = echarts.init(document.getElementById(target));
 	var dataX = [];
 	var dataY = [];
