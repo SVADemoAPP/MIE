@@ -142,62 +142,64 @@ var getAllData = function() {
 			endTime : endTimes
 		};
 	}
-	$("#divCon1").css(
-			{
-			"background-size": "100% auto",
-			"background-repeat": "repeat-x",
-//				"margin" : "0 auto",
-				"background-position":"center ",
-			"background-image":"url("+"../image/loading4.gif"+")"
-			});	
-	$("#divCon2").css(
-			{
-			"background-size": "100% auto",
-			"background-repeat": "repeat-x",
-//				"margin" : "0 auto",
-				"background-position":"center ",
-			"background-image":"url("+"../image/loading4.gif"+")"
-			});	
-	$("#divCon3").css(
-			{
-			"background-size": "100% auto",
-			"background-repeat": "repeat-x",
-//				"margin" : "0 auto",
-				"background-position":"center ",
-			"background-image":"url("+"../image/loading4.gif"+")"
-			});	
-	$("#divCon4").css(
-			{
-			"background-size": "100% auto",
-			"background-repeat": "repeat-x",
-//				"margin" : "0 auto",
-				"background-position":"center ",
-			"background-image":"url("+"../image/loading4.gif"+")"
-			});	
-	$("#divCon5").css(
-			{
-			"background-size": "100% auto",
-			"background-repeat": "repeat-x",
-//				"margin" : "0 auto",
-				"background-position":"center ",
-			"background-image":"url("+"../image/loading4.gif"+")"
-			});	
-	$("#divCon6").css(
-			{
-			"background-size": "100% auto",
-			"background-repeat": "repeat-x",
-//				"margin" : "0 auto",
-				"background-position":"center ",
-			"background-image":"url("+"../image/loading4.gif"+")"
-			});	
+//	$("#divCon1").css(
+//			{
+//			"background-size": "100% auto",
+//			"background-repeat": "repeat-x",
+////				"margin" : "0 auto",
+//				"background-position":"center ",
+//			"background-image":"url("+"../image/loading4.gif"+")"
+//			});	
+//	$("#divCon2").css(
+//			{
+//			"background-size": "100% auto",
+//			"background-repeat": "repeat-x",
+////				"margin" : "0 auto",
+//				"background-position":"center ",
+//			"background-image":"url("+"../image/loading4.gif"+")"
+//			});	
+//	$("#divCon3").css(
+//			{
+//			"background-size": "100% auto",
+//			"background-repeat": "repeat-x",
+////				"margin" : "0 auto",
+//				"background-position":"center ",
+//			"background-image":"url("+"../image/loading4.gif"+")"
+//			});	
+//	$("#divCon4").css(
+//			{
+//			"background-size": "100% auto",
+//			"background-repeat": "repeat-x",
+////				"margin" : "0 auto",
+//				"background-position":"center ",
+//			"background-image":"url("+"../image/loading4.gif"+")"
+//			});	
+//	$("#divCon5").css(
+//			{
+//			"background-size": "100% auto",
+//			"background-repeat": "repeat-x",
+////				"margin" : "0 auto",
+//				"background-position":"center ",
+//			"background-image":"url("+"../image/loading4.gif"+")"
+//			});	
+//	$("#divCon6").css(
+//			{
+//			"background-size": "100% auto",
+//			"background-repeat": "repeat-x",
+////				"margin" : "0 auto",
+//				"background-position":"center ",
+//			"background-image":"url("+"../image/loading4.gif"+")"
+//			});	
+	$(".loadingtext").show();
 	$.post("../visitor/getData", params, function(data) {
 		if (data.status == 200) {
-			$("#divCon1").css("background-image","");
-			$("#divCon2").css("background-image","");
-			$("#divCon3").css("background-image","");
-			$("#divCon4").css("background-image","");
-			$("#divCon5").css("background-image","");
-			$("#divCon6").css("background-image","");
+//			$("#divCon1").css("background-image","");
+//			$("#divCon2").css("background-image","");
+//			$("#divCon3").css("background-image","");
+//			$("#divCon4").css("background-image","");
+//			$("#divCon5").css("background-image","");
+//			$("#divCon6").css("background-image","");
+			$(".loadingtext").hide();
 			showPieCharts(data.genderList, "genderCharts", 100);
 			showPieCharts(data.ageList, "ageCharts", 100);
 			showBarCharts(data.localAddressList, "localAddressCharts",

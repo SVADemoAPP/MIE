@@ -24,28 +24,28 @@
 <body>
 	   <div id="myDiv" class="section1">
         <div id="myDiv1"class="section1_left">
-            <div class="logo"><i></i></div>
+            <div class="logo" style="font-size: 48px; color: #fff;">登录</div>
             <form method="post" action="../account/login">
             <div class="login">
                 <div class="input-group input-group-lg" style="margin-bottom: 20px;">
                   <span class="input-group-addon"><i class="userIcon"></i></span>
-                  <input type="text"  id="loginUserName" name="userName" class="form-control" placeholder="<spring:message code="login_8" />" aria-describedby="">
+                  <input type="text"  id="loginUserName" name="userName" style="font-size: 24px" class="form-control" placeholder="<spring:message code="login_8" />" aria-describedby="">
                 </div>
                 <div class="input-group input-group-lg">
                   <span class="input-group-addon" ><i class="passwordIcon"></i></span>
-                  <input type="password" id="loginPassWord" name="password" class="form-control" placeholder="<spring:message code="login_9" />" aria-describedby="">
+                  <input type="password" id="loginPassWord" name="password" style="font-size: 24px" class="form-control" placeholder="<spring:message code="login_9" />" aria-describedby="">
                 </div>
                  <div id="checkDiv" style="display: none;" class="input-group input-group-lg">
-                 <label style="color: red;text-align:center;width:100%;line-height: 80px;background: transparent;border: 2px solid #e7e7e2;border-left: 1;font-size: 20px;" id="checkId"></label>
+                 <label style="color: red;text-align:center;width:100%;line-height: 80px;background: transparent;border: 2px solid #e7e7e2;border-left: 1;font-size: 17px;" id="checkId"></label>
                 </div>               
-                <button id ="loginId" type="submit" class="loginBtn"><spring:message code="login_0" /></button>
+                <button id ="loginId" type="submit" style="font-size: 26px;" class="loginBtn"><spring:message code="login_0" /></button>
             </div>
             </form>
         </div>
         <div id="myDiv2" class="section1_right">
             <div class="content">
-                <h3>Intelligent business</h3>
-                <h3>information service specialist</h3>
+                <h3>Hangyang City  </h3>
+                <h3>Business Intelligent Platform</h3>
                 <p>Shopping flow analysis   Personnel traiectory</p>
                 <p>Historical data statistics   User behavior sumnary</p>
             </div>

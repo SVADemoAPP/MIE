@@ -444,21 +444,22 @@ var initChartBar = function()
 		//some data
 		var param = $("#shopId").val();
 //		$("#ordered-bars-chart").css("background-image","url("+"../image/loading.gif"+")")
-		$("#ordered-bars-chart").css(
-				{
-				"background-size": "100% auto",
-				"background-repeat": "repeat-x",
-//					"margin" : "0 auto",
-					"background-position":"center ",
-				"background-image":"url("+"../image/loading4.gif"+")"
-				});		
+//		$("#ordered-bars-chart").css(
+//				{
+//				"background-size": "100% auto",
+//				"background-repeat": "repeat-x",
+////					"margin" : "0 auto",
+//					"background-position":"center ",
+//				"background-image":"url("+"../image/loading4.gif"+")"
+//				});	
+		$("#loadingId").show();
 		$.post("/sva/heatmap/api/getRates",{id:param},function(data){
 //			for (var i = 0; i <= data.date.length; i += 1){
 //				d1.push([data.date[i], data.eRate[i]]);
 //				d2.push([data.date[i],data.oRate[i]]);
 //				d3.push([data.date[i], data.dRate[i]]);
 //		  }
-			  
+			$("#loadingId").hide();
 			  var shopName = data.date;
 			  var eRate = data.eRate; //进店率
 			  var oRate = data.oRate;//溢出率
@@ -1185,14 +1186,14 @@ var heatMap = function() {
 			});
 
 			$("#heatMapConfirm").on("click", function(e) {
-				$("#divCon1").css(
-						{
-						"background-size": "100% auto",
-						"background-repeat": "repeat-x",
-//							"margin" : "0 auto",
-							"background-position":"center ",
-						"background-image":"url("+"../image/loading4.gif"+")"
-						});	
+//				$("#divCon1").css(
+//						{
+//						"background-size": "100% auto",
+//						"background-repeat": "repeat-x",
+////							"margin" : "0 auto",
+//							"background-position":"center ",
+//						"background-image":"url("+"../image/loading4.gif"+")"
+//						});	
 				var startTime = $("#select_time_begin_tab1").val();
 				var endTime = $("#select_time_end_tab1").val();
 				var startSplit = startTime.split(" ");

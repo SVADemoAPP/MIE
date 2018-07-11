@@ -359,14 +359,15 @@ var initChartPeople = function(data1) {
 }
 var initChartBar = function()
 {
-	$("#ordered-bars-chart").css(
-			{
-			"background-size": "100% auto",
-			"background-repeat": "repeat-x",
-//				"margin" : "0 auto",
-				"background-position":"center ",
-			"background-image":"url("+"../image/loading4.gif"+")"
-			});		
+//	$("#ordered-bars-chart").css(
+//			{
+//			"background-size": "100% auto",
+//			"background-repeat": "repeat-x",
+////				"margin" : "0 auto",
+//				"background-position":"center ",
+//			"background-image":"url("+"../image/loading1.gif"+")"
+//			});	
+	$("#loadingId").show();
 	  $.post("/sva/market/getRatesByMapId?mapId="+mapIds,function(data) {
 //		  for (var i = 0; i <= data.eRate.length; i += 1){
 //				d1.push([data.shopName[i], data.eRate[i]]);
@@ -378,6 +379,7 @@ var initChartBar = function()
 		  var oRate = data.oRate;//溢出率
 		  var dRate = data.dRate;//深访率
 		  var titile = [EnteringRate,OverflowRate,DeepRate]; 
+		  $("#loadingId").hide();
 		  var myChart = echarts.init(document.getElementById("ordered-bars-chart")); 
 		  option = {
 				    tooltip: {
@@ -1303,15 +1305,15 @@ var heatMap = function() {
 			$("#heatMapConfirm").on("click", function(e) {
 				
 				$("#heatmap1").html('');
-				$("#divCon1").css("background-image", "");
-				$("#divCon1").css(
-						{
-						"background-size": "100% auto",
-						"background-repeat": "repeat-x",
-//							"margin" : "0 auto",
-							"background-position":"center ",
-						"background-image":"url("+"../image/loading4.gif"+")"
-						});		
+//				$("#divCon1").css("background-image", "");
+//				$("#divCon1").css(
+//						{
+//						"background-size": "100% auto",
+//						"background-repeat": "repeat-x",
+////							"margin" : "0 auto",
+//							"background-position":"center ",
+//						"background-image":"url("+"../image/loading4.gif"+")"
+//						});		
 				var startTime = $("#select_time_begin_tab1").val();
 				var endTime = $("#select_time_end_tab1").val();
 				var startSplit = startTime.split(" ");

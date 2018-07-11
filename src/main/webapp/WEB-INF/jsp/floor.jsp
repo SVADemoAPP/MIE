@@ -27,6 +27,7 @@
 <!-- Css files -->
 <!-- Icons -->
 <link href="../plugins/newJs/css/icons.css" rel="stylesheet" />
+<link href="../css/style-loading.css" rel="stylesheet" />
 <!-- jQueryUI -->
 <link href="../plugins/newJs/css/sprflat-theme/jquery.ui.all.css"
 	rel="stylesheet" />
@@ -524,7 +525,7 @@ color: white;
 								<div id="divCon1" style="text-align: center;">
 									<div id="mapContainer1" class="demo-wrapper">
 										<div id="heatmap1" class="heatmap" style="height: 400px"></div>
-									</div>
+									 </div>
 								</div>
 							</div>
 						</div>
@@ -540,7 +541,17 @@ color: white;
                                  <h4 class="panel-title"style="font-size: 15px;color: white;"><i class="im-bars"></i><spring:message code="echart_tongji"></spring:message></h4>
                              </div>
                              <div class="panel-body">
-                                 <div id="ordered-bars-chart" style="width: 100%; height:350px;"></div>
+                                 <div id="ordered-bars-chart" style="width: 100%; height:350px;">
+								</div>
+                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -225px;position: absolute;margin-left: 30%;">
+                                  <span>L</span>
+                                  <span>o</span>
+                                  <span>a</span>
+                                  <span>d</span>
+                                  <span>i</span>
+                                  <span>n</span>
+                                  <span>g</span>
+                                </h1>								                                 
                              </div>
                          </div>
                          <!-- End .panel -->

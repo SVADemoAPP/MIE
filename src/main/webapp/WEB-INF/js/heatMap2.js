@@ -477,14 +477,15 @@ var initChartPeople = function(data1) {
 }
 var initChartBar = function()
 {
-	$("#ordered-bars-chart").css(
-			{
-			"background-size": "100% auto",
-			"background-repeat": "repeat-x",
-//				"margin" : "0 auto",
-				"background-position":"center ",
-			"background-image":"url("+"../image/loading4.gif"+")"
-			});		
+//	$("#ordered-bars-chart").css(
+//			{
+//			"background-size": "100% auto",
+//			"background-repeat": "repeat-x",
+////				"margin" : "0 auto",
+//				"background-position":"center ",
+//			"background-image":"url("+"../image/loading4.gif"+")"
+//			});	
+	$("#loadingId").show();
 	  $.post("/sva/market/getRates?storeId="+storeIds,function(data) {
 //		  for (var i = 0; i <= data.eRate.length; i += 1){
 //				d1.push([data.shopName[i], data.eRate[i]]);
@@ -496,6 +497,7 @@ var initChartBar = function()
 		  var oRate = data.oRate;//溢出率
 		  var dRate = data.dRate;//深访率
 		  var titile = [EnteringRate,OverflowRate,DeepRate]; 
+			$("#loadingId").hide();
 		  var myChart = echarts.init(document.getElementById("ordered-bars-chart")); 
 		  option = {
 				    tooltip: {

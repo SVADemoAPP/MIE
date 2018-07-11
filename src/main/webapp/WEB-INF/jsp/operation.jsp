@@ -27,6 +27,7 @@
 <!-- Css files -->
 <!-- Icons -->
 <link href="../plugins/newJs/css/icons.css" rel="stylesheet" />
+<link href="../css/style-loading.css" rel="stylesheet" />
 <!-- jQueryUI -->
 <link href="../plugins/newJs/css/sprflat-theme/jquery.ui.all.css"
 	rel="stylesheet" />
@@ -287,6 +288,15 @@
 							<div class="panel-body">
 								<div id="divCon1" style="text-align: center;">
 									<div id="genderCharts" style="height: 400px;"></div>
+                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -250px;position: absolute;margin-left: 34%;">
+                                  <span>L</span>
+                                  <span>o</span>
+                                  <span>a</span>
+                                  <span>d</span>
+                                  <span>i</span>
+                                  <span>n</span>
+                                  <span>g</span>
+                                </h1>									
 								</div>
 							</div>
 						</div>
@@ -307,6 +317,15 @@
 							<div class="panel-body">
 								<div id="divCon2" style="text-align: center;">
 									<div id="ageCharts" style="height: 400px;"></div>
+                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -250px;position: absolute;margin-left: 34%;">
+                                  <span>L</span>
+                                  <span>o</span>
+                                  <span>a</span>
+                                  <span>d</span>
+                                  <span>i</span>
+                                  <span>n</span>
+                                  <span>g</span>
+                                </h1>									
 								</div>
 							</div>
 						</div>
@@ -327,6 +346,15 @@
 							<div class="panel-body">
 								<div id="divCon3" style="text-align: center;">
 									<div id="localAddressCharts" style="height: 400px;"></div>
+                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -250px;position: absolute;margin-left: 34%;">
+                                  <span>L</span>
+                                  <span>o</span>
+                                  <span>a</span>
+                                  <span>d</span>
+                                  <span>i</span>
+                                  <span>n</span>
+                                  <span>g</span>
+                                </h1>									
 								</div>
 							</div>
 						</div>
@@ -347,6 +375,15 @@
 							<div class="panel-body">
 								<div id="divCon4" style="text-align: center;">
 									<div id="homeAddressCharts" style="height: 400px;"></div>
+                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -250px;position: absolute;margin-left: 34%;">
+                                  <span>L</span>
+                                  <span>o</span>
+                                  <span>a</span>
+                                  <span>d</span>
+                                  <span>i</span>
+                                  <span>n</span>
+                                  <span>g</span>
+                                </h1>									
 								</div>
 							</div>
 						</div>
@@ -368,6 +405,15 @@
 							<div class="panel-body">
 								<div id="divCon5" style="text-align: center;">
 									<div id="workAddressCharts" style="height: 400px;"></div>
+                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -250px;position: absolute;margin-left: 34%;">
+                                  <span>L</span>
+                                  <span>o</span>
+                                  <span>a</span>
+                                  <span>d</span>
+                                  <span>i</span>
+                                  <span>n</span>
+                                  <span>g</span>
+                                </h1>									
 								</div>
 							</div>
 						</div>
@@ -388,6 +434,15 @@
 							<div class="panel-body">
 								<div id="divCon6" style="text-align: center;">
 									<div id="abilityCharts" style="height: 400px;"></div>
+                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -250px;position: absolute;margin-left: 34%;">
+                                  <span>L</span>
+                                  <span>o</span>
+                                  <span>a</span>
+                                  <span>d</span>
+                                  <span>i</span>
+                                  <span>n</span>
+                                  <span>g</span>
+                                </h1>									
 								</div>
 							</div>
 						</div>
