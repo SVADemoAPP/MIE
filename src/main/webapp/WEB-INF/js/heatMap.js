@@ -144,7 +144,7 @@ var fuzhiFunction = function(id, id1, id2, nowArray, nowPeople, yesPeople,
 		nowPeopleTemp = downs;
 		nowBaifen = ((-((nowPeople-yesPeople) / yesPeople))*100).toFixed(2);
 	}
-	else if(nowPeople = yesPeople) {
+	else if(nowPeople == yesPeople) {
 		yanse = colours.red;
 		nowPeopleTemp = title_yes+"=";
 		nowBaifen = "0.00";
