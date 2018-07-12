@@ -24,7 +24,7 @@
 <body>
 	   <div id="myDiv" class="section1">
         <div id="myDiv1"class="section1_left">
-            <div class="logo" style="font-size: 48px; color: #fff;">登录</div>
+            <div class="logo" style="font-size: 48px; color: #fff;"></div>
             <form method="post" action="../account/login">
             <div class="login">
                 <div class="input-group input-group-lg" style="margin-bottom: 20px;">
