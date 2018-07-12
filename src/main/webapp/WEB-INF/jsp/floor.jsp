@@ -516,7 +516,7 @@ color: white;
 								</div>
 								<div id="ConfirmId" class="col-lg-1 col-md-1 col-sm-1 col-xs-1
 									style="margin-top: 0px;">
-									<button class="btn btn-success" id="heatMapConfirm" style="padding: 2px 5px 2px 5px;font-size: 13px;background-image: linear-gradient(#01ff67, #061300);">
+									<button class="btn btn-success" id="heatMapConfirm" style="margin-top: 3px;padding: 2px 5px 2px 5px;font-size: 13px;background-image: linear-gradient(#01ff67, #061300);">
 										<spring:message code="store_confirm"></spring:message>
 									</button>
 								</div>

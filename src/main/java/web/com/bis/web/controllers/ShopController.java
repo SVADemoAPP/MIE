@@ -639,13 +639,13 @@ public class ShopController {
         long yesStartTimel = yesEndTimel - 600*1000;
         String yesTbaleName =Params.LOCATION+ Util.dateFormat(calendar.getTime(), Params.YYYYMMDD);
         String yesStartTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
-        String yesEndTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
+//        String yesEndTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -6);
         String bigenTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String[] weeks = Util.getLastNumDays(7, Params.YYMMDD);
         List<WeekTotalModel> list = locationDao.getWeekDataByShopId(shopId, bigenTime, endTime);
         List<WeekTotalModel> list1 = locationDao.getWeekDataByShopId(shopId, endTime, endTime1);
-        List<WeekTotalModel> list2 = locationDao.getWeekDataByShopId(shopId, yesStartTime, yesEndTime);
+        List<WeekTotalModel> list2 = locationDao.getWeekDataByShopId(shopId, yesStartTime, endTime);
         for (int i = 0; i < weeks.length; i++) {
             weekUsercount.put(weeks[i], 0);
             weekDelaytime.put(String.valueOf(Util.dateFormatStringtoLong(weeks[i], Params.YYMMDD)), 0);

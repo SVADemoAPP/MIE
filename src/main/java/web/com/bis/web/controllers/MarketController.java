@@ -630,6 +630,7 @@ public class MarketController {
         modelMap.put("weekDelaytime", weekDelaytime);
 //        modelMap.put("weekNewUsercount", weekNewUsercount);
 
+        
         modelMap.put("allWeekCount", coefficientData(Integer.parseInt(String.valueOf(allWeekCount))));
         modelMap.put("allWeekAvgDelay", allWeekCount == 0 ? 0 : Util.sToM((allWeekTime * 60 / allWeekCount)));
         return modelMap;
@@ -730,13 +731,13 @@ public class MarketController {
         long yesStartTimel = yesEndTimel - 600*1000;
         String yesTbaleName =Params.LOCATION+ Util.dateFormat(calendar.getTime(), Params.YYYYMMDD);
         String yesStartTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
-        String yesEndTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
+//        String yesEndTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -6);
         String bigenTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String[] weeks = Util.getLastNumDays(7, Params.YYMMDD);
         List<WeekTotalModel> list = locationDao.getWeekDataByStoreId(storeId, bigenTime, endTime);
         List<WeekTotalModel> list1 = locationDao.getWeekDataByStoreId(storeId, endTime, endTime1);
-        List<WeekTotalModel> list2 = locationDao.getWeekDataByStoreId(storeId, yesStartTime, yesEndTime);
+        List<WeekTotalModel> list2 = locationDao.getWeekDataByStoreId(storeId, yesStartTime, endTime);
         for (int i = 0; i < weeks.length; i++) {
             weekUsercount.put(weeks[i], 0);
             weekDelaytime.put(weeks[i], 0);
@@ -802,13 +803,13 @@ public class MarketController {
         long yesStartTimel = yesEndTimel - 600*1000;
         String yesTbaleName =Params.LOCATION+ Util.dateFormat(calendar.getTime(), Params.YYYYMMDD);
         String yesStartTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
-        String yesEndTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
+//        String yesEndTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -6);
         String bigenTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String[] weeks = Util.getLastNumDays(7, Params.YYMMDD);
         List<WeekTotalModel> list = locationDao.getWeekDataByMapId(mapId, bigenTime, endTime);
         List<WeekTotalModel> list1 = locationDao.getWeekDataByMapId(mapId, endTime, endTime1);
-        List<WeekTotalModel> list2 = locationDao.getWeekDataByMapId(mapId, yesStartTime, yesEndTime);
+        List<WeekTotalModel> list2 = locationDao.getWeekDataByMapId(mapId, yesStartTime, endTime);
         for (int i = 0; i < weeks.length; i++) {
             weekUsercount.put(weeks[i], 0);
             weekDelaytime.put(weeks[i], 0);

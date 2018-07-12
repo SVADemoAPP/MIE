@@ -700,15 +700,15 @@
     </select>
     
     <select id="getWeekDataByStoreId" resultType="WeekTotalModel">
-       select  substring(time,3,8) mytime,storeId myId,max(allcounts) allCount,round(sum(delayTime*allCount)/sum(allCount),2) averageTime from bi_static_store_visitTime where storeId = #{storeId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by storeId,mytime order by mytime       
+       select  substring(time,3,8) mytime,storeId myId,max(allcounts) allCount,round(sum(delayTime*allCount)/sum(allCount),2) averageTime from bi_static_store_visitTime where storeId = #{storeId} and  time &gt; #{startTime} and time &lt; #{endTime} group by storeId,mytime order by mytime       
     </select>
     
     <select id="getWeekDataByMapId" resultType="WeekTotalModel">
-       select  substring(time,3,8) mytime,mapId myId,max(allcounts) allCount,round(sum(delayTime*allCount)/sum(allCount),2) averageTime from bi_static_floor_visitTime where mapId = #{mapId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by mapId,mytime order by mytime       
+       select  substring(time,3,8) mytime,mapId myId,max(allcounts) allCount,round(sum(delayTime*allCount)/sum(allCount),2) averageTime from bi_static_floor_visitTime where mapId = #{mapId} and  time &gt; #{startTime} and time &lt; #{endTime} group by mapId,mytime order by mytime       
     </select>
     
     <select id="getWeekDataByShopId" resultType="WeekTotalModel">
-       select  substring(time,3,8) mytime,shopId myId,max(allcounts) allCount,round(sum(delayTime*allCount)/sum(allCount),2) averageTime from bi_static_shop_visitTime where shopId = #{shopId} and  time &gt; #{startTime} and time &lt;= #{endTime} group by shopId,mytime order by mytime       
+       select  substring(time,3,8) mytime,shopId myId,max(allcounts) allCount,round(sum(delayTime*allCount)/sum(allCount),2) averageTime from bi_static_shop_visitTime where shopId = #{shopId} and  time &gt; #{startTime} and time &lt; #{endTime} group by shopId,mytime order by mytime       
     </select>
     
     <select id="getUserList" resultType="VisitTimeModel">
