@@ -1028,31 +1028,36 @@ public class QuartzJob {
                         for (int i = 0; i < names.length; i++) {
                             // {"date","ipv4","ipv6","acr","eci","gender","age","localAddress","homeAddress",
                             // "homeAddressCI","workAddress","workAddressCI","expendAbility"};
-                            switch (i) {
-                            case 1: // ipv4
-                                jsonObject.put(names[i], Util.isIp(values[i])?Util.convertIp(values[i]):"");
-                                break;
-                            case 3: // acr
-                            case 4: // eci
-                                jsonObject.put(names[i], values[i].length()<200?values[i]:"error");
-                                break;
-                            case 5: // gender
-                            case 6: // age
-                            case 12: // expendAbility
-                                jsonObject.put(names[i], "".equals(values[i])?"不详":values[i]);
-                                break;
+                        	if (Util.isIp(values[1])) {
+                        		switch (i) {
+                        		case 1: // ipv4
+                        			jsonObject.put(names[i], Util.convertIp(values[i]));
+                        			break;
+                        		case 3: // acr
+                        		case 4: // eci
+                        			jsonObject.put(names[i], values[i].length()<200?values[i]:"error");
+                        			break;
+                        		case 5: // gender
+                        		case 6: // age
+                        		case 12: // expendAbility
+                        			jsonObject.put(names[i], "".equals(values[i])?"不详":values[i]);
+                        			break;
 //                            case 7: // localAddress
 //                                break;
 //                            case 8: // homeAddress
 //                            case 10: // workAddress
 //                                break;
-                            default:
-                                jsonObject.put(names[i], values[i]);
-                                break;
-                            }
+                        		default:
+                        			jsonObject.put(names[i], values[i]);
+                        			break;
+                        		}
+                        	}
                         }
                         jsonObject.put("time", dateKey);
-                        list.add(jsonObject);
+                        if (values.length>=14&&Util.isIp(values[1])) {
+                        	  list.add(jsonObject);
+						}
+                      
                     }
                     reader.close();
                 } catch (IOException e) {
@@ -1071,7 +1076,9 @@ public class QuartzJob {
                         }
                     }
                 }
-                visitorDao.saveData(list);
+                if (list.size()>0) {
+                	visitorDao.saveData(list);
+				}
             }
 //            LOG.debug("VisitorController~插入Visitor数据条数:" + num);
         } else {
