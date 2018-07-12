@@ -509,8 +509,8 @@ h1.loadingtext {
   text-align: center;
   text-transform: uppercase;
   font-family: 'Nunito', sans-serif;
-  font-size: 4.6875em;
-  color: transparent;
+  font-size: 1.2475em;;
+  /*color: transparent;*/
   letter-spacing: 0.01em;
 }
 h1.loadingtext span {

@@ -102,13 +102,13 @@ div.svgCotainer {
 	<div id="header">
 		<div class="container-fluid">
 			<div class="navbar">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="../market/getMarketInfo"><span
-						class="text-logo" style="margin: 14px 5px 0 18%; height: 35px;color: #E9D7B5">航洋国际慧商平台</span><span class="text-slogan"></span>
-					</a>
-				</div>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="../market/getMarketInfo"><span
+                        class="text-logo" style="margin: 17px 5px 0 5%;height: 35px;color: #ffffff; ">航洋国际慧商平台</span><span class="text-slogan"></span>
+                    </a>
+                </div>
 				<nav class="top-nav" role="navigation">
-				<ul class="nav navbar-nav pull-left"style="margin-top: 15px;">
+				<ul class="nav navbar-nav pull-left"style="margin-top: 17px;">
 					<li id="toggle-sidebar-li"><a href="#" id="toggle-sidebar"><i
 							class="en-arrow-left2"></i> </a></li>
 					<li><a href="#" class="full-screen"><i
@@ -212,10 +212,10 @@ div.svgCotainer {
 				<!-- Start .row -->
 				<!-- Start .page-header -->
 				<div class="col-lg-12 heading">
-					<h1 class="page-header">
+				<!-- Start	<h1 class="page-header">
 						<i class="fa-pencil"></i><spring:message code="shop_config"></spring:message>
 					</h1>
-					<!-- Start .bredcrumb -->
+					 .bredcrumb -->
 					<ul id="crumb" class="breadcrumb">
 					</ul>
 					<!-- End .breadcrumb -->

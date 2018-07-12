@@ -131,3 +131,8 @@ body{
 .demo-wrapper {
     position: relative;
 }
+.myTile{
+    margin: 17px 5px 0 5%;
+    height: 35px;
+    color: #ffffff;	
+}

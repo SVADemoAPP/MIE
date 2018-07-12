@@ -726,6 +726,9 @@ public class MarketController {
         String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String endTime1 = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -1);
+        long yesEndTimel =calendar.getTimeInMillis();
+        long yesStartTimel = yesEndTimel - 600*1000;
+        String yesTbaleName =Params.LOCATION+ Util.dateFormat(calendar.getTime(), Params.YYYYMMDD);
         String yesStartTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String yesEndTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -6);
@@ -759,16 +762,18 @@ public class MarketController {
             yesAverageTime = list2.get(0).getAverageTime();
         }
         long endTimes = System.currentTimeMillis();
-        long startTime =endTimes  - durationOfLocation*1000;
+        long startTime =endTimes  - 600*1000;
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
         long userCount = locationDao.getStoreMomentCount(startTime, endTimes, tableName, storeId);
+        long yesUserCounts = locationDao.getStoreMomentCount(yesStartTimel, yesEndTimel, yesTbaleName, storeId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
         modelMap.put("todayUser", coefficientData(nowUserCount));
         modelMap.put("todayAvgDelay", nowAverageTime);
-        modelMap.put("yesUser", coefficientData(yesUserCount));
+        modelMap.put("yesUser1", coefficientData(Integer.parseInt(String.valueOf(yesUserCounts))));
+        modelMap.put("yesUser", coefficientData(Integer.parseInt(String.valueOf(yesUserCount))));
         modelMap.put("yesAvgDelay", yesAverageTime);
         modelMap.put("weekUsercount", weekUsercount);
         modelMap.put("weekDelaytime", weekDelaytime);
@@ -793,6 +798,9 @@ public class MarketController {
         String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String endTime1 = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -1);
+        long yesEndTimel =calendar.getTimeInMillis();
+        long yesStartTimel = yesEndTimel - 600*1000;
+        String yesTbaleName =Params.LOCATION+ Util.dateFormat(calendar.getTime(), Params.YYYYMMDD);
         String yesStartTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String yesEndTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -6);
@@ -832,11 +840,13 @@ public class MarketController {
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
         long userCount = locationDao.getFloorMomentCount(startTime, endTimes, tableName, mapId);
+        long yesUserCounts = locationDao.getFloorMomentCount(yesStartTimel, yesEndTimel, yesTbaleName, mapId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
         modelMap.put("todayUser", coefficientData(nowUserCount));
         modelMap.put("todayAvgDelay", nowAverageTime);
         modelMap.put("yesUser", coefficientData(yesUserCount));
+        modelMap.put("yesUser1", coefficientData(Integer.parseInt(String.valueOf(yesUserCounts))));
         modelMap.put("yesAvgDelay", yesAverageTime);
         modelMap.put("weekUsercount", weekUsercount);
         modelMap.put("weekDelaytime", weekDelaytime);

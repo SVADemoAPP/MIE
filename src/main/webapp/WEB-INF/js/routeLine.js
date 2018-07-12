@@ -9,8 +9,8 @@ var RouteLine = function() {
 		var newWidth, newHeight, imgScale;
 		var divWidth = parseInt($("#routeLine").css("width").slice(0, -2));
 
-		if (divWidth / 530 > width / height) {
-			newHeight = 530;
+		if (divWidth / 480 > width / height) {
+			newHeight = 480;
 			imgScale = height / newHeight;
 			newWidth = width / imgScale;
 		} else {

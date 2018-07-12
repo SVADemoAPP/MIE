@@ -178,6 +178,211 @@ public class VisitorController {
      * @param shopId
      * @return
      */
+    @RequestMapping(value = "/getData1", method = { RequestMethod.POST })
+    @ResponseBody
+    public Map<String, Object> getData1(HttpServletRequest request, @RequestParam("field") String field,
+            @RequestParam("id") String id, @RequestParam(value = "startTime", required = false) String startTime,
+            @RequestParam(value = "endTime", required = false) String endTime,
+            @RequestParam(value = "storeId", required = false) String storeId) {
+
+        List<Map<String, Object>> genderList = new ArrayList<>();
+        List<Map<String, Object>> abilityList = new ArrayList<>();
+//        String[] agePeriod = { "00后", "90后", "80后", "70后", "69前" };
+//        String[] abilityPeriod = { "50以内", "50到100", "100到200", "200到500", "500以上" };
+//        for (int i = 0; i < agePeriod.length; i++) {
+//            Map<String, Object> newMap = new HashMap<>();
+//            newMap.put("name", agePeriod[i]);
+//            newMap.put("value", 0);
+//            ageList.add(newMap);
+//        }
+//        for (int i = 0; i < abilityPeriod.length; i++) {
+//            Map<String, Object> newMap = new HashMap<>();
+//            newMap.put("name", abilityPeriod[i]);
+//            newMap.put("value", 0);
+//            abilityList.add(newMap);
+//        }
+        Calendar calendar = Calendar.getInstance();
+        // 不传endTime则默认查3个月之内的
+        if (StringUtils.isEmpty(endTime)) {
+            endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMDD2);
+            calendar.add(Calendar.MONTH, -2);
+            startTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMDD2);
+        }
+        List<String> tableNameList = Util.getPeriodMonthList(startTime, endTime);
+//        calendar.setTime(new Date());
+        for (String tableName : tableNameList) {
+            // 表存在
+            if (statisticsDao.isTableExist(tableName, this.db) > 0) {
+                if ("shopId".equals(field)) {
+                    // 从00后的岁数开始查
+                    merge(genderList, dao.getDataByShopId("gender", id, startTime, endTime, tableName));
+                    merge(abilityList,
+                            dao.getAbilityByShopId( id, startTime, endTime, tableName));
+                } else if ("categoryId".equals(field)) {
+                    // 保证在规定商场，所以要加storeId限制
+                    merge(genderList, dao.getDataByCategoryId("gender", id, startTime, endTime, tableName, storeId));
+                    merge(abilityList, dao.getAbilityByCategoryId( id, startTime, endTime,
+                            tableName, storeId));
+                } else if ("storeId".equals(field)) {
+                    merge(genderList, dao.getDataByStoreId("gender", id, startTime, endTime, tableName));
+                    merge(abilityList,
+                            dao.getAbilityByStoreId(id, startTime, endTime, tableName));
+                }
+            }
+        }
+
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        modelMap.put("genderList", addRation(genderList));
+        modelMap.put("abilityList", addRation(abilityList));
+        modelMap.put("status", Params.RETURN_CODE_200);
+        return modelMap;
+    }
+    
+    /**
+     * 
+     * @Title: getData
+     * @Description: 获取性别统计，来源地统计，工作地统计
+     * @param request
+     * @param shopId
+     * @return
+     */
+    @RequestMapping(value = "/getData2", method = { RequestMethod.POST })
+    @ResponseBody
+    public Map<String, Object> getData2(HttpServletRequest request, @RequestParam("field") String field,
+            @RequestParam("id") String id, @RequestParam(value = "startTime", required = false) String startTime,
+            @RequestParam(value = "endTime", required = false) String endTime,
+            @RequestParam(value = "storeId", required = false) String storeId) {
+
+
+        List<Map<String, Object>> localAddressList = new ArrayList<>();
+        List<Map<String, Object>> homeAddressList = new ArrayList<>();
+
+//        String[] agePeriod = { "00后", "90后", "80后", "70后", "69前" };
+//        String[] abilityPeriod = { "50以内", "50到100", "100到200", "200到500", "500以上" };
+//        for (int i = 0; i < agePeriod.length; i++) {
+//            Map<String, Object> newMap = new HashMap<>();
+//            newMap.put("name", agePeriod[i]);
+//            newMap.put("value", 0);
+//            ageList.add(newMap);
+//        }
+//        for (int i = 0; i < abilityPeriod.length; i++) {
+//            Map<String, Object> newMap = new HashMap<>();
+//            newMap.put("name", abilityPeriod[i]);
+//            newMap.put("value", 0);
+//            abilityList.add(newMap);
+//        }
+        Calendar calendar = Calendar.getInstance();
+        // 不传endTime则默认查3个月之内的
+        if (StringUtils.isEmpty(endTime)) {
+            endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMDD2);
+            calendar.add(Calendar.MONTH, -2);
+            startTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMDD2);
+        }
+        List<String> tableNameList = Util.getPeriodMonthList(startTime, endTime);
+//        calendar.setTime(new Date());
+        for (String tableName : tableNameList) {
+            // 表存在
+            if (statisticsDao.isTableExist(tableName, this.db) > 0) {
+                if ("shopId".equals(field)) {
+                    // 从00后的岁数开始查
+                    merge(localAddressList, dao.getData2ByShopId("localAddress", id, startTime, endTime, tableName));
+                    merge(homeAddressList, dao.getData3ByShopId("homeAddress", id, startTime, endTime, tableName));
+                } else if ("categoryId".equals(field)) {
+                    // 保证在规定商场，所以要加storeId限制
+                    merge(localAddressList,
+                            dao.getData2ByCategoryId("localAddress", id, startTime, endTime, tableName, storeId));
+                    merge(homeAddressList,
+                            dao.getData3ByCategoryId("homeAddress", id, startTime, endTime, tableName, storeId));
+                } else if ("storeId".equals(field)) {
+                    merge(localAddressList, dao.getData2ByStoreId("localAddress", id, startTime, endTime, tableName));
+                    merge(homeAddressList, dao.getData3ByStoreId("homeAddress", id, startTime, endTime, tableName));
+                }
+            }
+        }
+
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        modelMap.put("localAddressList", (addRation(localAddressList)));
+        modelMap.put("homeAddressList", sortTop15(addRation(homeAddressList)));
+        modelMap.put("status", Params.RETURN_CODE_200);
+        return modelMap;
+    }
+    
+    /**
+     * 
+     * @Title: getData
+     * @Description: 获取性别统计，来源地统计，工作地统计
+     * @param request
+     * @param shopId
+     * @return
+     */
+    @RequestMapping(value = "/getData3", method = { RequestMethod.POST })
+    @ResponseBody
+    public Map<String, Object> getData3(HttpServletRequest request, @RequestParam("field") String field,
+            @RequestParam("id") String id, @RequestParam(value = "startTime", required = false) String startTime,
+            @RequestParam(value = "endTime", required = false) String endTime,
+            @RequestParam(value = "storeId", required = false) String storeId) {
+
+        List<Map<String, Object>> workAddressList = new ArrayList<>();
+        List<Map<String, Object>> ageList = new ArrayList<>();
+//        String[] agePeriod = { "00后", "90后", "80后", "70后", "69前" };
+//        String[] abilityPeriod = { "50以内", "50到100", "100到200", "200到500", "500以上" };
+//        for (int i = 0; i < agePeriod.length; i++) {
+//            Map<String, Object> newMap = new HashMap<>();
+//            newMap.put("name", agePeriod[i]);
+//            newMap.put("value", 0);
+//            ageList.add(newMap);
+//        }
+//        for (int i = 0; i < abilityPeriod.length; i++) {
+//            Map<String, Object> newMap = new HashMap<>();
+//            newMap.put("name", abilityPeriod[i]);
+//            newMap.put("value", 0);
+//            abilityList.add(newMap);
+//        }
+        Calendar calendar = Calendar.getInstance();
+        // 不传endTime则默认查3个月之内的
+        if (StringUtils.isEmpty(endTime)) {
+            endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMDD2);
+            calendar.add(Calendar.MONTH, -2);
+            startTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMDD2);
+        }
+        List<String> tableNameList = Util.getPeriodMonthList(startTime, endTime);
+//        calendar.setTime(new Date());
+        for (String tableName : tableNameList) {
+            // 表存在
+            if (statisticsDao.isTableExist(tableName, this.db) > 0) {
+                if ("shopId".equals(field)) {
+                    // 从00后的岁数开始查
+                    merge(ageList,
+                            dao.getAgeByShopId(id, startTime, endTime, tableName));
+                    merge(workAddressList, dao.getData3ByShopId("workAddress", id, startTime, endTime, tableName));
+                } else if ("categoryId".equals(field)) {
+                    // 保证在规定商场，所以要加storeId限制
+                    merge(ageList, dao.getAgeByCategoryId(id, startTime, endTime,
+                            tableName, storeId));
+                    merge(workAddressList,
+                            dao.getData3ByCategoryId("workAddress", id, startTime, endTime, tableName, storeId));
+                } else if ("storeId".equals(field)) {
+                    merge(ageList,
+                            dao.getAgeByStoreId(id, startTime, endTime, tableName));
+                    merge(workAddressList, dao.getData3ByStoreId("workAddress", id, startTime, endTime, tableName));
+                }
+            }
+        }
+
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        modelMap.put("workAddressList", sortTop15(addRation(workAddressList)));
+        modelMap.put("ageList", addRation(ageList));
+        modelMap.put("status", Params.RETURN_CODE_200);
+        return modelMap;
+    }
+    /**
+     * 
+     * @Title: getData
+     * @Description: 获取性别统计，来源地统计，工作地统计
+     * @param request
+     * @param shopId
+     * @return
+     */
     @RequestMapping(value = "/getData", method = { RequestMethod.POST })
     @ResponseBody
     public Map<String, Object> getData(HttpServletRequest request, @RequestParam("field") String field,
@@ -517,11 +722,13 @@ public class VisitorController {
         List<Map<String, Object>> returnList = new ArrayList<>();
         for (int i = 0; i < mapList.size(); i++) {
             WeekTotalModel map = mapList.get(i);
-            float temp = Util.getTwoPointNumber((float) ((long) coefficientData(map.getAllCount() * 100)) / coefficientData(sum));          
-            Map<String, Object> newMap = new HashMap<>();
-            newMap.put("name", map.getMyTime() + ":" + temp + "%");
-            newMap.put("value", coefficientData(map.getAllCount()));
-            returnList.add(newMap);
+            if (sum!=0) {
+                float temp = Util.getTwoPointNumber((float) ((long) coefficientData(map.getAllCount() * 100)) / coefficientData(sum));          
+                Map<String, Object> newMap = new HashMap<>();
+                newMap.put("name", map.getMyTime() + ":" + temp + "%");
+                newMap.put("value", coefficientData(map.getAllCount()));
+                returnList.add(newMap);
+            }
         }
         return returnList;
     }

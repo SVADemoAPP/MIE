@@ -93,11 +93,11 @@
 			<div class="navbar">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="../market/getMarketInfo"><span
-						class="text-logo" style="margin: 14px 5px 0 18%; height: 35px;color: #E9D7B5">航洋国际慧商平台</span><span class="text-slogan"></span>
+						class="text-logo" style="margin: 17px 5px 0 5%;height: 35px;color: #ffffff; ">航洋国际慧商平台</span><span class="text-slogan"></span>
 					</a>
 				</div>
 				<nav class="top-nav" role="navigation">
-					<ul class="nav navbar-nav pull-left">
+					<ul class="nav navbar-nav pull-left"style="margin-top: 3px">
 						<li id="toggle-sidebar-li"><a href="#" id="toggle-sidebar"><i
 								class="en-arrow-left2"></i> </a></li>
 						<li><a href="#" class="full-screen"><i
@@ -207,11 +207,11 @@
 				<!-- Start .row -->
 				<!-- Start .page-header -->
 				<div class="col-lg-12 heading">
-					<h1 class="page-header">
+					<!--<h1 class="page-header">
 						<i class="br-stats"></i>
 						<spring:message code="operation"></spring:message>
 					</h1>
-					<!-- Start .bredcrumb -->
+					 Start .bredcrumb -->
 					<ul id="crumb" class="breadcrumb">
 					</ul>
 					<!-- End .breadcrumb -->
@@ -222,7 +222,7 @@
 			<div class="outlet" >
 				<div class="row" style="margin-bottom: 10px;">
 					<div class="col-lg-6 col-md-6">
-						<label style="text-align: center; margin-top: 1%;"
+						<label style="text-align: center; margin-top: 9px;font-size: 13px;"
 							class="col-lg-1 col-md-1 control-label"><spring:message
 								code="operation_mall"></spring:message></label>
 						<div class="col-lg-3 col-md-3">
@@ -230,7 +230,7 @@
 								id="mallId">
 							</select>
 						</div>
-						<label style="text-align: center; margin-top: 1%;"
+						<label style="text-align: center; margin-top: 9px;font-size: 13px;"
 							class="col-lg-1 col-md-1 control-label"><spring:message
 								code="operation_category"></spring:message></label>
 						<div class="col-lg-3 col-md-3">
@@ -238,7 +238,7 @@
 								id="categoryId">
 							</select>
 						</div>
-						<label style="text-align: center; margin-top: 1%;"
+						<label style="text-align: center; margin-top: 9px;font-size: 13px;"
 							class="col-lg-1 col-md-1 control-label"><spring:message
 								code="operation_shop"></spring:message></label>
 						<div class="col-lg-3 col-md-3">
@@ -249,10 +249,10 @@
 					</div>
 					<div class="col-lg-6 col-md-6">
 						<label
-							style="margin-top: 7px; "
+							style="margin-top: 9px;font-size: 13px;"
 							class="col-lg-2 col-md-2 control-label"><spring:message
 								code="operation_datePicker"></spring:message></label>
-						<div class="col-lg-4 col-md-4" style="margin-top: 3px;">
+						<div class="col-lg-4 col-md-4" style="margin-top: 6px;">
 							<input class="sang_Calender " style="width: 60%;"
 								id="select_time_begin_tab1" onclick="getDatePicker(this)"
 								readonly /> <img
@@ -260,14 +260,14 @@
 								onclick="getDatePicker('select_time_begin_tab1');">~
 						</div>
 						<div id="timeId" class="col-lg-4 col-md-4 myhide"
-							style="margin-top: 3px;">
+							style="margin-top: 6px;">
 							<input class="sang_Calender" style="width: 60%;"
 								id="select_time_end_tab1" onclick="getDatePicker1(this)"
 								readonly /> <img
 								src="../plugins/My97DatePicker/skin/datePicker.gif"
 								onclick="getDatePicker1('select_time_end_tab1');">
 						</div>
-						<div id="confirmId" class="col-lg-2 col-md-2 myhide">
+						<div id="confirmId" style="margin-top: 4px;" class="col-lg-2 col-md-2 myhide">
 							<button class="btn btn-success" id="heatMapConfirm" style="padding-top:2%;padding-bottom:2%;">
 								<spring:message code="store_confirm"></spring:message>
 							</button>
@@ -288,14 +288,14 @@
 							<div class="panel-body">
 								<div id="divCon1" style="text-align: center;">
 									<div id="genderCharts" style="height: 400px;"></div>
-                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -250px;position: absolute;margin-left: 34%;">
-                                  <span>L</span>
-                                  <span>o</span>
-                                  <span>a</span>
-                                  <span>d</span>
-                                  <span>i</span>
-                                  <span>n</span>
-                                  <span>g</span>
+                                <h1  id="loadinggenderCharts"class="loadingtext" style="display:none;margin-top: -210px;position: absolute;margin-left: 40%;">
+                                  <span>加</span>
+                                  <span>载</span>
+                                  <span>中</span>
+                                  <span>请</span>
+                                  <span>稍</span>
+                                  <span>后</span>
+                                  <span>...</span>
                                 </h1>									
 								</div>
 							</div>
@@ -317,14 +317,14 @@
 							<div class="panel-body">
 								<div id="divCon2" style="text-align: center;">
 									<div id="ageCharts" style="height: 400px;"></div>
-                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -250px;position: absolute;margin-left: 34%;">
-                                  <span>L</span>
-                                  <span>o</span>
-                                  <span>a</span>
-                                  <span>d</span>
-                                  <span>i</span>
-                                  <span>n</span>
-                                  <span>g</span>
+                                <h1  id="loadingageCharts"class="loadingtext" style="display:none;margin-top: -210px;position: absolute;margin-left: 40%;">
+                                  <span>加</span>
+                                  <span>载</span>
+                                  <span>中</span>
+                                  <span>请</span>
+                                  <span>稍</span>
+                                  <span>后</span>
+                                  <span>...</span>
                                 </h1>									
 								</div>
 							</div>
@@ -346,14 +346,14 @@
 							<div class="panel-body">
 								<div id="divCon3" style="text-align: center;">
 									<div id="localAddressCharts" style="height: 400px;"></div>
-                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -250px;position: absolute;margin-left: 34%;">
-                                  <span>L</span>
-                                  <span>o</span>
-                                  <span>a</span>
-                                  <span>d</span>
-                                  <span>i</span>
-                                  <span>n</span>
-                                  <span>g</span>
+                                <h1  id="loadinglocalAddressCharts"class="loadingtext" style="display:none;margin-top: -210px;position: absolute;margin-left: 40%;">
+                                  <span>加</span>
+                                  <span>载</span>
+                                  <span>中</span>
+                                  <span>请</span>
+                                  <span>稍</span>
+                                  <span>后</span>
+                                  <span>...</span>
                                 </h1>									
 								</div>
 							</div>
@@ -375,14 +375,14 @@
 							<div class="panel-body">
 								<div id="divCon4" style="text-align: center;">
 									<div id="homeAddressCharts" style="height: 400px;"></div>
-                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -250px;position: absolute;margin-left: 34%;">
-                                  <span>L</span>
-                                  <span>o</span>
-                                  <span>a</span>
-                                  <span>d</span>
-                                  <span>i</span>
-                                  <span>n</span>
-                                  <span>g</span>
+                                <h1  id="loadinghomeAddressCharts"class="loadingtext" style="display:none;margin-top: -210px;position: absolute;margin-left: 40%;">
+                                  <span>加</span>
+                                  <span>载</span>
+                                  <span>中</span>
+                                  <span>请</span>
+                                  <span>稍</span>
+                                  <span>后</span>
+                                  <span>...</span>
                                 </h1>									
 								</div>
 							</div>
@@ -405,14 +405,14 @@
 							<div class="panel-body">
 								<div id="divCon5" style="text-align: center;">
 									<div id="workAddressCharts" style="height: 400px;"></div>
-                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -250px;position: absolute;margin-left: 34%;">
-                                  <span>L</span>
-                                  <span>o</span>
-                                  <span>a</span>
-                                  <span>d</span>
-                                  <span>i</span>
-                                  <span>n</span>
-                                  <span>g</span>
+                                <h1  id="loadingworkAddressCharts"class="loadingtext" style="display:none;margin-top: -210px;position: absolute;margin-left: 40%;">
+                                  <span>加</span>
+                                  <span>载</span>
+                                  <span>中</span>
+                                  <span>请</span>
+                                  <span>稍</span>
+                                  <span>后</span>
+                                  <span>...</span>
                                 </h1>									
 								</div>
 							</div>
@@ -434,14 +434,14 @@
 							<div class="panel-body">
 								<div id="divCon6" style="text-align: center;">
 									<div id="abilityCharts" style="height: 400px;"></div>
-                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -250px;position: absolute;margin-left: 34%;">
-                                  <span>L</span>
-                                  <span>o</span>
-                                  <span>a</span>
-                                  <span>d</span>
-                                  <span>i</span>
-                                  <span>n</span>
-                                  <span>g</span>
+                                <h1  id="loadingabilityCharts"class="loadingtext" style="display:none;margin-top: -210px;position: absolute;margin-left: 40%;">
+                                  <span>加</span>
+                                  <span>载</span>
+                                  <span>中</span>
+                                  <span>请</span>
+                                  <span>稍</span>
+                                  <span>后</span>
+                                  <span>...</span>
                                 </h1>									
 								</div>
 							</div>

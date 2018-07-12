@@ -191,7 +191,7 @@ var getAllData = function() {
 //			"background-image":"url("+"../image/loading4.gif"+")"
 //			});	
 	$(".loadingtext").show();
-	$.post("../visitor/getData", params, function(data) {
+	$.post("../visitor/getData1", params, function(data) {
 		if (data.status == 200) {
 //			$("#divCon1").css("background-image","");
 //			$("#divCon2").css("background-image","");
@@ -199,19 +199,85 @@ var getAllData = function() {
 //			$("#divCon4").css("background-image","");
 //			$("#divCon5").css("background-image","");
 //			$("#divCon6").css("background-image","");
-			$(".loadingtext").hide();
+			$("#loadinggenderCharts").hide();
+			$("#loadingabilityCharts").hide();
 			showPieCharts(data.genderList, "genderCharts", 100);
-			showPieCharts(data.ageList, "ageCharts", 100);
-			showBarCharts(data.localAddressList, "localAddressCharts",
-					[ colours.blue ]);
-			showBarCharts(data.homeAddressList, "homeAddressCharts",
-					[ colours.red ]);
-			showBarCharts(data.workAddressList, "workAddressCharts",
-					[ colours.green ]);
+//			showPieCharts(data.ageList, "ageCharts", 100);
+//			showBarCharts(data.localAddressList, "localAddressCharts",
+//					[ colours.blue ]);
+//			showBarCharts(data.homeAddressList, "homeAddressCharts",
+//					[ colours.red ]);
+//			showBarCharts(data.workAddressList, "workAddressCharts",
+//					[ colours.green ]);
 			showPieCharts(data.abilityList, "abilityCharts", 100);
 		}
 
 	});
+	$.post("../visitor/getData2", params, function(data) {
+		if (data.status == 200) {
+//			$("#divCon1").css("background-image","");
+//			$("#divCon2").css("background-image","");
+//			$("#divCon3").css("background-image","");
+//			$("#divCon4").css("background-image","");
+//			$("#divCon5").css("background-image","");
+//			$("#divCon6").css("background-image","");
+			$("#loadinglocalAddressCharts").hide();
+			$("#loadinghomeAddressCharts").hide();
+//			showPieCharts(data.genderList, "genderCharts", 100);
+//			showPieCharts(data.ageList, "ageCharts", 100);
+			showBarCharts(data.localAddressList, "localAddressCharts",
+					[ colours.blue ]);
+			showBarCharts(data.homeAddressList, "homeAddressCharts",
+					[ colours.red ]);
+//			showBarCharts(data.workAddressList, "workAddressCharts",
+//					[ colours.green ]);
+//			showPieCharts(data.abilityList, "abilityCharts", 100);
+		}
+
+	});
+	$.post("../visitor/getData3", params, function(data) {
+		if (data.status == 200) {
+//			$("#divCon1").css("background-image","");
+//			$("#divCon2").css("background-image","");
+//			$("#divCon3").css("background-image","");
+//			$("#divCon4").css("background-image","");
+//			$("#divCon5").css("background-image","");
+//			$("#divCon6").css("background-image","");
+			$("#loadingageCharts").hide();
+			$("#loadingworkAddressCharts").hide();
+//			showPieCharts(data.genderList, "genderCharts", 100);
+			showPieCharts(data.ageList, "ageCharts", 100);
+//			showBarCharts(data.localAddressList, "localAddressCharts",
+//					[ colours.blue ]);
+//			showBarCharts(data.homeAddressList, "homeAddressCharts",
+//					[ colours.red ]);
+			showBarCharts(data.workAddressList, "workAddressCharts",
+					[ colours.green ]);
+//			showPieCharts(data.abilityList, "abilityCharts", 100);
+		}
+
+	});
+//	$.post("../visitor/getData", params, function(data) {
+//		if (data.status == 200) {
+////			$("#divCon1").css("background-image","");
+////			$("#divCon2").css("background-image","");
+////			$("#divCon3").css("background-image","");
+////			$("#divCon4").css("background-image","");
+////			$("#divCon5").css("background-image","");
+////			$("#divCon6").css("background-image","");
+//			$(".loadingtext").hide();
+//			showPieCharts(data.genderList, "genderCharts", 100);
+//			showPieCharts(data.ageList, "ageCharts", 100);
+//			showBarCharts(data.localAddressList, "localAddressCharts",
+//					[ colours.blue ]);
+//			showBarCharts(data.homeAddressList, "homeAddressCharts",
+//					[ colours.red ]);
+//			showBarCharts(data.workAddressList, "workAddressCharts",
+//					[ colours.green ]);
+//			showPieCharts(data.abilityList, "abilityCharts", 100);
+//		}
+//
+//	});
 };
 
 var operation = function() {

@@ -635,6 +635,9 @@ public class ShopController {
         String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String endTime1 = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -1);
+        long yesEndTimel =calendar.getTimeInMillis();
+        long yesStartTimel = yesEndTimel - 600*1000;
+        String yesTbaleName =Params.LOCATION+ Util.dateFormat(calendar.getTime(), Params.YYYYMMDD);
         String yesStartTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String yesEndTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -6);
@@ -673,11 +676,13 @@ public class ShopController {
         String tableName = Params.LOCATION + nowDay;
         long nowTimes = System.currentTimeMillis();
         long times = nowTimes - durationOfLocation*1000;
-        int count = locationDao.getNowCount(times, tableName, shopModel);
+        int count = locationDao.getNowCounts(times,nowTimes, tableName, shopModel);
+        int yesCount = locationDao.getNowCounts(yesStartTimel,yesEndTimel,yesTbaleName, shopModel);
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put("allData", weekUsercount);
         modelMap.put("timeData", weekDelaytime);
-        modelMap.put("nowPeople",count );
+        modelMap.put("nowPeople",coefficientData(count));
+        modelMap.put("yesPeople",coefficientData(yesCount));
 //        modelMap.put("yesPeople", coefficientData(yesCount));
         
         modelMap.put("yesAllPeople", coefficientData(yesUserCount));

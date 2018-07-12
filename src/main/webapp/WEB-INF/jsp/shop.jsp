@@ -91,13 +91,13 @@
 	<div id="header">
 		<div class="container-fluid">
 			<div class="navbar">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="../market/getMarketInfo"><span
-						class="text-logo" style="margin: 14px 5px 0 18%; height: 35px;color: #E9D7B5">航洋国际慧商平台</span><span class="text-slogan"></span>
-					</a>
-				</div>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="../market/getMarketInfo"><span
+                        class="text-logo" style="margin: 17px 5px 0 5%;height: 35px;color: #ffffff; ">航洋国际慧商平台</span><span class="text-slogan"></span>
+                    </a>
+                </div>
 				<nav class="top-nav" role="navigation">
-					<ul class="nav navbar-nav pull-left">
+					<ul class="nav navbar-nav pull-left"style="margin-top: 3px">
 						<li id="toggle-sidebar-li"><a href="#" id="toggle-sidebar"><i
 								class="en-arrow-left2"></i> </a></li>
 						<li><a href="#" class="full-screen"><i
@@ -205,11 +205,11 @@
 				<!-- Start .row -->
 				<!-- Start .page-header -->
 				<div class="col-lg-12  col-md-12 col-sm-12 col-xs-12 heading">
-					<h1 class="page-header">
+				<!--	<h1 class="page-header">
 						<i class="br-basket"></i>
 						<spring:message code="shop1"></spring:message>
 					</h1>
-					<!-- Start .bredcrumb -->
+					 Start .bredcrumb -->
 					<ul id="crumb" class="breadcrumb">
 					</ul>
 					<!-- End .breadcrumb -->
@@ -219,7 +219,7 @@
 			<!-- End .row -->
 			<div class="outlet"style="font-size: 15px;">
 				<div class="row" style="margin-bottom: 10px;">
-					<label style="text-align: center; margin-top: 7px;"
+					<label style="text-align: center; margin-top: 7px;font-size:13px"
 						class="col-lg-1 col-md-1 col-sm-1 col-xs-1 control-label"><spring:message
 							code="shop_name"></spring:message></label>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -484,25 +484,25 @@
 						<div class="panel-default toggle ">
 							<!-- Start .panel -->
 							<div class="panel-heading"style="background-color: #71d398;">
-								<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+								<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
 									<h4 class="panel-title"style="font-size: 15px;color: white;">
 										<i class="im-fire"></i>
 										<spring:message code="mall_time_heatMap"></spring:message>
 									</h4>
 								</div>
-								<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="margin-top: 5px;font-size:12px;">
+								<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="margin-top: 5px;font-size:8px;">
 									<input class="sang_Calender" style="width: 78%;"
 										id="select_time_begin_tab1" onclick="getDatePicker(this)"
 										readonly />
 								</div>
 								<div id="timeId" class="col-lg-3 col-md-3 col-sm-3 col-xs-3"
-									style="margin-top: 5px;font-size:12px;">
-									<input class="sang_Calender" style="width: 76%;"
+									style="margin-top: 5px;font-size:8px;">
+									<input class="sang_Calender" style="width: 78%;"
 										id="select_time_end_tab1" onclick="getDatePicker1(this)"
 										readonly />
 								</div>
-								<div id="ConfirmId" class="col-lg-3 col-md-3 col-sm-3 col-xs-3"
-									style="margin-top: 5px;">
+								<div id="ConfirmId" class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
+									style="margin-top: 0px;">
 									<button class="btn btn-success" id="heatMapConfirm" style="padding: 2px 5px 2px 5px;font-size: 13px;background-image: linear-gradient(#01ff67, #061300);">
 										<spring:message code="store_confirm"></spring:message>
 									</button>
@@ -533,14 +533,14 @@
                               <div class="panel-body">
                                   <div id="ordered-bars-chart" style="width: 100%; height:350px;">                                  
                                   </div>
-                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -225px;position: absolute;margin-left: 34%;">
-                                  <span>L</span>
-                                  <span>o</span>
-                                  <span>a</span>
-                                  <span>d</span>
-                                  <span>i</span>
-                                  <span>n</span>
-                                  <span>g</span>
+                                <h1  id="loadingId"class="loadingtext" style="display:none;margin-top: -200px;position: absolute;margin-left: 40%;">
+                                  <span>加</span>
+                                  <span>载</span>
+                                  <span>中</span>
+                                  <span>请</span>
+                                  <span>稍</span>
+                                  <span>后</span>
+                                  <span>...</span>
                                 </h1>                                  
                               </div>
                           </div>
@@ -617,7 +617,7 @@
                                 <h4 class="panel-title"style="font-size: 15px;color: white;"><i class="en-statistics"></i><spring:message code="echart_route"></spring:message></h4>
                             </div>
                             <div class="panel-body">
-                                <div id="routeLine" style="height:530px;">
+                                <div id="routeLine" style="height:480px;">
                                     <canvas id="canvas"></canvas>
                                 </div>
                                 <div id="floorDiv myhide">

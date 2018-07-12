@@ -127,7 +127,7 @@ var fuzhiFunction = function(id, id1, id2, nowArray, nowPeople, yesPeople,
 	} else {
 		types = times;
 	}
-	if (parseInt(nowPeople) >= parseInt(yesPeople)) {
+	if (parseInt(nowPeople) > parseInt(yesPeople)) {
 		nowPeopleTemp = ups;
 		yanse = colours.green;
 		if (nowPeople == 0) {
@@ -137,12 +137,17 @@ var fuzhiFunction = function(id, id1, id2, nowArray, nowPeople, yesPeople,
 			nowBaifen = 100;
 		}
 		if (nowPeople > 0 && yesPeople > 0) {
-			nowBaifen = (((nowPeople) / yesPeople)*100).toFixed(2);
+			nowBaifen = (((nowPeople-yesPeople) / yesPeople)*100).toFixed(2);
 		}
-	} else {
+	} else if(nowPeople < yesPeople) {
 		yanse = colours.red;
 		nowPeopleTemp = downs;
-		nowBaifen = (((yesPeople-nowPeople) / yesPeople)*100).toFixed(2);
+		nowBaifen = ((-((nowPeople-yesPeople) / yesPeople))*100).toFixed(2);
+	}
+	else if(nowPeople = yesPeople) {
+		yanse = colours.red;
+		nowPeopleTemp = title_yes+"=";
+		nowBaifen = "0.00";
 	}
 	if (type == 0) {
 		if(id!="nowPeople")
@@ -196,7 +201,8 @@ var refreshTotalData = function() {
 							var yesAllPeople = data.yesAllPeople;
 							var nowTime = data.nowTime;
 							var yesTime = data.yesTime;
-
+							var nowPeople = data.nowPeople;
+							var yesPeople = data.yesPeople;
 
 //							var newArray = mapToarray(newData);
 							var allArray = mapToarray(allData);
@@ -204,6 +210,9 @@ var refreshTotalData = function() {
 //							fuzhiFunction("newPeople", "newPeopleId",
 //									"newData", newArray, newPeople,
 //									yesNewPeople, 0, 1);
+							fuzhiFunction("nowPeople", "nowPeopleId",
+									"nowData", allArray, nowPeople,
+									yesPeople, 0, 0);
 							fuzhiFunction("nowAllcount", "nowAllcountId",
 									"allDataId", allArray, nowAllPeople,
 									yesAllPeople, 0, 1);
@@ -481,6 +490,7 @@ var initChartBar = function()
 					            //x轴名称
 //					            var name = params[0].name
 					            //图表title名称
+					        	var myShopName = params[0].axisValue;
 					            var seriesName = params[0].seriesName.split("：")[0]+":"
 					            //值
 					            var value = params[0].value
@@ -490,7 +500,7 @@ var initChartBar = function()
 					            var seriesName2 = params[2].seriesName.split("：")[0]+":"
 					            //值
 					            var value2 = params[2].value
-					            var lengths = seriesName+value+'<br />'+seriesName1+value1+'<br />'+seriesName2+value2
+					            var lengths = myShopName+'<br />'+seriesName+value+'<br />'+seriesName1+value1+'<br />'+seriesName2+value2
 					            return lengths
 					        }
 					    },
@@ -829,6 +839,7 @@ var heatMap = function() {
 								var allData = data.allData;
 								var timeData = data.timeData;
 								var nowPeople = data.nowPeople;
+								var yesPeople = data.yesPeople;
 //								var yesPeople = data.yesPeople;
 //								var newPeople = data.newPeople;
 //								var yesNewPeople = data.yesNewPeople;
@@ -849,7 +860,7 @@ var heatMap = function() {
 								var timeArrays = mapToarray2(timeData);
 								fuzhiFunction("nowPeople", "nowPeopleId",
 										"nowData", nowArray, nowPeople,
-										yesAllPeople, 0, 0);
+										yesPeople, 0, 0);
 //								fuzhiFunction("newPeople", "newPeopleId",
 //										"newData", newArray, newPeople,
 //										yesNewPeople, 0, 1);
@@ -1140,7 +1151,7 @@ var heatMap = function() {
 					// 今天
 					var date1 = new Date();
 					nowDate1 = date1.format("yyyy-MM-dd");
-					sign1 = date1.getHours();
+					sign1 = date1.getHours()-1;
 					// 昨天
 					var date2 = new Date();
 					date2.setDate(date2.getDate() - 1);

@@ -240,7 +240,7 @@
 		from ${tableName}
 		where mapId = #{shopData.mapId}
 		and timestamp
-		>#{times}
+		 &gt; #{times}
 		and x &gt; (#{shopData.xSpot}) *10
 		and x &lt;
 		(#{shopData.x1Spot})*10
@@ -256,6 +256,7 @@
 		where mapId = #{shopData.mapId}
 		and timestamp
 		&gt; #{times}
+		and timestamp &lt; #{endTime}
 		and x &gt;
 		(#{shopData.xSpot}) *10
 		and x &lt;

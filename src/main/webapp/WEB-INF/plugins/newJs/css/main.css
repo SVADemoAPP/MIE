@@ -581,7 +581,7 @@ body {
   background: #ffffff;
   color: #383E4B;
   -webkit-font-smoothing: antialiased;
-  font-weight: 400;
+  font-weight: 600;
   -webkit-transition: -webkit-transform 0.4s ease !important;
   transition: transform 0.4s ease !important;
   position: relative;
@@ -688,7 +688,7 @@ body.full-screen #header {
   height: 60px;
   margin-bottom: 0;
   padding-right: 20px;
-  background: #1c689c;;
+  background: #394b8d;
   border-radius: 0;
   border: none;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
@@ -719,7 +719,7 @@ body.full-screen #header {
 }
 #header .navbar .navbar-brand {
   padding: 0;
-  width: 245px;
+  width: 187px;
   margin-right: 0;
 }
 #header .navbar .navbar-brand .text-logo-element {
@@ -733,7 +733,7 @@ body.full-screen #header {
 #header .navbar .navbar-brand .text-slogan {
   font-weight: bold;
   font-family: 'Droid Sans';
-  font-size: 24px;
+  font-size: 20px;
   text-transform: uppercase;
   margin-top: 15px;
   display: inline-block;
@@ -1315,9 +1315,11 @@ body.full-screen #header {
 #content .content-wrapper .heading .breadcrumb {
   line-height: 16px;
   border-radius: 4px;
-  background: #D9D9D9;
+  background: #ffffff;
   padding: 12px;
   margin-bottom: 12.5px;
+  font-size: 16px;
+  font-weight: 600;
 }
 #content .content-wrapper .heading .breadcrumb i {
   color: #acb1b8;
