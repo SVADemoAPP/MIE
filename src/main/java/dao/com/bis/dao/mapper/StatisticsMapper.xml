@@ -40,7 +40,19 @@
 	    PRIMARY KEY (`shopId`, `time`, `type`, `userId`),
 	    INDEX `Index 1` (`id`)
         );
-    </update>          
+    </update>
+    
+    <update id="createStoreTable">
+        CREATE TABLE  ${value}
+        (        
+        `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+        `time` DATE NOT NULL COMMENT '时间',
+        `storeId` INT(11) NOT NULL COMMENT '店铺id',
+        `userId` VARCHAR(200) NOT NULL COLLATE 'utf8_bin',
+        PRIMARY KEY (`storeId`, `time`, `userId`),
+        INDEX `Index 1` (`id`)
+        );
+    </update>              
 
 	<select id="getStoreStatistics" resultType="java.util.Map">
 		select count(a.userId) allcount,count(distinct a.userId) usercount,b.storeId 

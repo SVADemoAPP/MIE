@@ -716,6 +716,11 @@
         join bi_maps b on a.mapId = b.mapId join bi_shop c on c.mapId = b.mapId where a.x &gt;(c.xSpot)*10 and  a.x &lt;(c.x1Spot)*10 and a.y &gt; (c.ySpot)*10 and a.y &lt;(c.y1Spot)*10 group by a.userId,c.id)as d order by d.id asc                  
     </select>
     
+    <select id="getStoreUserList" resultType="VisitTimeModel">
+    select * from (select a.userid userid,b.storeId storeId from ${tableName} a 
+        join bi_maps b on a.mapId = b.mapId join bi_store c on c.id = b.storeId group by a.userId,c.id)as d order by d.userid asc                     
+    </select>    
+    
     <select id="getRateList" resultType="UserTimeModel">
     select a.*,c.deepTime deepTime,c.visitorNumber visitorNumber from bi_static_userid_visitTime a join bi_shop b on a.shopId = b.id join bi_shop_category c on c.id = b.categoryId where storeId = #{storeId} and time = #{time} ORDER BY shopId;
     </select>

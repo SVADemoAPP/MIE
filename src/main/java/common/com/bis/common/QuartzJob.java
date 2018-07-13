@@ -156,6 +156,18 @@ public class QuartzJob {
         } catch (Exception e) {
             LOG.error(e);
         }
+        // 商场表
+        String storeTableName = Params.STORELOCATION + nowMouths;
+        try {
+            // 创建shop表
+            if (statisticsDao.isTableExist(storeTableName, db) < 1) {
+                LOG.info("create" + storeTableName);
+                // 动态创建表
+                statisticsDao.createStoreTable(storeTableName);
+            }
+        } catch (Exception e) {
+            LOG.error(e);
+        }
         
         String localPath = getClass().getResource("/").getPath();
         // String localPath = System.getProperty("user.dir");
@@ -487,7 +499,20 @@ public class QuartzJob {
         String tableName = Params.LOCATION + nowDay;
         String nowMouths = Util.dateFormat(new Date(), Params.YYYYMM);
         String shopTableName = Params.SHOPLOCATION + nowMouths;
+        String storeTableName = Params.STORELOCATION + nowMouths;
+        String insertStoreUserid = "replace into "+storeTableName+"(userId,time,storeId) values";
         String insertUserid = "replace into "+shopTableName+"(userId,time,delaytime,shopId,type) values";
+        List<VisitTimeModel> storeUserListModel = locationDao.getStoreUserList(tableName);
+        for (VisitTimeModel sva : storeUserListModel){
+            String userId = sva.getUserId();
+            int storeId = sva.getStoreId();
+            insertStoreUserid +="('" + userId + "','" + userDay + "','"+ storeId + "'),";
+        }
+        if (storeUserListModel.size()>0) {
+            insertStoreUserid = insertStoreUserid.substring(0, insertStoreUserid.length() - 1);
+            int areaResult = statisticsDao.doUpdate(insertStoreUserid);
+            LOG.debug("saveUserShop-store-userid result:" + areaResult);
+        }
         List<VisitTimeModel> userListModel = locationDao.getUserList(tableName);
         for (VisitTimeModel sva : userListModel){
             String userId = sva.getUserId();
@@ -501,7 +526,7 @@ public class QuartzJob {
         if (userListModel.size()>0) {
             insertUserid = insertUserid.substring(0, insertUserid.length() - 1);
             int areaResult = statisticsDao.doUpdate(insertUserid);
-            LOG.debug("saveVisitTime-userid result:" + areaResult);
+            LOG.debug("saveUserShop-shop-userid :" + areaResult);
         }
     }
     /**

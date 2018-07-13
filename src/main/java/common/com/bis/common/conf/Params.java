@@ -26,7 +26,8 @@ public class Params {
 
     public static final String SHOPLOCATION = "bi_static_shop_";
     
-   
+
+    public static final String STORELOCATION = "bi_static_store_";  
 
     public static final String YYYYMMDD = "yyyyMMdd";
 

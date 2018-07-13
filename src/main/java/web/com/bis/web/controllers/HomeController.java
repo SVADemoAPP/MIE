@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,7 +27,10 @@ import org.springframework.web.servlet.support.RequestContext;
 
 import com.bis.common.Util;
 import com.bis.common.conf.Params;
+import com.bis.dao.LocationDao;
+import com.bis.dao.StatisticsDao;
 import com.bis.dao.VisitorDao;
+import com.bis.model.VisitTimeModel;
 import com.bis.web.auth.AuthPassport;
 
 import net.sf.json.JSONObject;
@@ -480,192 +482,75 @@ public class HomeController {
 
     @Autowired
     private VisitorDao visitorDao;
+    
+    @Autowired
+    private LocationDao locationDao;
+    
+    @Autowired
+    private StatisticsDao statisticsDao;
 
-    @RequestMapping(value = "/testFtpYesterday", method = { RequestMethod.GET })
+
+    @RequestMapping(value = "/doStoreUserData", method = { RequestMethod.GET })
     @ResponseBody
-    public Object testFtpYesterday() {
-        // System.out.println("定时任务：解析visitor文件");
-        String localPath = getClass().getResource("/").getPath();
-        // String localPath = System.getProperty("user.dir");
-        // localPath = localPath.substring(0,
-        // localPath.indexOf("bin"))+"webapps/SVAProject/WEB-INF";
-        localPath = localPath.substring(0, localPath.indexOf("/classes"));
-        localPath = localPath + "/" + "ftp" + "/";
-        LOG.debug("doFtpData localPath" + localPath);
-        // 解析前一天的visitor
-        Date date = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
-        String dateKey = Util.dateFormat(date, Params.YYYYMMDD);
-        String fileName = ftpFileNameHeader + dateKey + ".txt";
-        System.out.println(localPath);
-        boolean ftpResult = Util.downFtpFile(ftpIp, ftpPort, ftpUserName, ftpPassWord, ftpRemotePath, fileName,
-                localPath, ftpType);
-        if (ftpResult) {
-            // String time = Util.dateFormat(date, Params.YYYYMMDDHHMMSS);
-            String filePath = localPath;
-            File file = new File(filePath, fileName);
-            System.out.println(fileName+" 是否存在："+file.exists());
-            if (file.exists()) {
-                // System.out.println("信息文件存在");
-                List<JSONObject> list = new ArrayList<>();
-                String[] names = Params.VISITOR_COLUMNS;
-                BufferedReader reader = null;
-                InputStreamReader isr = null;
-                try {
-                    isr = new InputStreamReader(new FileInputStream(file), "UTF-8");
-                    reader = new BufferedReader(isr);
-                    String tempString = null;
-                    // 一次读入一行，直到读入null为文件结束
-                    while ((tempString = reader.readLine()) != null) {
-                        JSONObject jsonObject = new JSONObject();
-                        String[] values = (tempString+"|end").replace("|", "_").split("_");
-                        for (int i = 0; i < names.length; i++) {
-                            // {"date","ipv4","ipv6","acr","eci","gender","age","localAddress","homeAddress",
-                            // "homeAddressCI","workAddress","workAddressCI","expendAbility"};
-                            switch (i) {
-                            case 1: // ipv4
-                                jsonObject.put(names[i], Util.isIp(values[i])?Util.convertIp(values[i]):"");
-                                break;
-                            case 3: // acr
-                            case 4: // eci
-                                jsonObject.put(names[i], values[i].length()<200?values[i]:"error");
-                                break;
-                            case 5: // gender
-                            case 6: // age
-                            case 12: // expendAbility
-                                jsonObject.put(names[i], "".equals(values[i])?"不详":values[i]);
-                                break;
-//                            case 7: // localAddress
-//                                break;
-//                            case 8: // homeAddress
-//                            case 10: // workAddress
-//                                break;
-                            default:
-                                
-                                jsonObject.put(names[i], values[i]);
-                                break;
-                            }
-                        }
-                        jsonObject.put("time", dateKey);
-                        list.add(jsonObject);
-                    }
-                    reader.close();
-                } catch (IOException e) {
-                    System.out.println("解析文件错误:"+e.toString());
-                    e.printStackTrace();
-                } finally {
-                    if (isr != null) {
-                        try {
-                            isr.close();
-                        } catch (IOException e1) {
-                        }
-                    }
-                    if (reader != null) {
-                        try {
-                            reader.close();
-                        } catch (IOException e1) {
-                        }
-                    }
-                }
-                System.out.println("存bi_visitor前list长度："+list.size());
-                visitorDao.saveData(list);
-                System.out.println("存bi_visitor完毕");
+    public Object doStoreUserData(String dateKey) {
+        
+        boolean result =false;
+        if (dateKey!=null) {
+            String doDay =Util.dateFormat(Util.dateFormatStringtoLong(dateKey, Params.YYYYMMDD),Params.YYYYMMDD2);
+            String tableName =  Params.LOCATION+ dateKey;
+            String storeTableName = Params.STORELOCATION + dateKey.substring(0,dateKey.length()-2);
+            String insertStoreUserid = "replace into "+storeTableName+"(userId,time,storeId) values";
+            List<VisitTimeModel> storeUserListModel = locationDao.getStoreUserList(tableName);
+            for (VisitTimeModel sva : storeUserListModel){
+                String userId = sva.getUserId();
+                int storeId = sva.getStoreId();
+                insertStoreUserid +="('" + userId + "','" + doDay + "','"+ storeId + "'),";
             }
-            // LOG.debug("VisitorController~插入Visitor数据条数:" + num);
-        } else {
-            LOG.debug("doFtpData downFtpFile failed result " + ftpResult);
+            if (storeUserListModel.size()>0) {
+                insertStoreUserid = insertStoreUserid.substring(0, insertStoreUserid.length() - 1);
+                int areaResult = statisticsDao.doUpdate(insertStoreUserid);
+                result = true;
+                LOG.debug("saveUserShop-store-userid result:" + areaResult);
+            }
+        }else
+        {
+            return result;   
         }
-        return "yesterday:" + ftpResult;
+
+        return result;
     }
-
-    @RequestMapping(value = "/testFtpToday", method = { RequestMethod.GET })
+    
+    @RequestMapping(value = "/doShopUserData", method = { RequestMethod.GET })
     @ResponseBody
-    public Object testFtpToday() {
-        // System.out.println("定时任务：解析visitor文件");
-        String localPath = getClass().getResource("/").getPath();
-        // String localPath = System.getProperty("user.dir");
-        // localPath = localPath.substring(0,
-        // localPath.indexOf("bin"))+"webapps/SVAProject/WEB-INF";
-        localPath = localPath.substring(0, localPath.indexOf("/classes"));
-        localPath = localPath + "/" + "ftp" + "/";
-        LOG.debug("doFtpData localPath" + localPath);
-        // 解析前一天的visitor
-        Date date = new Date();
-        String dateKey = Util.dateFormat(date, Params.YYYYMMDD);
-        String fileName = ftpFileNameHeader + dateKey + ".txt";
-        boolean ftpResult = Util.downFtpFile(ftpIp, ftpPort, ftpUserName, ftpPassWord, ftpRemotePath, fileName,
-                localPath, ftpType);
-        if (ftpResult) {
-
-            // String time = Util.dateFormat(date, Params.YYYYMMDDHHMMSS);
-            String filePath = localPath;
-            File file = new File(filePath, fileName);
-            if (file.exists()) {
-                // System.out.println("信息文件存在");
-                List<JSONObject> list = new ArrayList<>();
-                String[] names = Params.VISITOR_COLUMNS;
-                BufferedReader reader = null;
-                InputStreamReader isr = null;
-                try {
-                    isr = new InputStreamReader(new FileInputStream(file), "UTF-8");
-                    reader = new BufferedReader(isr);
-                    String tempString = null;
-                    // 一次读入一行，直到读入null为文件结束
-                    while ((tempString = reader.readLine()) != null) {
-                        JSONObject jsonObject = new JSONObject();
-                        String[] values = (tempString+"|end").replace("|", "_").split("_");
-                        for (int i = 0; i < names.length; i++) {
-                            // {"date","ipv4","ipv6","acr","eci","gender","age","localAddress","homeAddress",
-                            // "homeAddressCI","workAddress","workAddressCI","expendAbility"};
-                            switch (i) {
-                            case 1: // ipv4
-                                jsonObject.put(names[i], Util.isIp(values[i])?Util.convertIp(values[i]):"");
-                                break;
-                            case 3: // acr
-                            case 4: // eci
-                                jsonObject.put(names[i], values[i].length()<200?values[i]:"error");
-                                break;
-                            case 5: // gender
-                            case 6: // age
-                            case 12: // expendAbility
-                                jsonObject.put(names[i], "".equals(values[i])?"不详":values[i]);
-                                break;
-//                            case 7: // localAddress
-//                                break;
-//                            case 8: // homeAddress
-//                            case 10: // workAddress
-//                                break;
-                            default:
-                                jsonObject.put(names[i], values[i]);
-                                break;
-                            }
-                        }
-                        jsonObject.put("time", dateKey);
-                        list.add(jsonObject);
-                    }
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (isr != null) {
-                        try {
-                            isr.close();
-                        } catch (IOException e1) {
-                        }
-                    }
-                    if (reader != null) {
-                        try {
-                            reader.close();
-                        } catch (IOException e1) {
-                        }
-                    }
-                }
-                visitorDao.saveData(list);
+    public Object doShopUserData(String dateKey) {
+        
+        boolean result =false;
+        if (dateKey!=null) {
+            String doDay =Util.dateFormat(Util.dateFormatStringtoLong(dateKey, Params.YYYYMMDD),Params.YYYYMMDD2);
+            String tableName =  Params.LOCATION+ dateKey;
+            String shopTableName = Params.SHOPLOCATION + dateKey.substring(0,dateKey.length()-2);
+            String insertUserid = "replace into "+shopTableName+"(userId,time,delaytime,shopId,type) values";
+            List<VisitTimeModel> userListModel = locationDao.getUserList(tableName);
+            for (VisitTimeModel sva : userListModel){
+                String userId = sva.getUserId();
+                long visiTime = sva.getMaxTime()-sva.getMinTime();
+                int shopId = sva.getId();
+//                int storeId = sva.getStoreId();
+//                int mapId = sva.getMapId();
+                String shopVisit = Util.getMinute(visiTime, 1);
+                insertUserid +="('" + userId + "','" + doDay + "','" + shopVisit + "','" + shopId + "','"+ 0+ "'),";
             }
-            // LOG.debug("VisitorController~插入Visitor数据条数:" + num);
-        } else {
-            LOG.debug("doFtpData downFtpFile failed result " + ftpResult);
+            if (userListModel.size()>0) {
+                insertUserid = insertUserid.substring(0, insertUserid.length() - 1);
+                int areaResult = statisticsDao.doUpdate(insertUserid);
+                LOG.debug("saveUserShop-shop-userid :" + areaResult);
+            }
+        }else
+        {
+            return result;   
         }
-        return "today:" + ftpResult;
+
+        return result;
     }
 
     @RequestMapping(value = "/testFtpOneDay", method = { RequestMethod.GET })

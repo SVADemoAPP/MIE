@@ -168,6 +168,10 @@ public interface VisitorDao {
             @Param("storeId") String storeId, @Param("startTime") String startTime, @Param("endTime") String endTime,
             @Param("tableName") String tableName);
     
+    public List<Map<String, Object>> getNewDataByStoreId(@Param("columnName") String columnName,
+            @Param("storeId") String storeId, @Param("startTime") String startTime, @Param("endTime") String endTime,
+            @Param("tableName") String tableName);
+    
     /**
      * 
      * @Title: getDataByStoreId
@@ -179,8 +183,16 @@ public interface VisitorDao {
     public List<Map<String, Object>> getData2ByStoreId(@Param("columnName") String columnName,
             @Param("storeId") String storeId, @Param("startTime") String startTime, @Param("endTime") String endTime,
             @Param("tableName") String tableName);
+    
+    public List<Map<String, Object>> getNewData2ByStoreId(@Param("columnName") String columnName,
+            @Param("storeId") String storeId, @Param("startTime") String startTime, @Param("endTime") String endTime,
+            @Param("tableName") String tableName);
 
     public List<Map<String, Object>> getData3ByStoreId(@Param("columnName") String columnName,
+            @Param("storeId") String storeId, @Param("startTime") String startTime, @Param("endTime") String endTime,
+            @Param("tableName") String tableName);
+    
+    public List<Map<String, Object>> getNewData3ByStoreId(@Param("columnName") String columnName,
             @Param("storeId") String storeId, @Param("startTime") String startTime, @Param("endTime") String endTime,
             @Param("tableName") String tableName);
     
@@ -195,6 +207,10 @@ public interface VisitorDao {
             @Param("startTime") String startTime, @Param("endTime") String endTime,
             @Param("tableName") String tableName);
     
+    public List<Map<String, Object>> getNewAgeByStoreId( @Param("storeId") String storeId,
+            @Param("startTime") String startTime, @Param("endTime") String endTime,
+            @Param("tableName") String tableName);
+    
     /**
      * 
      * @Title: getAgeByStoreId
@@ -203,6 +219,10 @@ public interface VisitorDao {
      * @return
      */
     public List<Map<String, Object>> getAbilityByStoreId(@Param("storeId") String storeId,
+            @Param("startTime") String startTime, @Param("endTime") String endTime,
+            @Param("tableName") String tableName);
+    
+    public List<Map<String, Object>> getNewAbilityByStoreId(@Param("storeId") String storeId,
             @Param("startTime") String startTime, @Param("endTime") String endTime,
             @Param("tableName") String tableName);
 

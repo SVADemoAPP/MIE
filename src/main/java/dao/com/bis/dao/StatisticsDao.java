@@ -34,6 +34,14 @@ public interface StatisticsDao {
      * @return
      */
     public int createShopTable(String tableName);
+    
+    /**
+     * @Title: createShopTable
+     * @Description: 创建shop表
+     * @param tableName
+     * @return
+     */
+    public int createStoreTable(String tableName);
 
     /**
      * @Title: isTableExist

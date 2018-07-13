@@ -228,6 +228,8 @@ public interface LocationDao {
     
     public List<VisitTimeModel> getUserList(@Param("tableName") String tableName);
     
+    public List<VisitTimeModel> getStoreUserList(@Param("tableName") String tableName);
+    
     public List<UserTimeModel> getRateList(@Param("storeId") String storeId,@Param("time") String time);
     
     public List<WeekTotalModel> getTop10ForMap(@Param("storeId") String storeId,@Param("time") String beginTime);

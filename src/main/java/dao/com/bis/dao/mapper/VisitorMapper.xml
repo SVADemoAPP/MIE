@@ -287,6 +287,22 @@
 		group by
 		${columnName}
 	</select>
+	
+    <select id="getNewDataByStoreId" resultType="Map">
+        select ${columnName} name,count(${columnName}) value from
+        (select
+        ${columnName},time,ipv4 from
+        bi_visitor where gender!='不详'
+        <if test="endTime != null">
+            and time &gt;= #{startTime} and
+            time &lt;= #{endTime}
+        </if>
+        ) a join (select userId,time from ${tableName}  where storeId=#{storeId})
+        b on a.ipv4=b.userId and
+        a.time=b.time
+        group by
+        ${columnName}
+    </select>	
 
 	<select id="getData2ByStoreId" resultType="Map">
 		select IFNULL(z.city,'省外') name,count(${columnName}) value from
@@ -305,6 +321,22 @@
 		group by
 		z.city
 	</select>
+	
+    <select id="getNewData2ByStoreId" resultType="Map">
+        select IFNULL(z.city,'省外') name,count(${columnName}) value from
+        (select
+        ${columnName},time,ipv4 from
+        bi_visitor
+        <if test="endTime != null">
+            where time &gt;= #{startTime} and
+            time &lt;= #{endTime}
+        </if>
+        ) a join (select userId,time from ${tableName}  where storeId=#{storeId})
+        b on a.ipv4=b.userId and
+        a.time=b.time left join bi_lac z on z.lac=${columnName}
+        group by
+        z.city
+    </select>	
 
 	<select id="getData3ByStoreId" resultType="Map">
 		select IFNULL(z.city,if(x.city is null,'无法统计','不详')) name,count(${columnName}) value from
@@ -322,6 +354,21 @@
 		a.time=b.time left join bi_lac z on z.lac=${columnName}  left join bi_lac x on x.lac=a.localAddress
 		group by name
 	</select>
+	
+    <select id="getNewData3ByStoreId" resultType="Map">
+        select IFNULL(z.city,if(x.city is null,'无法统计','不详')) name,count(${columnName}) value from
+        (select localAddress,
+        ${columnName},time,ipv4 from
+        bi_visitor
+        <if test="endTime != null">
+            where time &gt;= #{startTime} and
+            time &lt;= #{endTime}
+        </if>
+        ) a join (select userId,time from ${tableName} where storeId=#{storeId})
+        b on a.ipv4=b.userId and
+        a.time=b.time left join bi_lac z on z.lac=${columnName}  left join bi_lac x on x.lac=a.localAddress
+        group by name
+    </select>	
 
 	<select id="getAgeByStoreId" resultType="Map">
 		select age name,count(age) value
@@ -342,6 +389,23 @@
 		desc
 	</select>
 	
+    <select id="getNewAgeByStoreId" resultType="Map">
+        select age name,count(age) value
+        from 
+        (
+        select a.age from (select ipv4,time,age from bi_visitor
+        <if test="endTime != null">
+            where time &gt;= #{startTime} and
+            time &lt;= #{endTime}
+        </if>
+        ) a join (select userId,time from ${tableName} where storeId=#{storeId} ) b on a.ipv4=b.userId and
+        a.time=b.time
+        ) f 
+        group by
+        age
+        desc
+    </select>	
+	
 	<select id="getAbilityByStoreId" resultType="Map">
 		select expendAbility name,count(expendAbility) value
 		from 
@@ -360,6 +424,23 @@
 		expendAbility
 		desc
 	</select>
+	
+    <select id="getNewAbilityByStoreId" resultType="Map">
+        select expendAbility name,count(expendAbility) value
+        from 
+        (
+        select a.expendAbility from (select ipv4,time,expendAbility from bi_visitor
+        <if test="endTime != null">
+            where time &gt;= #{startTime} and
+            time &lt;= #{endTime}
+        </if>
+        ) a join (select userId,time from ${tableName} where storeId=#{storeId} ) b on a.ipv4=b.userId and
+        a.time=b.time
+        ) f 
+        group by
+        expendAbility
+        desc
+    </select>	
 
 	<select id="getMapVisitorCount" resultType="Map">
 		select b.floor

@@ -204,8 +204,8 @@ public class VisitorController {
         Calendar calendar = Calendar.getInstance();
         // 不传endTime则默认查3个月之内的
         if (StringUtils.isEmpty(endTime)) {
+            calendar.add(Calendar.DATE, -1);
             endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMDD2);
-            calendar.add(Calendar.MONTH, -2);
             startTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMDD2);
         }
         List<String> tableNameList = Util.getPeriodMonthList(startTime, endTime);
@@ -224,9 +224,14 @@ public class VisitorController {
                     merge(abilityList, dao.getAbilityByCategoryId( id, startTime, endTime,
                             tableName, storeId));
                 } else if ("storeId".equals(field)) {
-                    merge(genderList, dao.getDataByStoreId("gender", id, startTime, endTime, tableName));
+                    String[] ss = tableName.split("shop");
+                    String tableNames = ss[0]+"store"+ss[1];
+//                    merge(genderList, dao.getDataByStoreId("gender", id, startTime, endTime, tableName));
+                  merge(genderList, dao.getNewDataByStoreId("gender", id, startTime, endTime, tableNames));
+//                    merge(abilityList,
+//                            dao.getAbilityByStoreId(id, startTime, endTime, tableName));
                     merge(abilityList,
-                            dao.getAbilityByStoreId(id, startTime, endTime, tableName));
+                            dao.getNewAbilityByStoreId(id, startTime, endTime, tableNames));
                 }
             }
         }
@@ -274,8 +279,8 @@ public class VisitorController {
         Calendar calendar = Calendar.getInstance();
         // 不传endTime则默认查3个月之内的
         if (StringUtils.isEmpty(endTime)) {
+            calendar.add(Calendar.DATE, -1);
             endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMDD2);
-            calendar.add(Calendar.MONTH, -2);
             startTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMDD2);
         }
         List<String> tableNameList = Util.getPeriodMonthList(startTime, endTime);
@@ -294,8 +299,12 @@ public class VisitorController {
                     merge(homeAddressList,
                             dao.getData3ByCategoryId("homeAddress", id, startTime, endTime, tableName, storeId));
                 } else if ("storeId".equals(field)) {
-                    merge(localAddressList, dao.getData2ByStoreId("localAddress", id, startTime, endTime, tableName));
-                    merge(homeAddressList, dao.getData3ByStoreId("homeAddress", id, startTime, endTime, tableName));
+                    String[] ss = tableName.split("shop");
+                    String tableNames = ss[0]+"store"+ss[1];
+//                    merge(localAddressList, dao.getData2ByStoreId("localAddress", id, startTime, endTime, tableName));
+                    merge(localAddressList, dao.getNewData2ByStoreId("localAddress", id, startTime, endTime, tableNames));
+//                    merge(homeAddressList, dao.getData3ByStoreId("homeAddress", id, startTime, endTime, tableName));
+                      merge(homeAddressList, dao.getNewData3ByStoreId("homeAddress", id, startTime, endTime, tableNames));
                 }
             }
         }
@@ -341,8 +350,8 @@ public class VisitorController {
         Calendar calendar = Calendar.getInstance();
         // 不传endTime则默认查3个月之内的
         if (StringUtils.isEmpty(endTime)) {
+            calendar.add(Calendar.DATE, -1);
             endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMDD2);
-            calendar.add(Calendar.MONTH, -2);
             startTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMDD2);
         }
         List<String> tableNameList = Util.getPeriodMonthList(startTime, endTime);
@@ -362,9 +371,14 @@ public class VisitorController {
                     merge(workAddressList,
                             dao.getData3ByCategoryId("workAddress", id, startTime, endTime, tableName, storeId));
                 } else if ("storeId".equals(field)) {
+                    String[] ss = tableName.split("shop");
+                    String tableNames = ss[0]+"store"+ss[1];
+//                    merge(ageList,
+//                            dao.getAgeByStoreId(id, startTime, endTime, tableName));
                     merge(ageList,
-                            dao.getAgeByStoreId(id, startTime, endTime, tableName));
-                    merge(workAddressList, dao.getData3ByStoreId("workAddress", id, startTime, endTime, tableName));
+                            dao.getNewAgeByStoreId(id, startTime, endTime, tableNames));
+//                    merge(workAddressList, dao.getData3ByStoreId("workAddress", id, startTime, endTime, tableName));
+                    merge(workAddressList, dao.getNewData3ByStoreId("workAddress", id, startTime, endTime, tableNames));
                 }
             }
         }
