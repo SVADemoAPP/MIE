@@ -107,6 +107,8 @@
 		z.lac=${columnName}
 		group by
 		z.city
+		order by 
+		value desc
 	</select>
 	
 	<select id="getData3ByShopId" resultType="Map">
@@ -200,6 +202,8 @@
 		z.lac=${columnName}
 		group by
 		z.city
+		order by 
+		value desc
 	</select>
 	
 	<select id="getData3ByCategoryId" resultType="Map">
@@ -336,6 +340,8 @@
         a.time=b.time left join bi_lac z on z.lac=${columnName}
         group by
         z.city
+        order by 
+        value desc
     </select>	
 
 	<select id="getData3ByStoreId" resultType="Map">

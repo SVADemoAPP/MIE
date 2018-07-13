@@ -398,13 +398,13 @@ var initChartBar = function()
 //				            var name = params[0].name
 				            //图表title名称
 				        	var myShopName = params[0].axisValue;
-				            var seriesName = params[0].seriesName.split("：")[0]+":"
+				            var seriesName = params[0].seriesName.split(":")[0]+":"
 				            //值
 				            var value = params[0].value
-				            var seriesName1 = params[1].seriesName.split("：")[0]+":"
+				            var seriesName1 = params[1].seriesName.split(":")[0]+":"
 				            //值
 				            var value1 = params[1].value
-				            var seriesName2 = params[2].seriesName.split("：")[0]+":"
+				            var seriesName2 = params[2].seriesName.split(":")[0]+":"
 				            //值
 				            var value2 = params[2].value
 				            var lengths = myShopName+'<br />'+seriesName+value+'<br />'+seriesName1+value1+'<br />'+seriesName2+value2
@@ -418,7 +418,7 @@ var initChartBar = function()
 				    legend: {
 				    	data:titile,
 				        formatter: function (name) {
-				            return name.split("：")[0];
+				            return name.split(":")[0];
 				        },
 				        tooltip: {
 				            show: true

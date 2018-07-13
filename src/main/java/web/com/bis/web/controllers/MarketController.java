@@ -724,6 +724,8 @@ public class MarketController {
         JSONObject weekUsercount = new JSONObject();
         JSONObject weekDelaytime = new JSONObject();
         Calendar calendar = Calendar.getInstance();
+        long endTimes = calendar.getTimeInMillis();
+        long startTime = endTimes  - 600*1000;
         String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String endTime1 = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -1);
@@ -762,8 +764,6 @@ public class MarketController {
             yesUserCount = list2.get(0).getAllCount();
             yesAverageTime = list2.get(0).getAverageTime();
         }
-        long endTimes = System.currentTimeMillis();
-        long startTime =endTimes  - 600*1000;
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
@@ -796,6 +796,8 @@ public class MarketController {
         JSONObject weekUsercount = new JSONObject();
         JSONObject weekDelaytime = new JSONObject();
         Calendar calendar = Calendar.getInstance();
+        long endTimes = calendar.getTimeInMillis();
+        long startTime =endTimes  - 600*1000;
         String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String endTime1 = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -1);
@@ -835,8 +837,7 @@ public class MarketController {
             yesUserCount = list2.get(0).getAllCount();
             yesAverageTime = list2.get(0).getAverageTime();
         }
-        long endTimes = System.currentTimeMillis();
-        long startTime =endTimes  - durationOfLocation*1000;
+
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;

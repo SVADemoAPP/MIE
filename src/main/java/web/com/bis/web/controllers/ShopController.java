@@ -632,6 +632,8 @@ public class ShopController {
         JSONObject weekUsercount = new JSONObject();
         JSONObject weekDelaytime = new JSONObject();
         Calendar calendar = Calendar.getInstance();
+        long nowTimes = calendar.getTimeInMillis();
+        long times = nowTimes - 600*1000;
         String endTime = Util.dateFormat(calendar.getTime(), Params.YYYYMMdd0000);
         String endTime1 = Util.dateFormat(calendar.getTime(), Params.YYYYMMddHH00);
         calendar.add(Calendar.DATE, -1);
@@ -674,8 +676,7 @@ public class ShopController {
         ShopModel shopModel = listShopModel.get(0);
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
-        long nowTimes = System.currentTimeMillis();
-        long times = nowTimes - durationOfLocation*1000;
+
         int count = locationDao.getNowCounts(times,nowTimes, tableName, shopModel);
         int yesCount = locationDao.getNowCounts(yesStartTimel,yesEndTimel,yesTbaleName, shopModel);
         Map<String, Object> modelMap = new HashMap<String, Object>();

@@ -104,7 +104,7 @@ div.svgCotainer {
 			<div class="navbar">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="../market/getMarketInfo"><span
-                        class="text-logo" style="margin: 17px 5px 0 5%;height: 35px;color: #ffffff; ">航洋国际慧商平台</span><span class="text-slogan"></span>
+                        class="text-logo" style="margin: 17px 5px 0 5%;height: 35px;color: #ffffff; "><spring:message code="hangyang_title"></spring:message> </span><span class="text-slogan"></span>
                     </a>
                 </div>
 				<nav class="top-nav" role="navigation">

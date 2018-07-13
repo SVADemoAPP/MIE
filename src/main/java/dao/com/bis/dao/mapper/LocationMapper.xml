@@ -520,17 +520,15 @@
 	<select id="getStoreMomentCount" resultType="long">
 		select
 		count(distinct a.userId) from ${tableName} a join bi_maps b on
-		a.mapId=b.mapId where b.storeId =#{storeId} and a.timestamp &gt;
-		#{startTime}
-		<!-- and a.timestamp &lt; #{endTime} -->
+		a.mapId=b.mapId where a.timestamp &gt; #{startTime} and
+		 a.timestamp &lt; #{endTime}  and  b.storeId =#{storeId} 
 	</select>
 	
 	<select id="getFloorMomentCount" resultType="long">
 		select
 		count(distinct a.userId) from ${tableName} a join bi_maps b on
-		a.mapId=b.mapId where b.mapId =#{mapId} and a.timestamp &gt;
-		#{startTime} 
-		<!-- and a.timestamp &lt; #{endTime} -->
+		a.mapId=b.mapId where a.timestamp &gt; #{startTime} and a.timestamp &lt; #{endTime}
+		and  b.mapId =#{mapId} 
 	</select>	
 
 	<select id="queryAllUserIdByMapId" resultType="String">
