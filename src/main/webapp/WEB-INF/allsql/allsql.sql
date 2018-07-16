@@ -615,7 +615,7 @@ CREATE TABLE `bi_static_floor_visittime` (
     `delaytime` DECIMAL(10,2) NOT NULL COMMENT '平均驻留时长',
     `allcount` BIGINT(20) NOT NULL COMMENT '客流总人数',
     `allcounts` BIGINT(20) NOT NULL,
-    `mapId` INT(11) NOT NULL COMMENT '商场id',
+    `mapId` VARCHAR(50) NOT NULL COMMENT '商场id' COLLATE 'utf8_bin',
     PRIMARY KEY (`mapId`, `time`),
     INDEX `Index 1` (`id`),
     INDEX `Index 3` (`mapId`)
@@ -628,7 +628,7 @@ CREATE TABLE `bi_static_shop_visittime` (
     `delaytime` DECIMAL(10,2) NOT NULL COMMENT '平均驻留时长',
     `allcount` BIGINT(20) NOT NULL COMMENT '客流总人数',
     `allcounts` BIGINT(20) NOT NULL,
-    `shopId` INT(11) NOT NULL COMMENT '商场id',
+    `shopId` VARCHAR(50) NOT NULL COLLATE 'utf8_bin',
     PRIMARY KEY (`shopId`, `time`),
     INDEX `Index 1` (`id`),
     INDEX `Index 3` (`shopId`)
@@ -641,7 +641,7 @@ CREATE TABLE `bi_static_store_visittime` (
     `delaytime` DECIMAL(10,2) NOT NULL COMMENT '平均驻留时长',
     `allcount` BIGINT(20) NOT NULL COMMENT '客流总人数',
     `allcounts` BIGINT(20) NOT NULL,
-    `storeId` INT(11) NOT NULL COMMENT '商场id',
+    `storeId` VARCHAR(50) NOT NULL COMMENT '商场id' COLLATE 'utf8_bin',
     PRIMARY KEY (`storeId`, `time`),
     INDEX `Index 1` (`id`),
     INDEX `Index 3` (`storeId`)
