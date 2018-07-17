@@ -474,10 +474,10 @@ public class QuartzJob {
                 if (shopId!=null&&shopId!="null"&&shopId!="") {
                     String allcount = s.split("-")[1];
                     String visitTime = mapShop.get(s);
-                    int allCounts = locationDao.getShopAllCount(shopId, tableName);
+                    long allCounts = locationDao.getShopAllCount(shopId, tableName);
                     insertShop += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + shopId +  "','"+ allCounts+"'),"; 
                     if (endTimes.equals("23:00:00")) {
-                    	int allCountss = locationDao.getShopAllCount1(shopId, tableName);
+                        long allCountss = locationDao.getShopAllCount1(shopId, tableName);
                     	insertEntersql +="('" + nowDays +  "','" + allCounts + "','" + shopId +  "','"+ allCountss+"'),"; 
 					}
                 }

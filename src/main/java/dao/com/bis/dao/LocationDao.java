@@ -241,8 +241,8 @@ public interface LocationDao {
     
     public int getStoreNowCount(@Param("storeId") String storeId, @Param("tableName") String tableName,@Param("startTime") long beginTime,@Param("endTime") long endTime);
     
-    public int getShopAllCount(@Param("shopId") String shopId, @Param("tableName") String tableName);
-    public int getShopAllCount1(@Param("shopId") String shopId, @Param("tableName") String tableName);
+    public long getShopAllCount(@Param("shopId") String shopId, @Param("tableName") String tableName);
+    public long getShopAllCount1(@Param("shopId") String shopId, @Param("tableName") String tableName);
     
     public int getShopNowCount(@Param("shopId") String shopId, @Param("tableName") String tableName,@Param("startTime") long beginTime,@Param("endTime") long endTime);
     

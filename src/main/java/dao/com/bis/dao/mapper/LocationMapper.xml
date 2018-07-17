@@ -749,10 +749,10 @@
     <select id="getStoreNowCount" resultType="int">
         select count(distinct a.userid) from ${tableName} a join bi_maps c on c.mapId = a.mapId join bi_store b on b.id = c.storeId where b.id = #{storeId} and a.timestamp &gt; #{startTime} and a.timestamp &lt;#{endTime}
     </select>    
-    <select id="getShopAllCount" resultType="int">
+    <select id="getShopAllCount" resultType="long">
         select count(distinct a.userid) from ${tableName} a join bi_shop b on a.mapId = b.mapId where b.id = #{shopId} and  a.x &gt;(b.xSpot)*10 and  a.x &lt;(b.x1Spot)*10 and a.y &gt; (b.ySpot)*10 and a.y &lt;(b.y1Spot)*10 
     </select>
-    <select id="getShopAllCount1" resultType="int">
+    <select id="getShopAllCount1" resultType="long">
 		select count(distinct a.userid) from ${tableName} a join bi_shop b on a.mapId = b.mapId join bi_shop_category d on d.id = b.categoryId  where b.id = #{shopId} and  a.x &gt;(b.xSpot-(d.x/2))*10 and  a.x &lt;(b.x1Spot+(d.x/2))*10 and a.y &gt;(b.ySpot-(d.y/2))*10 and a.y &lt;(b.y1Spot+(d.x/2))*10
     </select>
 
