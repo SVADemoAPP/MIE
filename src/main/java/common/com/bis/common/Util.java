@@ -236,7 +236,7 @@ public class Util {
         if (size == 0) {
             return "0";
         } else {
-            float b = (time / 1000) / 60;
+            float b = ((float)time / 1000) / 60;
             float averageTime = b / size;
             DecimalFormat df = new DecimalFormat("0.00");
             return df.format(averageTime);
