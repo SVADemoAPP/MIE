@@ -728,7 +728,7 @@
     </select>
     
     <select id="getShop10ForMap" resultType="WeekTotalModel">
-    select max(a.allcounts) allCount,b.shopName myTime,a.shopId myId from bi_static_shop_visitTime a join bi_shop b on a.shopId = b.id join bi_maps c on c.mapId = b.mapId join bi_store d on d.id = c.storeId where time &gt; #{time} and c.id = #{storeId}  group by a.shopId limit 10
+    select max(a.allcounts) allCount,b.shopName myTime,a.shopId myId from bi_static_shop_visitTime a join bi_shop b on a.shopId = b.id join bi_maps c on c.mapId = b.mapId join bi_store d on d.id = c.storeId where time &gt; #{time} and d.id = #{storeId}  group by a.shopId limit 10
     </select>
     
     <select id="getShop10Count" resultType="String">
