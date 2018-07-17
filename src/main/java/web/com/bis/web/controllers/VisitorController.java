@@ -224,8 +224,8 @@ public class VisitorController {
                     merge(abilityList, dao.getAbilityByCategoryId( id, startTime, endTime,
                             tableName, storeId));
                 } else if ("storeId".equals(field)) {
-                    String[] ss = tableName.split("shop");
-                    String tableNames = ss[0]+"store"+ss[1];
+//                    String[] ss = tableName.split("shop");
+                    String tableNames = tableName.replace("shop", "store");
 //                    merge(genderList, dao.getDataByStoreId("gender", id, startTime, endTime, tableName));
                   merge(genderList, dao.getNewDataByStoreId("gender", id, startTime, endTime, tableNames));
 //                    merge(abilityList,
@@ -299,8 +299,8 @@ public class VisitorController {
                     merge(homeAddressList,
                             dao.getData3ByCategoryId("homeAddress", id, startTime, endTime, tableName, storeId));
                 } else if ("storeId".equals(field)) {
-                    String[] ss = tableName.split("shop");
-                    String tableNames = ss[0]+"store"+ss[1];
+//                    String[] ss = tableName.split("shop");
+                    String tableNames = tableName.replace("shop", "store");
 //                    merge(localAddressList, dao.getData2ByStoreId("localAddress", id, startTime, endTime, tableName));
                     merge(localAddressList, dao.getNewData2ByStoreId("localAddress", id, startTime, endTime, tableNames));
 //                    merge(homeAddressList, dao.getData3ByStoreId("homeAddress", id, startTime, endTime, tableName));
@@ -371,8 +371,8 @@ public class VisitorController {
                     merge(workAddressList,
                             dao.getData3ByCategoryId("workAddress", id, startTime, endTime, tableName, storeId));
                 } else if ("storeId".equals(field)) {
-                    String[] ss = tableName.split("shop");
-                    String tableNames = ss[0]+"store"+ss[1];
+//                    String[] ss = tableName.split("shop");
+                    String tableNames = tableName.replace("shop", "store");
 //                    merge(ageList,
 //                            dao.getAgeByStoreId(id, startTime, endTime, tableName));
                     merge(ageList,

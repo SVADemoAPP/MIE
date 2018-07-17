@@ -365,7 +365,7 @@
 							<div class="panel-heading"  style="background-color: #97d3c5; color: white; border-color: #97d3c5">
 								<h4 class="panel-title"style="font-size: 15px;color: white;">
 									<i class="st-connection-full"></i>
-									<spring:message code="mall_shop_visitors"> TOP15</spring:message>
+									<spring:message code="mall_shop_visitors"> TOP10</spring:message>
 								</h4>
 							</div>
 							<div class="panel-body" style="">

@@ -369,8 +369,8 @@ public class Util {
      * @return
      */
     public static List<String> getPeriodMonthList(String startTime, String endTime) {
-        Date start = Util.dateStringFormat(startTime, Params.YYYYMMDD2);
-        Date end = Util.dateStringFormat(endTime, Params.YYYYMMDD2);
+        Date start = Util.dateStringFormat(startTime, Params.YYYYMMM);
+        Date end = Util.dateStringFormat(endTime, Params.YYYYMMM);
         List<String> dateList = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
         cal.setTime(start);
