@@ -477,7 +477,7 @@ public class QuartzJob {
                     long allCounts = locationDao.getShopAllCount(shopId, tableName);
                     insertShop += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + shopId +  "','"+ allCounts+"'),"; 
                     if (endTimes.equals("23:00:00")) {
-                        long allCountss = locationDao.getShopAllCount1(shopId, tableName);
+                        long allCountss = locationDao.getShopAllCount2(shopId, tableName);
                     	insertEntersql +="('" + nowDays +  "','" + allCounts + "','" + shopId +  "','"+ allCountss+"'),"; 
 					}
                 }
