@@ -796,7 +796,7 @@ var heatMap = function() {
 		$("#mapContainer1").css("background-image", "");
 		var dataObj = {
 			// max : pointVal,
-			min : 1,
+			min : 2,
 			data : []
 		};
 		heatmap1.setData(dataObj); // 先清空
@@ -848,7 +848,7 @@ var heatMap = function() {
 												imgInfo[0]);
 										var dataObj = {
 											// max : pointVal,
-											min : 1,
+											min : 2,
 											data : points
 										};
 										heatmap1.setData(dataObj);
@@ -1223,7 +1223,7 @@ var heatMap = function() {
 																var dataObj = {
 																	// max :
 																	// pointVal,
-																	min : 1,
+																	min : 2,
 																	data : points
 																};
 																heatmap
@@ -1364,7 +1364,7 @@ var heatMap = function() {
 									imgScale);
 							var dataObj = {
 								// max : pointVal,
-								min : 1,
+								min : 2,
 								data : points
 							};
 							heatmap1.setData(dataObj);

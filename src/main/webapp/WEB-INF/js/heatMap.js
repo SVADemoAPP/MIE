@@ -33,7 +33,7 @@ var refreshHeatmapData = function() {
 										coordinate, imgScale);
 								var dataObj = {
 									// max : pointVal,
-									min : 1,
+									min : 2,
 									data : points
 								};
 								heatmap.setData(dataObj);
@@ -965,7 +965,7 @@ var heatMap = function() {
 																var dataObj = {
 																	// max :
 																	// pointVal,
-																	min : 1,
+																	min : 2,
 																	data : points
 																};
 																heatmap
@@ -1079,7 +1079,7 @@ var heatMap = function() {
 														imgInfo[0]);
 												var dataObj = {
 													// max : pointVal,
-													min : 1,
+													min : 2,
 													data : points
 												};
 												heatmap1.setData(dataObj);
