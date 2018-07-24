@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ import com.bis.common.conf.Params;
 import com.bis.dao.LocationDao;
 import com.bis.dao.StatisticsDao;
 import com.bis.dao.VisitorDao;
+import com.bis.model.GlobalModel;
 import com.bis.model.VisitTimeModel;
 import com.bis.web.auth.AuthPassport;
 
@@ -45,7 +47,7 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping(value = "/home")
 public class HomeController {
-    
+
     private static final Logger LOG = Logger.getLogger(HomeController.class);
 
     @Autowired
@@ -86,9 +88,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("storeMng", true);
-//        model.addAttribute("cpu", SystemInfo.cpu());
-//        model.addAttribute("memory", SystemInfo.memory());
-//        model.addAttribute("diskspace", SystemInfo.file());
+        // model.addAttribute("cpu", SystemInfo.cpu());
+        // model.addAttribute("memory", SystemInfo.memory());
+        // model.addAttribute("diskspace", SystemInfo.file());
         return "config/storeConfig";
     }
 
@@ -130,9 +132,9 @@ public class HomeController {
         model.addAttribute("infoMng", true);
         model.addAttribute("mapMng", true);
         model.addAttribute("info", info);
-//        model.addAttribute("cpu", SystemInfo.cpu());
-//        model.addAttribute("memory", SystemInfo.memory());
-//        model.addAttribute("diskspace", SystemInfo.file());
+        // model.addAttribute("cpu", SystemInfo.cpu());
+        // model.addAttribute("memory", SystemInfo.memory());
+        // model.addAttribute("diskspace", SystemInfo.file());
         return "config/mapConfig";
     }
 
@@ -171,9 +173,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("categoryMng", true);
-//        model.addAttribute("cpu", SystemInfo.cpu());
-//        model.addAttribute("memory", SystemInfo.memory());
-//        model.addAttribute("diskspace", SystemInfo.file());
+        // model.addAttribute("cpu", SystemInfo.cpu());
+        // model.addAttribute("memory", SystemInfo.memory());
+        // model.addAttribute("diskspace", SystemInfo.file());
         return "config/categoryConfig";
     }
 
@@ -212,9 +214,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("InputMng", true);
-//        model.addAttribute("cpu", SystemInfo.cpu());
-//        model.addAttribute("memory", SystemInfo.memory());
-//        model.addAttribute("diskspace", SystemInfo.file());
+        // model.addAttribute("cpu", SystemInfo.cpu());
+        // model.addAttribute("memory", SystemInfo.memory());
+        // model.addAttribute("diskspace", SystemInfo.file());
         return "config/shopConfig";
     }
 
@@ -253,9 +255,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("InputMng", true);
-//        model.addAttribute("cpu", SystemInfo.cpu());
-//        model.addAttribute("memory", SystemInfo.memory());
-//        model.addAttribute("diskspace", SystemInfo.file());
+        // model.addAttribute("cpu", SystemInfo.cpu());
+        // model.addAttribute("memory", SystemInfo.memory());
+        // model.addAttribute("diskspace", SystemInfo.file());
         return "config/ticketConfig";
     }
 
@@ -288,9 +290,9 @@ public class HomeController {
         // model.addAttribute("diskspace",si.getDisk());
         model.addAttribute("infoMng", true);
         model.addAttribute("InputMng", true);
-//        model.addAttribute("cpu", SystemInfo.cpu());
-//        model.addAttribute("memory", SystemInfo.memory());
-//        model.addAttribute("diskspace", SystemInfo.file());
+        // model.addAttribute("cpu", SystemInfo.cpu());
+        // model.addAttribute("memory", SystemInfo.memory());
+        // model.addAttribute("diskspace", SystemInfo.file());
         return "config/mixingConfig";
     }
 
@@ -330,9 +332,9 @@ public class HomeController {
         // model.addAttribute("cpu",si.getCpuRatioForWindows());
         // model.addAttribute("memory", si.getEMS());
         // model.addAttribute("diskspace",si.getDisk());
-//        model.addAttribute("cpu", SystemInfo.cpu());
-//        model.addAttribute("memory", SystemInfo.memory());
-//        model.addAttribute("diskspace", SystemInfo.file());
+        // model.addAttribute("cpu", SystemInfo.cpu());
+        // model.addAttribute("memory", SystemInfo.memory());
+        // model.addAttribute("diskspace", SystemInfo.file());
         return "shop";
     }
 
@@ -363,9 +365,9 @@ public class HomeController {
         // }
         model.addAttribute("infoMng", true);
         model.addAttribute("InputMng", true);
-//        model.addAttribute("cpu", SystemInfo.cpu());
-//        model.addAttribute("memory", SystemInfo.memory());
-//        model.addAttribute("diskspace", SystemInfo.file());
+        // model.addAttribute("cpu", SystemInfo.cpu());
+        // model.addAttribute("memory", SystemInfo.memory());
+        // model.addAttribute("diskspace", SystemInfo.file());
         // model.addAttribute("cpu",si.getCpuRatioForWindows());
         // model.addAttribute("memory", si.getEMS());
         // model.addAttribute("diskspace",si.getDisk());
@@ -404,9 +406,9 @@ public class HomeController {
         // }
         // model.addAttribute("memory", si.getEMS());
         // model.addAttribute("diskspace",si.getDisk());
-//        model.addAttribute("cpu", SystemInfo.cpu());
-//        model.addAttribute("memory", SystemInfo.memory());
-//        model.addAttribute("diskspace", SystemInfo.file());
+        // model.addAttribute("cpu", SystemInfo.cpu());
+        // model.addAttribute("memory", SystemInfo.memory());
+        // model.addAttribute("diskspace", SystemInfo.file());
         return "operation";
     }
 
@@ -482,72 +484,69 @@ public class HomeController {
 
     @Autowired
     private VisitorDao visitorDao;
-    
+
     @Autowired
     private LocationDao locationDao;
-    
+
     @Autowired
     private StatisticsDao statisticsDao;
-
 
     @RequestMapping(value = "/doStoreUserData", method = { RequestMethod.GET })
     @ResponseBody
     public Object doStoreUserData(String dateKey) {
-        
-        boolean result =false;
-        if (dateKey!=null) {
-            String doDay =Util.dateFormat(Util.dateFormatStringtoLong(dateKey, Params.YYYYMMDD),Params.YYYYMMDD2);
-            String tableName =  Params.LOCATION+ dateKey;
-            String storeTableName = Params.STORELOCATION + dateKey.substring(0,dateKey.length()-2);
-            String insertStoreUserid = "replace into "+storeTableName+"(userId,time,storeId) values";
+
+        boolean result = false;
+        if (dateKey != null) {
+            String doDay = Util.dateFormat(Util.dateFormatStringtoLong(dateKey, Params.YYYYMMDD), Params.YYYYMMDD2);
+            String tableName = Params.LOCATION + dateKey;
+            String storeTableName = Params.STORELOCATION + dateKey.substring(0, dateKey.length() - 2);
+            String insertStoreUserid = "replace into " + storeTableName + "(userId,time,storeId) values";
             List<VisitTimeModel> storeUserListModel = locationDao.getStoreUserList(tableName);
-            for (VisitTimeModel sva : storeUserListModel){
+            for (VisitTimeModel sva : storeUserListModel) {
                 String userId = sva.getUserId();
                 int storeId = sva.getStoreId();
-                insertStoreUserid +="('" + userId + "','" + doDay + "','"+ storeId + "'),";
+                insertStoreUserid += "('" + userId + "','" + doDay + "','" + storeId + "'),";
             }
-            if (storeUserListModel.size()>0) {
+            if (storeUserListModel.size() > 0) {
                 insertStoreUserid = insertStoreUserid.substring(0, insertStoreUserid.length() - 1);
                 int areaResult = statisticsDao.doUpdate(insertStoreUserid);
                 result = true;
                 LOG.debug("saveUserShop-store-userid result:" + areaResult);
             }
-        }else
-        {
-            return result;   
+        } else {
+            return result;
         }
 
         return result;
     }
-    
+
     @RequestMapping(value = "/doShopUserData", method = { RequestMethod.GET })
     @ResponseBody
     public Object doShopUserData(String dateKey) {
-        
-        boolean result =false;
-        if (dateKey!=null) {
-            String doDay =Util.dateFormat(Util.dateFormatStringtoLong(dateKey, Params.YYYYMMDD),Params.YYYYMMDD2);
-            String tableName =  Params.LOCATION+ dateKey;
-            String shopTableName = Params.SHOPLOCATION + dateKey.substring(0,dateKey.length()-2);
-            String insertUserid = "replace into "+shopTableName+"(userId,time,delaytime,shopId,type) values";
+
+        boolean result = false;
+        if (dateKey != null) {
+            String doDay = Util.dateFormat(Util.dateFormatStringtoLong(dateKey, Params.YYYYMMDD), Params.YYYYMMDD2);
+            String tableName = Params.LOCATION + dateKey;
+            String shopTableName = Params.SHOPLOCATION + dateKey.substring(0, dateKey.length() - 2);
+            String insertUserid = "replace into " + shopTableName + "(userId,time,delaytime,shopId,type) values";
             List<VisitTimeModel> userListModel = locationDao.getUserList(tableName);
-            for (VisitTimeModel sva : userListModel){
+            for (VisitTimeModel sva : userListModel) {
                 String userId = sva.getUserId();
-                long visiTime = sva.getMaxTime()-sva.getMinTime();
+                long visiTime = sva.getMaxTime() - sva.getMinTime();
                 int shopId = sva.getId();
-//                int storeId = sva.getStoreId();
-//                int mapId = sva.getMapId();
+                // int storeId = sva.getStoreId();
+                // int mapId = sva.getMapId();
                 String shopVisit = Util.getMinute(visiTime, 1);
-                insertUserid +="('" + userId + "','" + doDay + "','" + shopVisit + "','" + shopId + "','"+ 0+ "'),";
+                insertUserid += "('" + userId + "','" + doDay + "','" + shopVisit + "','" + shopId + "','" + 0 + "'),";
             }
-            if (userListModel.size()>0) {
+            if (userListModel.size() > 0) {
                 insertUserid = insertUserid.substring(0, insertUserid.length() - 1);
                 int areaResult = statisticsDao.doUpdate(insertUserid);
                 LOG.debug("saveUserShop-shop-userid :" + areaResult);
             }
-        }else
-        {
-            return result;   
+        } else {
+            return result;
         }
 
         return result;
@@ -565,8 +564,8 @@ public class HomeController {
         localPath = localPath + "/" + "ftp" + "/";
         LOG.debug("doFtpData localPath" + localPath);
         // 解析前一天的visitor
-//        Date date = new Date();
-//        String dateKey = Util.dateFormat(date, Params.YYYYMMDD);
+        // Date date = new Date();
+        // String dateKey = Util.dateFormat(date, Params.YYYYMMDD);
         String fileName = ftpFileNameHeader + dateKey + ".txt";
         boolean ftpResult = Util.downFtpFile(ftpIp, ftpPort, ftpUserName, ftpPassWord, ftpRemotePath, fileName,
                 localPath, ftpType);
@@ -588,39 +587,40 @@ public class HomeController {
                     // 一次读入一行，直到读入null为文件结束
                     while ((tempString = reader.readLine()) != null) {
                         JSONObject jsonObject = new JSONObject();
-                        String[] values = (tempString+"|end").replace("|", "_").split("_");
+                        String[] values = (tempString + "|end").replace("|", "_").split("_");
                         for (int i = 0; i < names.length; i++) {
                             // {"date","ipv4","ipv6","acr","eci","gender","age","localAddress","homeAddress",
                             // "homeAddressCI","workAddress","workAddressCI","expendAbility"};
-                        	if (Util.isIp(values[1])) {
-                        		switch (i) {
-                        		case 1: // ipv4
-                        			jsonObject.put(names[i], Util.isIp(values[i])?Util.convertIp(values[i]):"");
-                        			break;
-                        		case 3: // acr
-                        		case 4: // eci
-                        			jsonObject.put(names[i], values[i].length()<200?values[i]:"error");
-                        			break;
-                        		case 5: // gender
-                        		case 6: // age
-                        		case 12: // expendAbility
-                        			jsonObject.put(names[i], "".equals(values[i])?"不详":values[i]);
-                        			break;
-//                            case 7: // localAddress
-//                                break;
-//                            case 8: // homeAddress
-//                            case 10: // workAddress
-//                                break;
-                        		default:
-                        			jsonObject.put(names[i], values[i]);
-                        			break;
-                        		}
-							}
+                            if (Util.isIp(values[1])) {
+                                switch (i) {
+                                case 1: // ipv4
+                                    jsonObject.put(names[i], Util.isIp(values[i]) ? Util.convertIp(values[i]) : "");
+                                    break;
+                                case 3: // acr
+                                case 4: // eci
+                                    jsonObject.put(names[i], values[i].length() < 200 ? values[i] : "error");
+                                    break;
+                                case 5: // gender
+                                case 6: // age
+                                case 12: // expendAbility
+                                    jsonObject.put(names[i], "".equals(values[i]) ? "不详" : values[i]);
+                                    break;
+                                // case 7: // localAddress
+                                // break;
+                                case 8: // homeAddress
+                                case 10: // workAddress
+                                    jsonObject.put(names[i], values[i] + "_" + values[i + 1]);
+                                    break;
+                                default:
+                                    jsonObject.put(names[i], values[i]);
+                                    break;
+                                }
+                            }
                         }
                         jsonObject.put("time", dateKey);
-                        if (values.length>=14&&Util.isIp(values[1])) {
-                        	list.add(jsonObject);
-						}
+                        if (values.length >= 14 && Util.isIp(values[1])) {
+                            list.add(jsonObject);
+                        }
                     }
                     reader.close();
                 } catch (IOException e) {
@@ -639,15 +639,24 @@ public class HomeController {
                         }
                     }
                 }
-                if (list.size()>0) {
-                	visitorDao.saveData(list);
-					
-				}
+                if (list.size() > 0) {
+                    visitorDao.saveData(list);
+
+                }
             }
             // LOG.debug("VisitorController~插入Visitor数据条数:" + num);
         } else {
             LOG.debug("doFtpData downFtpFile failed result " + ftpResult);
         }
         return "today:" + ftpResult;
+    }
+    
+    @Autowired
+    private GlobalModel globalModel;
+    
+    @RequestMapping(value = "/testMapBorder", method = { RequestMethod.GET })
+    @ResponseBody
+    public Object testMapBorder() {
+        return globalModel;
     }
 }

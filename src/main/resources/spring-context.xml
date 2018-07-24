@@ -37,6 +37,9 @@
         <property name="basePackage" value="com.bis.dao" />  
     </bean>
     
+    <bean id="globalModel" class="com.bis.model.GlobalModel">
+    </bean>
+    
     <!-- 事务管理 -->
     <bean id="txManager"  
         class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  

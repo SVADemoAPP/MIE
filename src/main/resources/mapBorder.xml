@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Border>
+		<mapId>11</mapId>
+		<x1>10</x1>
+		<x2>1</x2>
+		<y1>1</y1>
+		<y2>10</y2>
+	</Border>
+	<Border>
+		<mapId>22</mapId>
+		<x1>2</x1>
+		<x2>20</x2>
+		<y1>20</y1>
+		<y2>2</y2>
+	</Border>
+</Configuration>
+
+
+
