@@ -746,6 +746,12 @@
     <select id="getStoreAllCount" resultType="int">
         select count(distinct a.userid) from ${tableName} a join bi_maps c on c.mapId = a.mapId join bi_store b on b.id = c.storeId where b.id = #{storeId}
     </select>
+    <select id="getMapNowCountOutOfArea" resultType="int">
+        select count(distinct a.userid) from ${tableName} a  
+        where a.mapId = #{mapId} and a.timestamp &gt; #{startTime} and a.timestamp &lt; #{endTime}
+        and (a.x &lt; #{mapBorderModel.minX} or a.x &gt; #{mapBorderModel.maxX} 
+        or a.y &lt; #{mapBorderModel.minY} or a.y &gt; #{mapBorderModel.maxY})
+    </select>    
     <select id="getStoreNowCount" resultType="int">
         select count(distinct a.userid) from ${tableName} a join bi_maps c on c.mapId = a.mapId join bi_store b on b.id = c.storeId where b.id = #{storeId} and a.timestamp &gt; #{startTime} and a.timestamp &lt;#{endTime}
     </select>    

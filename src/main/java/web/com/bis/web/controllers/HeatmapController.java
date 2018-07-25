@@ -24,7 +24,9 @@ import com.bis.dao.LocationDao;
 import com.bis.dao.MapMngDao;
 import com.bis.dao.RateDao;
 import com.bis.dao.ShopDao;
+import com.bis.model.GlobalModel;
 import com.bis.model.LocationModel;
+import com.bis.model.MapBorderModel;
 import com.bis.model.MapMngModel;
 import com.bis.model.ShopModel;
 import com.bis.web.auth.Rates;
@@ -40,22 +42,25 @@ public class HeatmapController {
 
     @Autowired
     private ShopDao shopDao;
-    
+
     @Autowired
     private Rates rates;
-    
+
     @Autowired
     private RateDao rateDao;
-    
+
+    @Autowired
+    private GlobalModel globalModel;
+
     @Value("${sva.durationOfLocation}")
     private int durationOfLocation;
-    
+
     @Value("${sva.coefficientSwitch}")
-    private int coefficientSwitch;   
-    
+    private int coefficientSwitch;
+
     @Value("${sva.coefficient}")
-    private double coefficient;  
-    
+    private double coefficient;
+
     private static final Logger LOG = Logger.getLogger(HeatmapController.class);
 
     @RequestMapping(value = "/api/getMapInfoByPosition", method = { RequestMethod.POST })
@@ -166,53 +171,54 @@ public class HeatmapController {
     @ResponseBody
     public Map<String, Object> getShopHeatMap(@RequestParam("shopId") String shopId) {
         LOG.info("HeatmapController ~ getShopHeatMap 店铺前10分钟客流量");
-//        List<ShopModel> list = shopDao.getShopDataById(shopId);
-//        ShopModel model = new ShopModel();
+        // List<ShopModel> list = shopDao.getShopDataById(shopId);
+        // ShopModel model = new ShopModel();
         Map<String, Object> modelMap = new HashMap<String, Object>(2);
         Map<Long, Long> timeMap = new TreeMap<Long, Long>();
-//        List<LocationModel> resultList = new ArrayList<LocationModel>();
-//        if (list.size() > 0) {
-//            model = list.get(0);
-//        } else {
-////            modelMap.put("data", resultList);
-//            return modelMap;
-//        }
-     // 查询截至时间
+        // List<LocationModel> resultList = new ArrayList<LocationModel>();
+        // if (list.size() > 0) {
+        // model = list.get(0);
+        // } else {
+        //// modelMap.put("data", resultList);
+        // return modelMap;
+        // }
+        // 查询截至时间
         long nowTime = System.currentTimeMillis();
         nowTime = nowTime / 4000 * 4000; // 取4000的倍数
         // timeMap.put(nowTime, (long) 0);
-        long startTime = nowTime -durationOfLocation*1000;
+        long startTime = nowTime - durationOfLocation * 1000;
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
-//        resultList = locationDao.getTenminitShopData(startTime, nowTime, tableName, model);
+        // resultList = locationDao.getTenminitShopData(startTime, nowTime,
+        // tableName, model);
         int count = locationDao.getShopNowCount(shopId, tableName, startTime, nowTime);
-//        int startIndex=0; //开始遍历resultList的位置
-//        Set<String> userIdSet=new HashSet<>();
-//        LocationModel eachModel;
+        // int startIndex=0; //开始遍历resultList的位置
+        // Set<String> userIdSet=new HashSet<>();
+        // LocationModel eachModel;
         for (int i = 0; i < 899; i++) {
-//            timeMap.put(nowTime - i * 4000, (long) 0);
-            long thisTime=nowTime-(899-i)*4000;
-          //是否第一次进入时间段
-//            boolean firstBetween=true; 
-//            for(int j=startIndex;j<resultList.size();j++){
-//                eachModel=resultList.get(j);
-//                //超出时间段
-//                if(eachModel.getTimestamp()>thisTime){
-//                    break;
-//                }
-//                //在时间段之内
-//                if(eachModel.getTimestamp()>thisTime-durationOfLocation*1000){
-//                    if(firstBetween){
-//                        firstBetween=false;
-//                        startIndex=j; //下次开始遍历的位置，从此索引开始
-//                    }
-//                    userIdSet.add(eachModel.getUserID());
-//                }
-//            }
-            //遍历完过后存数目
-            timeMap.put(thisTime,  0l);
-//            userIdSet.clear();
+            // timeMap.put(nowTime - i * 4000, (long) 0);
+            long thisTime = nowTime - (899 - i) * 4000;
+            // 是否第一次进入时间段
+            // boolean firstBetween=true;
+            // for(int j=startIndex;j<resultList.size();j++){
+            // eachModel=resultList.get(j);
+            // //超出时间段
+            // if(eachModel.getTimestamp()>thisTime){
+            // break;
+            // }
+            // //在时间段之内
+            // if(eachModel.getTimestamp()>thisTime-durationOfLocation*1000){
+            // if(firstBetween){
+            // firstBetween=false;
+            // startIndex=j; //下次开始遍历的位置，从此索引开始
+            // }
+            // userIdSet.add(eachModel.getUserID());
+            // }
+            // }
+            // 遍历完过后存数目
+            timeMap.put(thisTime, 0l);
+            // userIdSet.clear();
         }
         timeMap.put(nowTime, Long.valueOf(coefficientData(count)));
         modelMap.put("data", timeMap);
@@ -226,122 +232,130 @@ public class HeatmapController {
         LOG.info("HeatmapController ~ getMallHeatMap 商场前10分钟客流量");
         Map<String, Object> modelMap = new HashMap<String, Object>(2);
         Map<Long, Long> timeMap = new TreeMap<Long, Long>();
-//        List<LocationModel> resultList = new ArrayList<LocationModel>();
+        // List<LocationModel> resultList = new ArrayList<LocationModel>();
         // 查询截至时间
         long nowTime = System.currentTimeMillis();
         nowTime = nowTime / 4000 * 4000; // 取4000的倍数
         // timeMap.put(nowTime, (long) 0);
-        long startTime = nowTime -durationOfLocation*1000;
+        long startTime = nowTime - durationOfLocation * 1000;
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
-//        resultList = locationDao.getTenminitMallData(startTime, nowTime, tableName, storeId);
+        // resultList = locationDao.getTenminitMallData(startTime, nowTime,
+        // tableName, storeId);
         int count = locationDao.getStoreNowCount(storeId, tableName, startTime, nowTime);
-//        int startIndex=0; //开始遍历resultList的位置
-//        Set<String> userIdSet=new HashSet<>();
-//        LocationModel eachModel;
+        Map<Integer, MapBorderModel> map = globalModel.getMapBorderMap();
+        MapBorderModel tempModel;
+        for (Integer in : map.keySet()) {
+            // map.keySet()返回的是所有key的值
+            tempModel = map.get(in);// 得到每个key多对用value的值
+            count-=locationDao.getMapNowCountOutOfArea(tempModel,in, tableName, startTime, nowTime);
+        }
+        // int startIndex=0; //开始遍历resultList的位置
+        // Set<String> userIdSet=new HashSet<>();
+        // LocationModel eachModel;
         for (int i = 0; i < 899; i++) {
-//            timeMap.put(nowTime - i * 4000, (long) 0);
-            long thisTime=nowTime-(899-i)*4000;
-          //是否第一次进入时间段
-//            boolean firstBetween=true; 
-//            for(int j=startIndex;j<resultList.size();j++){
-//                eachModel=resultList.get(j);
-//                //超出时间段
-//                if(eachModel.getTimestamp()>thisTime){
-//                    break;
-//                }
-//                //在时间段之内
-//                if(eachModel.getTimestamp()>thisTime-durationOfLocation*1000){
-//                    if(firstBetween){
-//                        firstBetween=false;
-//                        startIndex=j; //下次开始遍历的位置，从此索引开始
-//                    }
-//                    userIdSet.add(eachModel.getUserID());
-//                }
-//            }
-            //遍历完过后存数目
+            // timeMap.put(nowTime - i * 4000, (long) 0);
+            long thisTime = nowTime - (899 - i) * 4000;
+            // 是否第一次进入时间段
+            // boolean firstBetween=true;
+            // for(int j=startIndex;j<resultList.size();j++){
+            // eachModel=resultList.get(j);
+            // //超出时间段
+            // if(eachModel.getTimestamp()>thisTime){
+            // break;
+            // }
+            // //在时间段之内
+            // if(eachModel.getTimestamp()>thisTime-durationOfLocation*1000){
+            // if(firstBetween){
+            // firstBetween=false;
+            // startIndex=j; //下次开始遍历的位置，从此索引开始
+            // }
+            // userIdSet.add(eachModel.getUserID());
+            // }
+            // }
+            // 遍历完过后存数目
             timeMap.put(thisTime, 0l);
-//            userIdSet.clear();
+            // userIdSet.clear();
         }
         timeMap.put(nowTime, Long.valueOf(coefficientData(count)));
-//        // 分时间段的userId集合
-//        Set<String> existUserIdSet = new HashSet<>();
-//        for (int i = 0; i < resultList.size(); i++) {
-//            LocationModel localModel = resultList.get(i);
-//            if (localModel.getTimestamp() <= startTime + 60000) {
-//                // 存放满足时间戳的userId
-//                existUserIdSet.add(localModel.getUserID());
-//            } else {
-//                // 150个刻度点用户量的存放，然后清空userId集合在下个刻度点重新计数
-//                startTime += 60000;
-//                timeMap.put(startTime, (long) existUserIdSet.size());
-//                existUserIdSet.clear();
-//                // 如果下一个时间戳中没有位置信息，则startTime往后加，直到进入小于等于startTime的区间
-//                while (localModel.getTimestamp() > startTime + 60000) {
-//                    startTime += 60000;
-//                }
-//                // 添加userId到下一个存在的数据中去
-//                existUserIdSet.add(localModel.getUserID());
-//            }
-//        }
-//        // 最后剩下的就是当前4秒的，再put一次
-//        timeMap.put(startTime + 60000, (long) existUserIdSet.size());
-//        modelMap.put("timestamp", startTime);
+        // // 分时间段的userId集合
+        // Set<String> existUserIdSet = new HashSet<>();
+        // for (int i = 0; i < resultList.size(); i++) {
+        // LocationModel localModel = resultList.get(i);
+        // if (localModel.getTimestamp() <= startTime + 60000) {
+        // // 存放满足时间戳的userId
+        // existUserIdSet.add(localModel.getUserID());
+        // } else {
+        // // 150个刻度点用户量的存放，然后清空userId集合在下个刻度点重新计数
+        // startTime += 60000;
+        // timeMap.put(startTime, (long) existUserIdSet.size());
+        // existUserIdSet.clear();
+        // // 如果下一个时间戳中没有位置信息，则startTime往后加，直到进入小于等于startTime的区间
+        // while (localModel.getTimestamp() > startTime + 60000) {
+        // startTime += 60000;
+        // }
+        // // 添加userId到下一个存在的数据中去
+        // existUserIdSet.add(localModel.getUserID());
+        // }
+        // }
+        // // 最后剩下的就是当前4秒的，再put一次
+        // timeMap.put(startTime + 60000, (long) existUserIdSet.size());
+        // modelMap.put("timestamp", startTime);
         modelMap.put("data", timeMap);
 
         return modelMap;
     }
-    
+
     @RequestMapping(value = "/api/getFloorHeatMap", method = { RequestMethod.POST })
     @ResponseBody
     public Map<String, Object> getFloorHeatMap(@RequestParam("mapId") String mapId) {
         LOG.info("HeatmapController ~ getMallHeatMap 商场前10分钟客流量");
         Map<String, Object> modelMap = new HashMap<String, Object>(2);
         Map<Long, Long> timeMap = new TreeMap<Long, Long>();
-//        List<LocationModel> resultList = new ArrayList<LocationModel>();
+        // List<LocationModel> resultList = new ArrayList<LocationModel>();
         // 查询截至时间
         long nowTime = System.currentTimeMillis();
         nowTime = nowTime / 4000 * 4000; // 取4000的倍数
         // timeMap.put(nowTime, (long) 0);
-        long startTime = nowTime-durationOfLocation*1000;
+        long startTime = nowTime - durationOfLocation * 1000;
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
-//        resultList = locationDao.getTenminitFloorData(startTime, nowTime, tableName, mapId);
+        // resultList = locationDao.getTenminitFloorData(startTime, nowTime,
+        // tableName, mapId);
         int count = locationDao.getMapNowCount(mapId, tableName, startTime, nowTime);
-//        int startIndex=0; //开始遍历resultList的位置
-//        Set<String> userIdSet=new HashSet<>();
-//        LocationModel eachModel;
+        // int startIndex=0; //开始遍历resultList的位置
+        // Set<String> userIdSet=new HashSet<>();
+        // LocationModel eachModel;
         for (int i = 0; i < 899; i++) {
-//            timeMap.put(nowTime - i * 4000, (long) 0);
-            long thisTime=nowTime-(899-i)*4000;
-          //是否第一次进入时间段
-//            boolean firstBetween=true; 
-//            for(int j=startIndex;j<resultList.size();j++){
-//                eachModel=resultList.get(j);
-//                //超出时间段
-//                if(eachModel.getTimestamp()>thisTime){
-//                    break;
-//                }
-//                //在时间段之内
-//                if(eachModel.getTimestamp()>thisTime-durationOfLocation*1000){
-//                    if(firstBetween){
-//                        firstBetween=false;
-//                        startIndex=j; //下次开始遍历的位置，从此索引开始
-//                    }
-//                    userIdSet.add(eachModel.getUserID());
-//                }
-//            }
-            //遍历完过后存数目
+            // timeMap.put(nowTime - i * 4000, (long) 0);
+            long thisTime = nowTime - (899 - i) * 4000;
+            // 是否第一次进入时间段
+            // boolean firstBetween=true;
+            // for(int j=startIndex;j<resultList.size();j++){
+            // eachModel=resultList.get(j);
+            // //超出时间段
+            // if(eachModel.getTimestamp()>thisTime){
+            // break;
+            // }
+            // //在时间段之内
+            // if(eachModel.getTimestamp()>thisTime-durationOfLocation*1000){
+            // if(firstBetween){
+            // firstBetween=false;
+            // startIndex=j; //下次开始遍历的位置，从此索引开始
+            // }
+            // userIdSet.add(eachModel.getUserID());
+            // }
+            // }
+            // 遍历完过后存数目
             timeMap.put(thisTime, 0l);
-//            userIdSet.clear();
+            // userIdSet.clear();
         }
         timeMap.put(nowTime, Long.valueOf(coefficientData(count)));
         modelMap.put("data", timeMap);
         return modelMap;
-    }    
-
+    }
 
     @RequestMapping(value = "/api/getShopChartsData", method = { RequestMethod.POST })
     @ResponseBody
@@ -360,7 +374,7 @@ public class HeatmapController {
         // 查询截至时间
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
-        long startTime = endTime - durationOfLocation*1000 - 28800000;
+        long startTime = endTime - durationOfLocation * 1000 - 28800000;
         long endTimes = endTime - 28800000;
         resultList = locationDao.getNowCounts(startTime, endTimes, tableName, model);
         modelMap.put("data", coefficientData(resultList));
@@ -375,7 +389,7 @@ public class HeatmapController {
         List<LocationModel> resultList = new ArrayList<>();
         // 查询截至时间
         long nowTime = System.currentTimeMillis();
-        long time = nowTime - durationOfLocation*1000;
+        long time = nowTime - durationOfLocation * 1000;
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
@@ -386,24 +400,23 @@ public class HeatmapController {
 
         return modelMap;
     }
-    
-    
+
     @RequestMapping(value = "/api/getStoreHeatMap", method = { RequestMethod.POST })
     @ResponseBody
     public Map<String, Object> getStoreHeatMap(@RequestParam("storeId") String storeId) {
         // 查询截至时间
         long nowTime = System.currentTimeMillis();
-        long time = nowTime - durationOfLocation*1000;
+        long time = nowTime - durationOfLocation * 1000;
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
         long count = locationDao.getMallTotal1(time, tableName, storeId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
 
-        modelMap.put("data", coefficientData((int)count));
+        modelMap.put("data", coefficientData((int) count));
 
         return modelMap;
-    }    
+    }
 
     @RequestMapping(value = "/api/getPeriodMapHeatMap", method = { RequestMethod.POST })
     @ResponseBody
@@ -448,110 +461,117 @@ public class HeatmapController {
     public Map<String, Object> getStoreMomentCount(@RequestParam("storeId") String storeId,
             @RequestParam("endTime") long endTime) {
         LOG.info("HeatmapController ~ getStoreMomentCount 商场指定时间客流量");
-        long startTime = endTime - durationOfLocation*1000;
+        long startTime = endTime - durationOfLocation * 1000;
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
         long userCount = locationDao.getStoreMomentCount(startTime, endTime, tableName, storeId);
+        Map<Integer, MapBorderModel> map = globalModel.getMapBorderMap();
+        MapBorderModel tempModel;
+        for (Integer in : map.keySet()) {
+            // map.keySet()返回的是所有key的值
+            tempModel = map.get(in);// 得到每个key多对用value的值
+            userCount-=locationDao.getMapNowCountOutOfArea(tempModel,in, tableName, startTime, endTime);
+        }
         Map<String, Object> modelMap = new HashMap<String, Object>();
-        modelMap.put("data", coefficientData((int)userCount));
+        modelMap.put("data", coefficientData((int) userCount));
         return modelMap;
     }
-    
+
     @RequestMapping(value = "/api/getFloorMomentCount", method = { RequestMethod.POST })
     @ResponseBody
     public Map<String, Object> getFloorMomentCount(@RequestParam("mapId") String mapId,
             @RequestParam("endTime") long endTime) {
         LOG.info("HeatmapController ~ getStoreMomentCount 商场指定时间客流量");
-        long startTime = endTime - durationOfLocation*1000;
+        long startTime = endTime - durationOfLocation * 1000;
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
         long userCount = locationDao.getFloorMomentCount(startTime, endTime, tableName, mapId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
-        modelMap.put("data", coefficientData((int)userCount));
+        modelMap.put("data", coefficientData((int) userCount));
         return modelMap;
-    }    
-    
+    }
+
     @RequestMapping(value = "/api/getRates", method = { RequestMethod.POST })
     @ResponseBody
-    public Map<String,Object> getRates(@RequestParam("id") int id){
-        Map<String,Object> map = new HashMap<String, Object>();
+    public Map<String, Object> getRates(@RequestParam("id") int id) {
+        Map<String, Object> map = new HashMap<String, Object>();
         List<String> listDate = new ArrayList<>();
-         List<String> listEnterRate = new ArrayList<>();
+        List<String> listEnterRate = new ArrayList<>();
         List<String> listOverRate = new ArrayList<>();
-         List<String> listDeepRate = new ArrayList<>();
-//      Calendar calendar = Calendar.getInstance();
+        List<String> listDeepRate = new ArrayList<>();
+        // Calendar calendar = Calendar.getInstance();
         // 获得前一天的日期
-//      calendar.add(Calendar.DATE,-i);
-//      calendar.getTimeInMillis()
-//           for(int i=1;i<8;i++){
-//               listDate.add("");
-//               listEnterRate.add("");
-//               listOverRate.add("");
-//               listDeepRate.add("");
-//           }
-//       Thread[] threadList=new Thread[7];
-//       ExecutorService executorService = Executors.newFixedThreadPool(7);
-//       final CountDownLatch end=new CountDownLatch(7);
-       ShopModel shopModel=rateDao.getShopInfoById(id);
+        // calendar.add(Calendar.DATE,-i);
+        // calendar.getTimeInMillis()
+        // for(int i=1;i<8;i++){
+        // listDate.add("");
+        // listEnterRate.add("");
+        // listOverRate.add("");
+        // listDeepRate.add("");
+        // }
+        // Thread[] threadList=new Thread[7];
+        // ExecutorService executorService = Executors.newFixedThreadPool(7);
+        // final CountDownLatch end=new CountDownLatch(7);
+        ShopModel shopModel = rateDao.getShopInfoById(id);
         Calendar calendar = Calendar.getInstance();
         for (int i = 0; i < 7; i++) {
-//            final int j=i;
-//            threadList[i]=new Thread(new Runnable() {
-//                
-            
-//                @Override
-//                public void run() {
-//                    // TODO Auto-generated method stub
-//                    
-//                    Calendar calendar = Calendar.getInstance();
-//                    calendar.add(Calendar.DATE,-j-1);
-//                    listDate.set(j,Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2));
-//                    listEnterRate.set(j,String.valueOf(rates.getEnter(shopModel,calendar)));
-//                    listOverRate.set(j,String.valueOf(rates.getOverflow1(shopModel,calendar)));
-//                    listDeepRate.set(j,String.valueOf(rates.getDeep(shopModel, calendar))); 
-//                }
-//            });
-//           threadList[i].start();
-//           executorService.submit(new Runnable() {
-//               
-//               @Override
-//               public void run() {
-                   // TODO Auto-generated method stub
-//                   Calendar calendar = Calendar.getInstance();
-                   calendar.add(Calendar.DATE,-1);
-                   String days = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2);
-                   listDate.add(days);
-                   listEnterRate.add(rates.getNewEnter(shopModel,days));
-                   listOverRate.add(String.valueOf(rates.getOverflow1(shopModel,calendar)));
-                   listDeepRate.add(String.valueOf(rates.getDeep(shopModel, calendar))); 
-//                   end.countDown();
-//               }
-//           });
+            // final int j=i;
+            // threadList[i]=new Thread(new Runnable() {
+            //
+
+            // @Override
+            // public void run() {
+            // // TODO Auto-generated method stub
+            //
+            // Calendar calendar = Calendar.getInstance();
+            // calendar.add(Calendar.DATE,-j-1);
+            // listDate.set(j,Util.dateFormat(calendar.getTimeInMillis(),
+            // Params.YYYYMMDD2));
+            // listEnterRate.set(j,String.valueOf(rates.getEnter(shopModel,calendar)));
+            // listOverRate.set(j,String.valueOf(rates.getOverflow1(shopModel,calendar)));
+            // listDeepRate.set(j,String.valueOf(rates.getDeep(shopModel,
+            // calendar)));
+            // }
+            // });
+            // threadList[i].start();
+            // executorService.submit(new Runnable() {
+            //
+            // @Override
+            // public void run() {
+            // TODO Auto-generated method stub
+            // Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE, -1);
+            String days = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD2);
+            listDate.add(days);
+            listEnterRate.add(rates.getNewEnter(shopModel, days));
+            listOverRate.add(String.valueOf(rates.getOverflow1(shopModel, calendar)));
+            listDeepRate.add(String.valueOf(rates.getDeep(shopModel, calendar)));
+            // end.countDown();
+            // }
+            // });
         }
-//        try {
-//            end.await();
-//        } catch (InterruptedException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        executorService.shutdown();
+        // try {
+        // end.await();
+        // } catch (InterruptedException e) {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // }
+        // executorService.shutdown();
         map.put("date", listDate);
         map.put("eRate", listEnterRate);
         map.put("oRate", listOverRate);
         map.put("dRate", listDeepRate);
         return map;
     }
-    
-    private int coefficientData(int data){
-        if(coefficientSwitch==0)
-        {
+
+    private int coefficientData(int data) {
+        if (coefficientSwitch == 0) {
             return data;
-        }else
-        {
-            return (int) (data*coefficient);
+        } else {
+            return (int) (data * coefficient);
         }
-        
+
     }
 }

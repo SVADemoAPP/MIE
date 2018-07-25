@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.bis.model.LocationModel;
+import com.bis.model.MapBorderModel;
 import com.bis.model.ShopModel;
 import com.bis.model.TrendAllModel;
 import com.bis.model.TrendMapModel;
@@ -238,6 +239,8 @@ public interface LocationDao {
     public String getShop10Count(@Param("storeId") String storeId,@Param("time") String beginTime);
     
     public int getStoreAllCount(@Param("storeId") String storeId, @Param("tableName") String tableName);
+    
+    public int getMapNowCountOutOfArea(@Param("mapBorderModel") MapBorderModel mapBorderModel, @Param("mapId") int mapId,@Param("tableName") String tableName,@Param("startTime") long beginTime,@Param("endTime") long endTime);
     
     public int getStoreNowCount(@Param("storeId") String storeId, @Param("tableName") String tableName,@Param("startTime") long beginTime,@Param("endTime") long endTime);
     
