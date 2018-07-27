@@ -604,14 +604,21 @@ var dataFilter = function(data, xo, yo, scale, width, height, coordinate,
 	xo = parseFloat(xo);
 	yo = parseFloat(yo);
 	scale = parseFloat(scale);
+	var pointX;
+	var pointY;
 	switch (coordinate) {
 	case "ul":
 		for ( var i in data) {
+			pointX = (data[i].x / 10 * scale + xo * scale) / imgScale
+			+ Math.random() / 10;
+			pointY = (data[i].y / 10 * scale + yo * scale) / imgScale
+			+ Math.random() / 10;
+			if(pointX > width || pointY > height){
+				continue;
+			}
 			var point = {
-				x : (data[i].x / 10 * scale + xo * scale) / imgScale
-						+ Math.random() / 10,
-				y : (data[i].y / 10 * scale + yo * scale) / imgScale
-						+ Math.random() / 10,
+				x : pointX,
+				y : pointY,
 				value : 1
 			};
 			list.push(point);
@@ -619,11 +626,16 @@ var dataFilter = function(data, xo, yo, scale, width, height, coordinate,
 		break;
 	case "ll":
 		for ( var i in data) {
+			pointX = (data[i].x / 10 * scale + xo * scale) / imgScale
+			+ Math.random() / 10;
+			pointY =  height - (data[i].y / 10 * scale + yo * scale) / imgScale
+			+ Math.random() / 10;
+			if(pointX > width || pointY > height){
+				continue;
+			}
 			var point = {
-				x : (data[i].x / 10 * scale + xo * scale) / imgScale
-						+ Math.random() / 10,
-				y : height - (data[i].y / 10 * scale + yo * scale) / imgScale
-						+ Math.random() / 10,
+				x : pointX,
+				y : pointY,
 				value : 1
 			};
 			list.push(point);
@@ -631,11 +643,16 @@ var dataFilter = function(data, xo, yo, scale, width, height, coordinate,
 		break;
 	case "ur":
 		for ( var i in data) {
+			pointX = width - (data[i].x / 10 * scale + xo * scale) / imgScale
+			+ Math.random() / 10;
+			pointY = (data[i].y / 10 * scale + yo * scale) / imgScale
+			+ Math.random() / 10;
+			if(pointX > width || pointY > height){
+				continue;
+			}
 			var point = {
-				x : width - (data[i].x / 10 * scale + xo * scale) / imgScale
-						+ Math.random() / 10,
-				y : (data[i].y / 10 * scale + yo * scale) / imgScale
-						+ Math.random() / 10,
+				x : pointX,
+				y : pointY,
 				value : 1
 			};
 			list.push(point);
@@ -643,11 +660,16 @@ var dataFilter = function(data, xo, yo, scale, width, height, coordinate,
 		break;
 	case "lr":
 		for ( var i in data) {
+			pointX = width - (data[i].x / 10 * scale + xo * scale) / imgScale
+			+ Math.random() / 10;
+			pointY = height - (data[i].y / 10 * scale + yo * scale) / imgScale
+			+ Math.random() / 10;
+			if(pointX > width || pointY > height){
+				continue;
+			}
 			var point = {
-				x : width - (data[i].x / 10 * scale + xo * scale) / imgScale
-						+ Math.random() / 10,
-				y : height - (data[i].y / 10 * scale + yo * scale) / imgScale
-						+ Math.random() / 10,
+				x : pointX,
+				y : pointY,
 				value : 1
 			};
 			list.push(point);
