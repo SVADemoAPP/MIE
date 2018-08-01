@@ -144,32 +144,96 @@ var RouteLine = function() {
 		if(data.length == 0){
 			return;
 		}
-		// 开始第一个path的第一个点
-		map[data[0]["userId"]] = true;
-		ctx.beginPath();
-	    ctx.moveTo(parseInt(shopInfo[data[0]["shopId"]].x), parseInt(shopInfo[data[0]["shopId"]].y));
+		//保存有序客流方向的json，用箭头画出
+		var arrowMap = {}; 
+		var lastUserId=-1;
+		var lastShopId=-1;
 		for(var i=1; i<data.length; i++){
-			var temp = data[i];
-			var shopTemp = shopInfo[temp["shopId"]];
-			if(map[temp["userId"]]){
-				ctx.lineTo(parseInt(shopTemp.x), parseInt(shopTemp.y));
+			var tempUserId=data[i]["userId"];
+			if(tempUserId==lastUserId){
+				var tempShopId=data[i]["shopId"];
+				if(tempShopId!=lastShopId){
+					if(arrowMap[lastShopId+"_"+tempShopId]){
+						arrowMap[lastShopId+"_"+tempShopId]++;
+					}else{
+						arrowMap[lastShopId+"_"+tempShopId] = 1;
+					}
+					lastShopId=tempShopId;
+				}
 			}else{
-				// 结束上一条path
-				ctx.closePath();
-				ctx.stroke();
-				// 开始新的path
-				ctx.beginPath();
-			    ctx.moveTo(parseInt(shopTemp.x), parseInt(shopTemp.y));
-			    
-			    map[temp["userId"]] = true;
+				lastUserId=tempUserId;
+				lastShopId=data[i]["shopId"];
 			}
+			
+		}	
+		console.log(Math.log(1)/Math.log(10));
+		console.log(parseInt(Math.log(11)/Math.log(10)));
+		console.log(Math.log(100)/Math.log(10));
+		for(var k in arrowMap){
+			var pair=k.split("_");  //拆分出两个shopId
+			var x0=parseInt(shopInfo[pair[0]].x);
+			var y0=parseInt(shopInfo[pair[0]].y);
+			var x1=parseInt(shopInfo[pair[1]].x);
+			var y1=parseInt(shopInfo[pair[1]].y);
+			//接下来做一定的位置偏移，是为了清晰明了的画出两点之间正反两条线
+			var length=Math.sqrt((x1-x0)*(x1-x0)+(y1-y0)*(y1-y0));
+			var cos=((x1-x0)/length).toFixed(2);
+			var sin=((y1-y0)/length).toFixed(2);
+			if(x1!=x0){
+				x0=x0+cos*15;
+				x1=x1-cos*15;
+			}
+			if(y1!=y0){
+				y0=y0+sin*15;
+				y1=y1-sin*15;
+			}
+			//左右偏移，以区分两个方向
+			x0=x0+sin*5;
+			x1=x1+sin*5;
+			y0=y0-cos*5;
+			y1=y1-cos*5;
+			drawArrow(ctx, x0, y0, 
+					x1,y1,15,10,parseInt(Math.log(arrowMap[k])/Math.log(10))+1,'#f36');
+			  ctx.fillText(arrowMap[k],x1-(x1-x0)/8,y1-(y1-y0)/8,200);
 		}
-		// 结束最后一条path
-		ctx.closePath();
-		ctx.stroke();
-		
 	};
 	
+//	ctx：Canvas绘图环境
+//	fromX, fromY：起点坐标（也可以换成 p1 ，只不过它是一个数组）
+//	toX, toY：终点坐标 (也可以换成 p2 ，只不过它是一个数组)
+//	theta：三角斜边一直线夹角
+//	headlen：三角斜边长度
+//	width：箭头线宽度
+//	color：箭头颜色
+	function drawArrow(ctx, fromX, fromY, toX, toY,theta,headlen,width,color) {
+		  var theta = theta || 30,
+		      headlen = headlen || 10,
+		      width = width || 1,
+		      color = color || '#000',
+		      angle = Math.atan2(fromY - toY, fromX - toX) * 180 / Math.PI,
+		      angle1 = (angle + theta) * Math.PI / 180,
+		      angle2 = (angle - theta) * Math.PI / 180,
+		      topX = headlen * Math.cos(angle1),
+		      topY = headlen * Math.sin(angle1),
+		      botX = headlen * Math.cos(angle2),
+		      botY = headlen * Math.sin(angle2);
+		  ctx.save();
+		  ctx.beginPath();
+		  var arrowX, arrowY;
+		  ctx.moveTo(fromX, fromY);
+		  ctx.lineTo(toX, toY);
+		  arrowX = toX + topX;
+		  arrowY = toY + topY;
+		  ctx.moveTo(arrowX, arrowY);
+		  ctx.lineTo(toX, toY);
+		  arrowX = toX + botX;
+		  arrowY = toY + botY;
+		  ctx.lineTo(arrowX, arrowY);
+		  ctx.strokeStyle = color;
+		  ctx.lineWidth = width;
+		  ctx.stroke();
+		  ctx.restore();
+		};
 	
 	var generateRandomPoint = function(shopInfo){
 		var x1 = shopInfo.x1,
@@ -280,7 +344,7 @@ var RouteLine = function() {
 		c.height = imgHeight;
 		
 		// 获取用户轨迹信息
-		var startTime = dateFormat(new Date(new Date().getTime() - 37*24*60*60*1000), "yyyy-MM-dd HH:mm:ss"),
+		var startTime = dateFormat(new Date(new Date().getTime() - 97*24*60*60*1000), "yyyy-MM-dd HH:mm:ss"),
 			endTime = dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
 		// test
 		//startTime = "2016-06-14 16:30:20";
