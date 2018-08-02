@@ -137,8 +137,8 @@ var RouteLine = function() {
 	
 	// 商场店铺轨迹渲染
 	var paintPeopleRouteStore = function(data, shopInfo, ctx){
-		var map = {};
-		ctx.strokeStyle = "#ff4c4c";
+//		var map = {};
+//		ctx.strokeStyle = "#ff4c4c";
 //		ctx.globalCompositeOperation = "lighter";
 		// 数据为空时，直接返回
 		if(data.length == 0){
@@ -166,9 +166,6 @@ var RouteLine = function() {
 			}
 			
 		}	
-		console.log(Math.log(1)/Math.log(10));
-		console.log(parseInt(Math.log(11)/Math.log(10)));
-		console.log(Math.log(100)/Math.log(10));
 		for(var k in arrowMap){
 			var pair=k.split("_");  //拆分出两个shopId
 			var x0=parseInt(shopInfo[pair[0]].x);
@@ -179,23 +176,39 @@ var RouteLine = function() {
 			var length=Math.sqrt((x1-x0)*(x1-x0)+(y1-y0)*(y1-y0));
 			var cos=((x1-x0)/length).toFixed(2);
 			var sin=((y1-y0)/length).toFixed(2);
-			if(x1!=x0){
-				x0=x0+cos*15;
-				x1=x1-cos*15;
-			}
-			if(y1!=y0){
-				y0=y0+sin*15;
-				y1=y1-sin*15;
-			}
-			//左右偏移，以区分两个方向
-			x0=x0+sin*5;
-			x1=x1+sin*5;
-			y0=y0-cos*5;
-			y1=y1-cos*5;
+			x0=x0+cos*15+sin*5;
+			x1=x1-cos*15+sin*5;
+			y0=y0+sin*15-cos*5;
+			y1=y1-sin*15-cos*5;
+			var sac=getStrokeAndColor(arrowMap[k]);
 			drawArrow(ctx, x0, y0, 
-					x1,y1,15,10,parseInt(Math.log(arrowMap[k])/Math.log(10))+1,'#f36');
+					x1,y1,15,10,sac.stroke*0.5,sac.color);
 			  ctx.fillText(arrowMap[k],x1-(x1-x0)/8,y1-(y1-y0)/8,200);
 		}
+	};
+	
+	var getStrokeAndColor = function(num){
+		var s,c;
+		if(num<11){
+			s=1;
+			c='#8DB4E2';
+		}else if(num<51){
+			s=3;
+			c='#92D050';
+		}else if(num<101){
+			s=5;
+			c='#FFFF00';
+		}else if(num<201){
+			s=7;
+			c='#FFC000';
+		}else if(num<501){
+			s=9;
+			c='#FF0000';
+		}else{
+			s=11;
+			c='#C00000';
+		}
+		return {stroke:s, color:c};
 	};
 	
 //	ctx：Canvas绘图环境
