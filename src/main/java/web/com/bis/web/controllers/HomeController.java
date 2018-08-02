@@ -11,7 +11,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.RequestContext;
-
+import com.bis.common.RSAUtils;
 import com.bis.common.Util;
 import com.bis.common.conf.Params;
 import com.bis.dao.LocationDao;
@@ -452,7 +452,16 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/login", method = { RequestMethod.GET })
-    public String login(Model model) {
+    public String login(HttpServletRequest request, Model model) {
+        // 获取公钥
+        String publicKey = RSAUtils.getBase64PublicKey();
+        model.addAttribute("publicKey", publicKey);
+        // 生成随机值
+        String rand =  RandomStringUtils.randomAlphabetic(6);
+        model.addAttribute("rand", rand);
+        
+        // 将生成的随机值存到session中，实际使用可以存到第三方缓存中,并设置失效时间
+        request.getSession().setAttribute("rand", rand);
         return "login";
     }
 

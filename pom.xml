@@ -14,7 +14,7 @@
         <commons-dbcp.version>1.4</commons-dbcp.version>
         <commons-fileupload.version>1.3.1</commons-fileupload.version>
         <commons-io.version>2.4</commons-io.version>
-        <commons-lang.version>2.5</commons-lang.version>
+        <commons-lang.version>3.4</commons-lang.version>
         <commons-logging.version>1.1.3</commons-logging.version>
         <commons-pool.version>1.6</commons-pool.version>
         <core.version>3.1.0</core.version>
@@ -246,7 +246,26 @@
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
             <version>3.3</version>
-        </dependency>        
+        </dependency>
+        
+        <!-- 登录安全 -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.54</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang.version}</version>
+        </dependency>
         
         <!-- 测试用 -->
         <dependency>  

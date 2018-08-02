@@ -58,12 +58,15 @@
         <img src="../image/home_3.2.png" alt="">
     </div> --> 
     <script type="text/javascript" src="../plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../plugins/jsencrypt.min.js"></script>
 	<script type="text/javascript">
 		var home = '<spring:message code="home"/>';
 		var passenger = '<spring:message code="passenger"/>';
         var login_error = '<spring:message code="login_5"/>';
         var login_username = '<spring:message code="login_6"/>';
         var login_password = '<spring:message code="login_7"/>';
+        var publicKey = '${publicKey}',
+            rand = '${rand}';
 		var objColors, colours;
 	   var url = window.location.href;
 	   var valuess = url.split("=");
@@ -116,10 +119,29 @@
 	            	{
 	            	 $("#checkId").html("");
 	            	 $("#checkDiv").hide()
+	            	 submit(userName, password);
 	            	 return true;          	 
 	            	}    
 	    	});
 	    }); 
+	    
+	    function submit(username, password){
+    
+            //组装明文：由加密后的密码和随机值组成
+            var text = password + '|' + rand;
+            
+            //使用RSA公钥加密
+            var encrypt = new JSEncrypt();
+              encrypt.setPublicKey(publicKey);
+            
+            // password就可以发送到服务端进行解密校验了
+            var passwordNew = encrypt.encrypt(text);
+            $("#loginPassWord").val(passwordNew);
+            /*
+            $.post("/sva/account/login", {userName:userName, password: passwordNew}, function(data){
+            	
+            });*/
+	    }
 	</script>
 </body>
 </html>
