@@ -137,50 +137,145 @@ var RouteLine = function() {
 	
 	// 单个店铺轨迹渲染
 	var paintPeopleRouteShop = function(data, shopInfo, ctx){
-		ctx.strokeStyle = "#fd0b0c";
-		ctx.globalCompositeOperation = "lighter";
-		// 计算进出指定店铺的数据
-		var mapTemp = {};
-		var shopList = [];
-		var shopId = shopInfo.selectedShopId;
-		for(var i=0; i<data.length; i++){
-			var temp = data[i];
-			if(temp.shopId == shopId){
-				if(i-1 >=0 && data[i-1].userId == temp.userId){
-					if(mapTemp[data[i-1].shopId]){
-						mapTemp[data[i-1].shopId]++;
+		// 数据为空时，直接返回
+		if(data.length == 0){
+			return;
+		}
+		var selectShopId = shopInfo.selectedShopId;
+		//保存客流路径的json，先查询出所有终点为要查看商铺的路径
+		var pathArray = []; 
+		var lastUserId=-1;
+		var lastShopId=-1;
+		var tempPath;
+		//默认未开始查询路径
+		var inPath=false;
+		for(var i=1; i<data.length; i++){
+			var tempUserId=data[i]["userId"];
+			if(tempUserId==lastUserId){
+				var tempShopId=data[i]["shopId"];
+				if(tempShopId!=lastShopId){
+					if(tempShopId==selectShopId){
+						inPath=false;
+						tempPath=tempPath+'_'+tempShopId;
+						pathArray.push(tempPath);
 					}else{
-						mapTemp[data[i-1].shopId] = 1;
-						shopList.push(data[i-1].shopId);
+						if(inPath){
+							tempPath=tempPath+'_'+tempShopId;
+						}else{
+							inPath=true;
+							tempPath=tempShopId;
+						}
 					}
-					
+					lastShopId=tempShopId;
 				}
-				if(i!=0&&i+1 < data.length && data[i-1].userId == temp.userId){
-					if(mapTemp[data[i+1].shopId]){
-						mapTemp[data[i+1].shopId]++;
-					}else{
-						mapTemp[data[i+1].shopId] = 1;
-						shopList.push(data[i+1].shopId);
-					}
+			}else{
+				lastUserId=tempUserId;
+				lastShopId=data[i]["shopId"];
+				inPath=false;
+				tempPath='';
+				if(lastShopId!=selectShopId){
+					inPath=true;
+					tempPath=lastShopId;
+				}
+			}
+		}	
+		//保存有序客流方向的json，用箭头画出
+		var arrowMap = {}; 
+		var tempSplit;
+		var tempKey;
+		for(i = 0,len=pathArray.length; i < len; i++) {
+			tempSplit=pathArray[i].split("_");
+			for(j=0,len2=tempSplit.length;j<len2-1;j++){
+				//从前往后，统计两两配对的数量
+				tempKey=tempSplit[j]+"_"+tempSplit[j+1];
+				if(arrowMap[tempKey]){
+					arrowMap[tempKey]++;
+				}else{
+					arrowMap[tempKey] = 1;
 				}
 			}
 		}
-		// 画线
-		for(var j=0; j<shopList.length; j++){
-			var shopIdTemp = shopList[j];
-			var count = mapTemp[shopIdTemp];
-			for(var k=0; k<count; k++){
-				var randomPoint = generateRandomPoint(shopInfo[shopId]);
-				// 开始新的path
-				ctx.beginPath();
-			    ctx.moveTo(parseInt(shopInfo[shopIdTemp].x), parseInt(shopInfo[shopIdTemp].y));
-			    ctx.lineTo(parseInt(randomPoint.x), parseInt(randomPoint.y))
-				// 结束path
-				ctx.closePath();
-				ctx.stroke();
-			}
+		for(var k in arrowMap){
+			var pair=k.split("_");  //拆分出两个shopId
+			var x0=parseInt(shopInfo[pair[0]].x);
+			var y0=parseInt(shopInfo[pair[0]].y);
+			var x1=parseInt(shopInfo[pair[1]].x);
+			var y1=parseInt(shopInfo[pair[1]].y);
+			//接下来做一定的位置偏移，是为了清晰明了的画出两点之间正反两条线
+			var length=Math.sqrt((x1-x0)*(x1-x0)+(y1-y0)*(y1-y0));
+			var cos=((x1-x0)/length).toFixed(2);
+			var sin=((y1-y0)/length).toFixed(2);
+			x0=x0+cos*15+sin*5;
+			x1=x1-cos*15+sin*5;
+			y0=y0+sin*15-cos*5;
+			y1=y1-sin*15-cos*5;
+			var sac=getStrokeAndColor(arrowMap[k]);
+			drawArrow(ctx, x0, y0, 
+					x1,y1,15,10,sac.stroke*0.5,sac.color);
+			  ctx.fillText(arrowMap[k],x1-(x1-x0)/8,y1-(y1-y0)/8,200);
 		}
 	};
+	
+	var getStrokeAndColor = function(num){
+		var s,c;
+		if(num<11){
+			s=1;
+			c='#8DB4E2';
+		}else if(num<51){
+			s=3;
+			c='#92D050';
+		}else if(num<101){
+			s=5;
+			c='#FFFF00';
+		}else if(num<201){
+			s=7;
+			c='#FFC000';
+		}else if(num<501){
+			s=9;
+			c='#FF0000';
+		}else{
+			s=11;
+			c='#C00000';
+		}
+		return {stroke:s, color:c};
+	};
+	
+//	ctx：Canvas绘图环境
+//	fromX, fromY：起点坐标（也可以换成 p1 ，只不过它是一个数组）
+//	toX, toY：终点坐标 (也可以换成 p2 ，只不过它是一个数组)
+//	theta：三角斜边一直线夹角
+//	headlen：三角斜边长度
+//	width：箭头线宽度
+//	color：箭头颜色
+	function drawArrow(ctx, fromX, fromY, toX, toY,theta,headlen,width,color) {
+		  var theta = theta || 30,
+		      headlen = headlen || 10,
+		      width = width || 1,
+		      color = color || '#000',
+		      angle = Math.atan2(fromY - toY, fromX - toX) * 180 / Math.PI,
+		      angle1 = (angle + theta) * Math.PI / 180,
+		      angle2 = (angle - theta) * Math.PI / 180,
+		      topX = headlen * Math.cos(angle1),
+		      topY = headlen * Math.sin(angle1),
+		      botX = headlen * Math.cos(angle2),
+		      botY = headlen * Math.sin(angle2);
+		  ctx.save();
+		  ctx.beginPath();
+		  var arrowX, arrowY;
+		  ctx.moveTo(fromX, fromY);
+		  ctx.lineTo(toX, toY);
+		  arrowX = toX + topX;
+		  arrowY = toY + topY;
+		  ctx.moveTo(arrowX, arrowY);
+		  ctx.lineTo(toX, toY);
+		  arrowX = toX + botX;
+		  arrowY = toY + botY;
+		  ctx.lineTo(arrowX, arrowY);
+		  ctx.strokeStyle = color;
+		  ctx.lineWidth = width;
+		  ctx.stroke();
+		  ctx.restore();
+		};
 	
 	var generateRandomPoint = function(shopInfo){
 		var x1 = shopInfo.x1,
