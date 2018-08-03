@@ -387,7 +387,7 @@ var RouteLine = function() {
 		c.height = imgHeight;
 		
 		// 获取用户轨迹信息
-		var startTime = dateFormat(new Date(new Date().getTime() - 97*24*60*60*1000), "yyyy-MM-dd HH:mm:ss"),
+		var startTime = dateFormat(new Date(new Date().getTime() - 7*24*60*60*1000), "yyyy-MM-dd HH:mm:ss"),
 			endTime = dateFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
 		// test
 		//startTime = "2016-06-14 16:30:20";
