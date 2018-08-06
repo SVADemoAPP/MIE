@@ -34,6 +34,9 @@ public class AccountController {
         String plaintext = RSAUtils.decrypt(password);
         
         String[] arr = plaintext.split("\\|");
+        if(arr.length<2){
+            return "redirect:/home/login";
+        }
         
         // 校验随机值
         String rand = arr[1];
