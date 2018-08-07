@@ -66,6 +66,12 @@ public class ShopController {
     @Value("${sva.coefficient}")
     private double coefficient;  
     
+    @Value("${sva.coefficientSwitch2}")
+    private int coefficientSwitch2;   
+    
+    @Value("${sva.coefficient2}")
+    private double coefficient2;  
+    
     @Value("${sva.durationOfLocation}")
     private int durationOfLocation;
 
@@ -586,9 +592,9 @@ public class ShopController {
             double vistiTime = Double.valueOf(allTimes) / allSize;
 
             visitMap.put(String.valueOf(Util.dateFormatStringtoLong(keyVal, Params.YYYYMMDD2)), vistiTime);
-            countMap.put(keyVal.replace("-", "/").substring(2, keyVal.length()), coefficientData(allSize));
+            countMap.put(keyVal.replace("-", "/").substring(2, keyVal.length()), coefficientData2(allSize));
         }
-        yesAllCount = coefficientData(Integer.parseInt(lists.get(lists.size()-1).get("allcount").toString()));
+        yesAllCount = coefficientData2(Integer.parseInt(lists.get(lists.size()-1).get("allcount").toString()));
 //        List<NewUserModel> list = dao.getAllNewDataByShopId(shopId, sevenDays, yesDays);
 //        for (int i = 0; i < list.size(); i++) {
 //            NewUserModel model = list.get(i);
@@ -608,7 +614,7 @@ public class ShopController {
         modelMap.put("yesPeople", coefficientData(yesCount));
 //        modelMap.put("newPeople", coefficientData(newUser));
 //        modelMap.put("yesNewPeople", newUserMap.get(yesDays));
-        modelMap.put("nowAllPeople", coefficientData(allcount));
+        modelMap.put("nowAllPeople", coefficientData2(allcount));
         modelMap.put("yesAllPeople", yesAllCount);
         modelMap.put("nowTime", averageTime);
         modelMap.put("yesTime", yesAverageTime);
@@ -656,7 +662,7 @@ public class ShopController {
         WeekTotalModel model = null;
         for (int i = 0; i < list.size(); i++) {
             model = list.get(i);
-            int allCount = coefficientData(model.getAllCount());
+            int allCount = coefficientData2(model.getAllCount());
             double averageTime = model.getAverageTime();
             allWeekCount += allCount;
             allWeekTime +=averageTime;
@@ -687,9 +693,9 @@ public class ShopController {
         modelMap.put("yesPeople",coefficientData(yesCount));
 //        modelMap.put("yesPeople", coefficientData(yesCount));
         
-        modelMap.put("yesAllPeople", coefficientData(yesUserCount));
+        modelMap.put("yesAllPeople", coefficientData2(yesUserCount));
         modelMap.put("yesTime", yesAverageTime);        
-        modelMap.put("nowAllPeople", coefficientData(nowUserCount));
+        modelMap.put("nowAllPeople", coefficientData2(nowUserCount));
 //        modelMap.put("yesAllPeople", weekUsercount);
         modelMap.put("nowTime", nowAverageTime);
 //        modelMap.put("yesTime", yesAverageTime);
@@ -747,6 +753,17 @@ public class ShopController {
         }else
         {
             return (int) (data*coefficient);
+        }
+        
+    }
+    
+    private int coefficientData2(int data){
+        if(coefficientSwitch2==0)
+        {
+            return data;
+        }else
+        {
+            return (int) (data*coefficient2);
         }
         
     }

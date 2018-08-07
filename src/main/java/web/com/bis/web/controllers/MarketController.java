@@ -96,6 +96,12 @@ public class MarketController {
     @Value("${sva.coefficient}")
     private double coefficient;  
     
+    @Value("${sva.coefficientSwitch2}")
+    private int coefficientSwitch2;   
+    
+    @Value("${sva.coefficient2}")
+    private double coefficient2;  
+    
     @Value("${sva.durationOfLocation}")
     private int durationOfLocation;
     
@@ -603,7 +609,7 @@ public class MarketController {
             // jsonObject1.put("name", weeks2[i]);
             // jsonObject1.put("value", userIdList.size());
             // weekUsercount.add(jsonObject1);
-            weekUsercount.put(weeks2[i], coefficientData(userIdList.size()));
+            weekUsercount.put(weeks2[i], coefficientData2(userIdList.size()));
 
             float avgDelaytime = 0;
             if (userIdList.size() != 0) {
@@ -623,7 +629,7 @@ public class MarketController {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
         // modelMap.put(Params.RETURN_KEY_DATA, shopList);
-        modelMap.put("todayUser", coefficientData(todayUser));
+        modelMap.put("todayUser", coefficientData2(todayUser));
 //        modelMap.put("todayNewUser", coefficientData(todayNewUser));
         modelMap.put("todayAvgDelay", avgDelay);
         modelMap.put("weekUsercount", weekUsercount);
@@ -631,7 +637,7 @@ public class MarketController {
 //        modelMap.put("weekNewUsercount", weekNewUsercount);
 
         
-        modelMap.put("allWeekCount", coefficientData(Integer.parseInt(String.valueOf(allWeekCount))));
+        modelMap.put("allWeekCount", coefficientData2(Integer.parseInt(String.valueOf(allWeekCount))));
         modelMap.put("allWeekAvgDelay", allWeekCount == 0 ? 0 : Util.sToM((allWeekTime * 60 / allWeekCount)));
         return modelMap;
     }
@@ -681,7 +687,7 @@ public class MarketController {
             if (userIdList.size()>0) {
                 allWeekCount += userIdList.get(0).getUserCount();
                 allWeekTime +=  Double.valueOf(userIdList.get(0).getVisitTime())*userIdList.get(0).getUserCount();
-                weekUsercount.put(weeks[i], coefficientData(Integer.parseInt(String.valueOf(userIdList.get(0).getUserCount()))));
+                weekUsercount.put(weeks[i], coefficientData2(Integer.parseInt(String.valueOf(userIdList.get(0).getUserCount()))));
                 weekDelaytime.put(weeks[i], userIdList.get(0).getVisitTime());
             }else
             {
@@ -701,13 +707,13 @@ public class MarketController {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
         // modelMap.put(Params.RETURN_KEY_DATA, shopList);
-        modelMap.put("todayUser", coefficientData(todayUser));
+        modelMap.put("todayUser", coefficientData2(todayUser));
 //        modelMap.put("todayNewUser", coefficientData(todayNewUser));
         modelMap.put("todayAvgDelay", avgDelay);
         modelMap.put("weekUsercount", weekUsercount);
         modelMap.put("weekDelaytime", weekDelaytime);
 //        modelMap.put("weekNewUsercount", weekNewUsercount);
-        modelMap.put("allWeekCount", coefficientData(allWeekCount));
+        modelMap.put("allWeekCount", coefficientData2(allWeekCount));
         modelMap.put("allWeekAvgDelay", allWeekCount == 0 ? 0 : Util.sToM((allWeekTime * 60 / allWeekCount)));
         return modelMap;
     }    
@@ -748,7 +754,7 @@ public class MarketController {
         WeekTotalModel model = null;
         for (int i = 0; i < list.size(); i++) {
             model = list.get(i);
-            int allCount = coefficientData(model.getAllCount());
+            int allCount = coefficientData2(model.getAllCount());
             double averageTime = model.getAverageTime();
             allWeekCount += allCount;
             allWeekTime +=averageTime;
@@ -772,10 +778,10 @@ public class MarketController {
         long yesUserCounts = locationDao.getStoreMomentCount(yesStartTimel, yesEndTimel, yesTbaleName, storeId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
-        modelMap.put("todayUser", coefficientData(nowUserCount));
+        modelMap.put("todayUser", coefficientData2(nowUserCount));
         modelMap.put("todayAvgDelay", nowAverageTime);
         modelMap.put("yesUser1", coefficientData(Integer.parseInt(String.valueOf(yesUserCounts))));
-        modelMap.put("yesUser", coefficientData(Integer.parseInt(String.valueOf(yesUserCount))));
+        modelMap.put("yesUser", coefficientData2(Integer.parseInt(String.valueOf(yesUserCount))));
         modelMap.put("yesAvgDelay", yesAverageTime);
         modelMap.put("weekUsercount", weekUsercount);
         modelMap.put("weekDelaytime", weekDelaytime);
@@ -821,7 +827,7 @@ public class MarketController {
         WeekTotalModel model = null;
         for (int i = 0; i < list.size(); i++) {
             model = list.get(i);
-            int allCount = coefficientData(model.getAllCount());
+            int allCount = coefficientData2(model.getAllCount());
             double averageTime = model.getAverageTime();
             allWeekCount += allCount;
             allWeekTime +=averageTime;
@@ -847,9 +853,9 @@ public class MarketController {
         long yesUserCounts = locationDao.getFloorMomentCount(yesStartTimel, yesEndTimel, yesTbaleName, mapId);
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
-        modelMap.put("todayUser", coefficientData(nowUserCount));
+        modelMap.put("todayUser", coefficientData2(nowUserCount));
         modelMap.put("todayAvgDelay", nowAverageTime);
-        modelMap.put("yesUser", coefficientData(yesUserCount));
+        modelMap.put("yesUser", coefficientData2(yesUserCount));
         modelMap.put("yesUser1", coefficientData(Integer.parseInt(String.valueOf(yesUserCounts))));
         modelMap.put("yesAvgDelay", yesAverageTime);
         modelMap.put("weekUsercount", weekUsercount);
@@ -1442,6 +1448,17 @@ public class MarketController {
         }else
         {
             return (int) (data*coefficient);
+        }
+        
+    }
+    
+    private int coefficientData2(int data){
+        if(coefficientSwitch2==0)
+        {
+            return data;
+        }else
+        {
+            return (int) (data*coefficient2);
         }
         
     }
