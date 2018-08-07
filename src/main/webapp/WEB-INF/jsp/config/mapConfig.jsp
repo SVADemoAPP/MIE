@@ -209,24 +209,28 @@ div.svgCotainer {
 							code="configuration"></spring:message><i
 						class="im-paragraph-justify"></i></a>
 					<ul class="nav sub show">
+						<c:if test="${sessionScope.userName== 'admin'}"> 
 						<li><a href="<c:url value='/home/storeMng'/>"><i
 								class="ec-pencil2"></i>
 							<spring:message code="store_config"></spring:message></a></li>
 						<li><a class="active" href="<c:url value='/home/mapMng'/>"><i
 								class="im-checkbox-checked"></i>
 							<spring:message code="map_config"></spring:message></a></li>
+							 </c:if>		
 						<li><a href="<c:url value='/home/categoryMng'/>"><i
 								class="im-wand"></i>
 							<spring:message code="category_config"></spring:message></a></li>
 						<li><a href="<c:url value='/home/shopMng'/>"><i
 								class="fa-pencil"></i>
 							<spring:message code="shop_config"></spring:message></a></li>
+								<c:if test="${sessionScope.userName== 'admin'}"> 
 						<li><a href="<c:url value='/home/ticketMng'/>"><spring:message
 									code="ticket_config"></spring:message><i class="st-chart"></i>
 						</a></li>
                         <li><a href="<c:url value='/home/mixingMng'/>"><spring:message
                                     code="position_config"></spring:message><i class="ec-support"></i>
-                        </a></li>						
+                        </a></li>				
+                         </c:if>				
 					</ul></li>
 			</ul>
 			<!-- End #sideNav -->
