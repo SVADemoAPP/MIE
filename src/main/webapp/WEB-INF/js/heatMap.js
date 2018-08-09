@@ -883,10 +883,10 @@ var heatMap = function() {
 									yesss = yesss.toFixed(2);
 								}
 								document.getElementById("countToday").innerHTML = nowAllPeople;
-								document.getElementById("countYesterday").innerHTML = yesAllPeople;
+								document.getElementById("countYesterday").innerHTML = nowArrays[nowArrays.length-1][1];
 								document.getElementById("countTotal").innerHTML = weekCount;
 								document.getElementById("countTodayTime").innerHTML = timeToVarchar(nowTime);
-								document.getElementById("countYesTodayTime").innerHTML = timeToVarchar(yesss);
+								document.getElementById("countYesTodayTime").innerHTML = timeToVarchar(timeArrays[timeArrays.length-1][1]);
 								document.getElementById("allCountToday").innerHTML = timeToVarchar(weekTime.toFixed(2));
 								clearTimeout(charTime1);
 								intiHeatMapChart();

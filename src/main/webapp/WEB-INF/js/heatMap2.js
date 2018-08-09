@@ -184,6 +184,7 @@ var refreshTotalData = function() {
 //							newArray.reverse();
 							var allArray = mapToarray(allData);
 							var timeArray = mapToarray(timeData);
+//							var a=timeArrays[timeArrays.length-1][1];
 //							var yesNewPeople = newArray[5];
 							var yesAllPeople = data.yesUser;
 							var yesTime = data.yesAvgDelay;
@@ -1096,6 +1097,7 @@ var heatMap = function() {
 								var weekTime = data.allWeekAvgDelay;
 								var allArrays = mapToarray2(allData);
 								var timeArrays = mapToarray2(timeData);
+//								var a=timeArrays[timeArrays.length-1][1];
 //								fuzhiFunction("newPeople", "newPeopleId",
 //										"newData", newArray, newPeople,
 //										yesNewPeople, 0, 1);
@@ -1112,10 +1114,10 @@ var heatMap = function() {
 								initChartLine(timeArrays);
 								initChartBar();
 								document.getElementById("countToday").innerHTML = nowAllPeople;
-								document.getElementById("countYesterday").innerHTML = yesAllPeople;
+								document.getElementById("countYesterday").innerHTML = allArrays[allArrays.length-1][1];
 								document.getElementById("countTotal").innerHTML = data.allWeekCount;
 								document.getElementById("countToday2").innerHTML = timeToString(nowTime);
-								document.getElementById("countYesterday2").innerHTML = timeToString(yesTime);
+								document.getElementById("countYesterday2").innerHTML = timeToString(timeArrays[timeArrays.length-1][1]);
 								document.getElementById("countTotal2").innerHTML = timeToString(weekTime);
 								document.getElementById("nowTime").innerHTML = '<i class="ec-clock"></i>'
 										+ timeToString(nowTime); // 显示m+s格式的时间字符串

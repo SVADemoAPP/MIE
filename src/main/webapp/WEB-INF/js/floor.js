@@ -1004,10 +1004,10 @@ var heatMap = function() {
 								initChartLine(timeArrays);
 								initChartBar();
 								document.getElementById("countToday").innerHTML = nowAllPeople;
-								document.getElementById("countYesterday").innerHTML = yesAllPeople;
+								document.getElementById("countYesterday").innerHTML = allArrays[allArrays.length-1][1];
 								document.getElementById("countTotal").innerHTML = data.allWeekCount;
 								document.getElementById("countToday2").innerHTML = timeToString(nowTime);
-								document.getElementById("countYesterday2").innerHTML = timeToString(yesTime);
+								document.getElementById("countYesterday2").innerHTML = timeToString(timeArrays[timeArrays.length-1][1]);
 								document.getElementById("countTotal2").innerHTML = timeToString(weekTime);
 								document.getElementById("nowTime").innerHTML = '<i class="ec-clock"></i>'
 										+ timeToString(nowTime); // 显示m+s格式的时间字符串
