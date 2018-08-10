@@ -140,10 +140,10 @@ public class QuartzJob {
             int x1, x2, y1, y2,mapId;
             for (int i = 0; i < nodeList.getLength(); i++) {
                 try {
-                    x1 = Integer.parseInt(doc.getElementsByTagName("x1").item(i).getFirstChild().getNodeValue());
-                    x2 = Integer.parseInt(doc.getElementsByTagName("x2").item(i).getFirstChild().getNodeValue());
-                    y1 = Integer.parseInt(doc.getElementsByTagName("x1").item(i).getFirstChild().getNodeValue());
-                    y2 = Integer.parseInt(doc.getElementsByTagName("x2").item(i).getFirstChild().getNodeValue());
+                    x1 = (int) (10*Float.parseFloat(doc.getElementsByTagName("x1").item(i).getFirstChild().getNodeValue()));
+                    x2 = (int) (10*Float.parseFloat(doc.getElementsByTagName("x2").item(i).getFirstChild().getNodeValue()));
+                    y1 = (int) (10*Float.parseFloat(doc.getElementsByTagName("y1").item(i).getFirstChild().getNodeValue()));
+                    y2 = (int) (10*Float.parseFloat(doc.getElementsByTagName("y2").item(i).getFirstChild().getNodeValue()));
                     mapId=Integer.parseInt(doc.getElementsByTagName("mapId").item(i).getFirstChild().getNodeValue());
                     MapBorderModel mapBorder = new MapBorderModel();
                     mapBorder.setMinX(x1<x2?x1:x2);
