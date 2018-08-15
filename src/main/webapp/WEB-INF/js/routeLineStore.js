@@ -362,7 +362,9 @@ var RouteLine = function() {
 		// test
 		//startTime = "2016-06-14 16:30:20";
 		getPeopleRoute(mapInfo.mapId, startTime, endTime, function(data){
-			paintPeopleRoute(data.data, shopInfo, ctx);
+			if(mapInfo.mapId==data.mapId){
+				paintPeopleRoute(data.data, shopInfo, ctx);
+			}
 		})
 	};
 	

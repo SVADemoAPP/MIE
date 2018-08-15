@@ -67,6 +67,12 @@ public class VisitorController {
     
     @Value("${sva.coefficient}")
     private double coefficient;  
+    
+    @Value("${sva.coefficientSwitch2}")
+    private int coefficientSwitch2;   
+    
+    @Value("${sva.coefficient2}")
+    private double coefficient2; 
 
     /**
      * 
@@ -705,6 +711,17 @@ public class VisitorController {
         
     }
     
+    private int coefficientData2(int data){
+        if(coefficientSwitch2==0)
+        {
+            return data;
+        }else
+        {
+            return (int) (data*coefficient2);
+        }
+        
+    }
+    
     private List<Map<String, Object>> newAddRation(List<WeekTotalModel> mapList) {
         List<Map<String, Object>> returnList = new ArrayList<>();
         long sum = 0;
@@ -726,7 +743,7 @@ public class VisitorController {
             }
             Map<String, Object> newMap = new HashMap<>();
             newMap.put("name", map.getMyTime() + ":" + temp + "%");
-            newMap.put("value", coefficientData(map.getAllCount()));
+            newMap.put("value", coefficientData2(map.getAllCount()));
             returnList.add(newMap);
         }
         return returnList;
@@ -740,7 +757,7 @@ public class VisitorController {
                 float temp = Util.getTwoPointNumber((float) ((long) coefficientData(map.getAllCount() * 100)) / coefficientData(sum));          
                 Map<String, Object> newMap = new HashMap<>();
                 newMap.put("name", map.getMyTime() + ":" + temp + "%");
-                newMap.put("value", coefficientData(map.getAllCount()));
+                newMap.put("value", coefficientData2(map.getAllCount()));
                 returnList.add(newMap);
             }
         }

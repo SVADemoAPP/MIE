@@ -57,6 +57,7 @@ public class RouteLineController
         List<StatisticsModel> resultList = service.getOrderedPeopleRoute(mapId, startTime, endTime);
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put("data", resultList);
+        modelMap.put("mapId", mapId);
         LOG.debug("getRouteData out:"+resultList.size());
         return modelMap;
     }
