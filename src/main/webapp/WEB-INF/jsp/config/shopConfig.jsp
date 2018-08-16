@@ -280,14 +280,14 @@ div.svgCotainer {
 												class="col-lg-2 col-md-2 control-label"><spring:message code="shop_select"></spring:message>
 												<spring:message code="shop_position"></spring:message></label>
 											<div class="col-lg-4 col-md-4" >
-												<a data-toggle="modal" data-type="point" href="#myModal1"
+												<a data-toggle="modal" data-type="point" href="#myModal1" 
 													role="button" class="btn btn-default" disabled="disabled"
-													style="width: 25%; "><spring:message code="shop_select"></spring:message></a> <a
-													id="search" data-toggle="modal" href="#areaModel"
+													style="width: 25%; "><spring:message code="shop_select"></spring:message></a> 
+													<%-- <a id="search" data-toggle="modal" href="#areaModel"
 													data-type="areapreview" role="button"
 													class="btn btn-default"
 													style="width:25%; ">
-													<spring:message code="shop_show"></spring:message></a>
+													<spring:message code="shop_show"></spring:message></a> --%>
 											</div>
 												</div>
 											<div class="col-lg-12 col-md-12 " style="height:40px;">
@@ -547,6 +547,7 @@ div.svgCotainer {
 			idelete = '<spring:message code="store_delete"/>',
 			notnull = '<spring:message code="shop_not_null"/>',
 			format_error = '<spring:message code="format_error"/>',
+			confirm_delete = '<spring:message code="confirm_delete"/>',
 			points_over = '<spring:message code="points_over"/>',
 			exist =  '<spring:message code="shop_exists"/>',
 			shop_pass = '<spring:message code="shop_pass"/>',

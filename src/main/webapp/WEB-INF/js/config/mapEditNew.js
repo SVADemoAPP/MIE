@@ -20,6 +20,8 @@ var options={
     cssClickClass1:'point1',//点击时生成点的类
 
     svgCtnCls:'svgContainer',//svg容器的类
+    
+    svgCtnCls1:'svgContainer1',//svg容器的类
 
     wapper:'#preview',//地图容器
     
@@ -198,7 +200,7 @@ var Ploy={
 
                          .attr('id','mapPloy')
 
-                         .addClass(options.svgCtnCls)
+                         .addClass(options.svgCtnCls1)
 
                          .css({
 
@@ -345,7 +347,7 @@ var Ploy={
     	if(this.paper){
     		this.paper.remove();
     	}
-    	$('.'+options.svgCtnCls).remove();
+    	$('.'+options.svgCtnCls1).remove();
     	$('.'+options.cssClickClass1).remove();
     },
     
@@ -416,11 +418,82 @@ var Ploy={
         return pathslength.getTotalLength();
 
     },
-    
+    makePoly1:function(el,o){
+
+        var s=this;
+
+        s.addPoint1(o.top,o.left);
+
+        s.makeSvgContainer1();
+
+        //清空svg，重新画图
+
+        $(el).find('div.'+options.svgCtnCls1).empty();
+
+        //遍历已经有的点，做出路线
+
+        var points=$('div.'+options.cssClickClass1);
+
+        var datas=s.getData();
+
+        //生成路径
+
+        var path="";
+
+        $.each(points,function(i,n){
+
+            if(i==0){
+
+                path+="M";
+
+            }else{
+
+                path+="L";
+
+            }
+
+            var leftInSvg=$(n).position().left-datas.minLeft;
+
+            var TopInSvg=$(n).position().top-datas.minTop;
+
+            path += leftInSvg;
+
+            path += ",";
+
+            path += TopInSvg;
+
+            path += " ";
+
+        });
+
+        var ploy = Raphael('mapPloy', datas.w, datas.h);
+        this.paper = ploy;
+
+        var pathslength=ploy.path(path).attr({
+
+            stroke:'#1791fc', 
+
+            'stroke-width':3,
+
+            opacity:.7, 
+
+            fill:"none"});
+
+        //计算距离
+
+        return pathslength.getTotalLength();
+
+    },
     addOnePoint:function(el,o){
     	var s=this;
         s.addPoint(o.top,o.left);
         s.makeSvgContainer();
+    },
+    
+    addOnePoint1:function(el,o){
+    	var s=this;
+        s.addPoint1(o.top,o.left);
+        s.makeSvgContainer1();
     },
     
     makeRect:function(el,o){

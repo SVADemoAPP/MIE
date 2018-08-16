@@ -32,7 +32,7 @@ function setPreview(select) {
 		ShopConfig.initPreview(select);
 	} else {
 		$('a[href="#myModal1"]').attr("disabled", "disabled");
-		 $("#search").hide();
+//		 $("#search").hide();
 	}
 };
 
@@ -63,7 +63,7 @@ function clearinfo() {
 	$("#pointsArray").val("");
 	$("#idid").val("");
 	$('a[href="#myModal1"]').attr("disabled", "disabled");
-	 $("#search").hide();
+//	 $("#search").hide();
 	$("#formParams i").remove();
 };
 
@@ -160,7 +160,7 @@ var ShopConfig = function() {
 		$('#' + renderId + ' .addoption').remove().trigger("liszt:updated");
 	};
 	var deleteTableData = function(targetId) {
-		var a = confirm("Confirm delete？");
+		var a = confirm(confirm_delete);
 		if (a == true) {
 			$.post("../shop/api/deleteData", {
 				id : targetId
@@ -399,7 +399,7 @@ var ShopConfig = function() {
 				"-moz-background-size" : "cover"
 			});
 			$('a[href="#myModal1"]').attr("disabled", false);
-			 $("#search").show();
+//			 $("#search").show();
 
 		},
 		setMapDataByStore : function(sid, mapId) {
@@ -448,33 +448,115 @@ var ShopConfig = function() {
 //									"#y1Id").val(), $("#x2Id").val(),
 //									$("#y2Id").val());
 //						}
+						setTimeout(function(){
+							var tempArray=JSON.parse($("#pointsArray").val());
+							//校验位置字符串格式
+							var tempLen=tempArray.length;
+							if(tempLen&&tempLen>2){
+								var myPoints=[];
+								var coordinate = rect.coordinate;
+								var scale = rect.scale;
+								var imagex = rect.width;
+								var imagey = rect.height;
+								var rectx=rect.x;
+								var recty=rect.y;
+								var zoomScale=rect.zoomScale;
+								var leftX= $('#preview').offset().left;
+								var topY=$('#preview').offset().top;
+								var px,py;
+								for(i=0;i<tempLen;i++){
+									var tempO=tempArray[i];
+									px = ((parseFloat(tempO.x) + parseFloat(rectx)) * parseFloat(scale) / zoomScale)
+									.toFixed(2);
+									py = ((parseFloat(tempO.y) + parseFloat(recty)) * parseFloat(scale) / zoomScale)
+									.toFixed(2);
+									switch (coordinate) {
+									case "ul":
+										break;
+									case "ll":
+										py = imagey - py;
+										break;
+									case "ur":
+										px = imagex - px;
+										break;
+									case "lr":
+										px = imagex - px;
+										py = imagey - py;
+									}
+									myPoints.push({left:parseFloat(px)+leftX,top:parseFloat(py)+topY});
+								}
+								Ploy.addOnePoint('#preview', myPoints[0]);
+								for(j=1,len=myPoints.length;j<len;j++){
+									Ploy.makePoly('#preview', myPoints[j]);
+								}
+								Ploy.makePoly('#preview', myPoints[0]);
+							}
+						},500);
 					});
-			$("a[data-type='areapreview']").on(
-					"click",
-					function(e) {
-//						$("#Ok").attr("disabled", "disabled");
-						if (typeof ($(this).attr("disabled")) != "undefined") {
-							e.preventDefault();
-							return false;
-						}
-//						Ploy.clearPaper();
-						Ploy.clearPaper1();
-						pointsArray=[];
-						// $("#pointY2").val("");
-//						$("#x1Id").blur();
-//						$("#y1Id").blur();
-//						$("#x2Id").blur();
-//						$("#y2Id").blur();
-
-						if ($("#x1Id").val() != "" && $("#y1Id").val() != ""
-								&& $("#x2Id").val() != ""
-								&& $("#y2Id").val() != "") {
-//							Ploy.initPaper();
-							AreaMakeRect($("#x1Id").val(), $(
-									"#y1Id").val(), $("#x2Id").val(),
-									$("#y2Id").val());
-						}
-					});
+//			$("a[data-type='areapreview']").on(
+//					"click",
+//					function(e) {
+////						$("#Ok").attr("disabled", "disabled");
+//						if (typeof ($(this).attr("disabled")) != "undefined") {
+//							e.preventDefault();
+//							return false;
+//						}
+////						Ploy.clearPaper();
+//						Ploy.clearPaper1();
+////						pointsArray=[];
+//						// $("#pointY2").val("");
+////						$("#x1Id").blur();
+////						$("#y1Id").blur();
+////						$("#x2Id").blur();
+////						$("#y2Id").blur();
+//						setTimeout(function(){
+//							var tempArray=JSON.parse($("#pointsArray").val());
+//							//校验位置字符串格式
+//							var tempLen=tempArray.length;
+//							if(tempLen&&tempLen>2){
+//								var myPoints=[];
+//								var coordinate = rect.coordinate;
+//								var scale = rect.scale;
+//								var imagex = rect.width;
+//								var imagey = rect.height;
+//								var rectx=rect.x;
+//								var recty=rect.y;
+//								var zoomScale=rect.zoomScale;
+//								var leftX= $('#areapreview').offset().left;
+//								var topY=$('#areapreview').offset().top;
+//								var px,py;
+//								for(i=0;i<tempLen;i++){
+//									var tempO=tempArray[i];
+//									px = ((parseFloat(tempO.x) + parseFloat(rectx)) * parseFloat(scale) / zoomScale)
+//									.toFixed(2);
+//									py = ((parseFloat(tempO.y) + parseFloat(recty)) * parseFloat(scale) / zoomScale)
+//									.toFixed(2);
+//									switch (coordinate) {
+//									case "ul":
+//										break;
+//									case "ll":
+//										py = imagey - py;
+//										break;
+//									case "ur":
+//										px = imagex - px;
+//										break;
+//									case "lr":
+//										px = imagex - px;
+//										py = imagey - py;
+//									}
+//									myPoints.push({left:parseFloat(px)+leftX,top:parseFloat(py)+topY});
+//								}
+//								Ploy.addOnePoint1('#areapreview', myPoints[0]);
+//								for(j=1,len=myPoints.length;j<len;j++){
+//									Ploy.makePoly1('#areapreview', myPoints[j]);
+//								}
+//								
+//							}else{
+//								alert(format_erros);
+//							}
+//						},1000);
+//						
+//					});
 			$('#preview').click(function(e) {
 
 				var left = e.pageX;
@@ -485,6 +567,7 @@ var ShopConfig = function() {
 				};
 				var len=pointsArray.length;
 				if(len==0){
+					Ploy.clearPaper();
 					Ploy.addOnePoint('#preview', o);
 					pointsArray.push(o);
 				}else if(len>15){
@@ -525,7 +608,7 @@ var ShopConfig = function() {
 //				$("#y0").val("");
 //				$("#x1").val("");
 //				$("#y1").val("");
-				$("#pointsArray").val("");
+//				$("#pointsArray").val("");
 				// $("#Ok").attr("disabled","disabled");
 			});
 
@@ -546,7 +629,7 @@ var ShopConfig = function() {
 								var coordinate = rect.coordinate;
 								for(i=0,len=pointsArray.length;i<len;i++){
 									var tempO=pointsArray[i];
-									var px=tempO.left-leftX
+									var px=tempO.left-leftX;
 									var py=tempO.top-topY;
 									switch (coordinate) {
 									case "ul":
@@ -756,7 +839,7 @@ var ShopConfig = function() {
 			$('#storeId').change(function() {
 				var select = $(this).children('option:selected').val();
 				$('a[href="#myModal1"]').attr("disabled", "disabled");
-				 $("#search").hide();
+//				 $("#search").hide();
 				if (select == "") {
 					updateMapList("mapId", allMapData);
 				} else {
@@ -798,13 +881,13 @@ var ShopConfig = function() {
 				setPreview(select);
 				// } else {
 				// $('a[href="#myModal1"]').attr("disabled", "disabled");
-				 $("#search").hide();
+//				 $("#search").hide();
 				// }
-				 if ($("#mapId").val() != "") {
-				 $("#search").show();
-				 } else {
-				 $("#search").hide();
-				 }
+//				 if ($("#mapId").val() != "") {
+//				 $("#search").show();
+//				 } else {
+//				 $("#search").hide();
+//				 }
 			})
 		}
 	}
