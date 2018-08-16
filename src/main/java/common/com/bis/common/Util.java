@@ -24,7 +24,12 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
 
+import com.bis.common.area.Point;
+import com.bis.common.area.Polygon;
 import com.bis.common.conf.Params;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 public class Util {
 
@@ -559,60 +564,22 @@ public class Util {
         }
     }
 
-    // public static void ftp4jConnecttion(String ip, int port,String username,
-    // String password)
-    // {
-    // it.sauronsoftware.ftp4j.FTPClient client = null;
-    // try {
-    // TrustManager[] trustManager = new TrustManager[] { new X509TrustManager()
-    // {
-    // public X509Certificate[] getAcceptedIssuers() {
-    // return null;
-    // }
-    // public void checkClientTrusted(X509Certificate[] certs,
-    // String authType) {
-    // }
-    // public void checkServerTrusted(X509Certificate[] certs,
-    // String authType) {
-    // }
-    // } };
-    // SSLContext sslContext = null;
-    // sslContext = SSLContext.getInstance("SSL");
-    //// System.setProperty("https.protocols", "TLS");
-    //// sslContext = SSLContext.getInstance("TLS");
-    // sslContext.init(null, trustManager, new SecureRandom());
-    // SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-    // client = new it.sauronsoftware.ftp4j.FTPClient();;
-    // client.setSSLSocketFactory(sslSocketFactory);
-    // client.setSecurity(it.sauronsoftware.ftp4j.FTPClient.SECURITY_FTPS);
-    // client.connect(ip, 33);
-    // client.login(username, password);
-    // System.out.println(client.toString());
-    // System.out.println(client.currentDirectory());
-    // client.changeDirectory("\\SVA\\wangjun\\ftp\\");
-    // String[] fs = client.listNames();
-    // for (int i = 0; i < fs.length; i++) {
-    // if (fs[i].equals("H2F1.xml")) {
-    // client.download("\\SVA\\wangjun\\ftp\\H2F1.xml",new
-    // File("d:\\H2F2.xml"));
-    // }
-    // }
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // }finally {
-    // if (null != client) {
-    // try {
-    // client.disconnect(true);// 安全退出
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // System.out.println("安全退出FTP服务时异常！" + e.getMessage());
-    // }
-    // }
-    // }
-    // }
-
-    // public static void main(String[] args) {
-    // ftp4jConnecttion("139.159.219.166", 990, "Administrator",
-    // "Huawei@sva_demo_app");
-    // }
+    public static boolean isInArea(Point point, String pointsArray)
+    {
+        JSONArray jsonArray = JSONArray.fromObject(pointsArray);
+        List<Point> pointList = new ArrayList<Point>();
+        for (int i = 0; i < jsonArray.size(); i++)
+        {
+          JSONObject pointJsonObject = (JSONObject)jsonArray.get(i);
+          double x = pointJsonObject.getDouble("x");
+          double y = pointJsonObject.getDouble("y");
+          pointList.add(new Point(Double.valueOf(x), Double.valueOf(y)));
+        }
+        Polygon polygon = Polygon.initPolygon(pointList);
+        if (polygon.contains(point)) {
+          return true;
+        }
+      return false;
+    }
+    
 }
