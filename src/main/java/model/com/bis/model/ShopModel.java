@@ -32,7 +32,16 @@ public class ShopModel {
     private String shopId;
     private String x;
     private String y;
+    private String pointsArray;
     
+    public String getPointsArray() {
+        return pointsArray;
+    }
+
+    public void setPointsArray(String pointsArray) {
+        this.pointsArray = pointsArray;
+    }
+
     public String getX() {
         return x;
     }

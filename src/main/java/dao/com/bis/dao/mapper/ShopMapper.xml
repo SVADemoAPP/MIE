@@ -158,7 +158,8 @@
 		categoryId,
 		isVip,
 		updateTime,
-		createTime
+		createTime,
+		pointsArray
 		)
 		VALUES(
 		#{mapId},
@@ -172,7 +173,8 @@
 		#{categoryId},
 		#{isVip},
 		#{updateTime},
-		#{createTime}
+		#{createTime},
+		#{pointsArray}
 		)
 	</insert>
 
@@ -197,7 +199,8 @@
 		y1Spot=#{y1Spot},
 		categoryId=#{categoryId},
 		isVip = #{isVip},
-		updateTime=#{updateTime}
+		updateTime=#{updateTime},
+		pointsArray=#{pointsArray}
 		WHERE id = #{id}
 	</update>
 
@@ -206,6 +209,13 @@
 		from bi_shop
 		where mapId = #{value}
 	</select>
+	
+	<select id="getPointsArrayById" resultType="String">
+		SELECT pointsArray
+		from bi_shop
+		where id = #{id}
+	</select>
+	
 	<select id="getShopInfoByMapId1" resultType="ShopModel">
 		SELECT shopName,id
 		shopId,xSpot,ySpot,x1Spot,y1Spot,mapId

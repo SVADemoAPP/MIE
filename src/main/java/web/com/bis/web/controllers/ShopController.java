@@ -308,6 +308,12 @@ public class ShopController {
         modelMap.put(Params.RETURN_KEY_DATA, shops);
         return modelMap;
     }
+    
+    @RequestMapping(value = "/api/getPointsArrayById", method = { RequestMethod.POST })
+    @ResponseBody
+    public Object getPointsArrayById(@RequestParam("id") String id) {
+        return dao.getPointsArrayById(id);
+    }
 
     /**
      * @Title: getGenderAndProfession

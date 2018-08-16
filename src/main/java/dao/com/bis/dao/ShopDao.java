@@ -172,6 +172,8 @@ public interface ShopDao {
      * @return
      */
     public List<ShopModel> getShopInfoByMapId(String mapId);
+    
+    public String getPointsArrayById(String id);
 
     public List<ShopModel> getShopInfoByMapId1(String mapId);
 

@@ -301,16 +301,18 @@ div.svgCotainer {
 												</div>
 												<label
 													style="color: #71d398; text-align: center; margin-top: 6px; font-size: 16px;"
-													class="col-lg-2 col-md-2 control-label"><spring:message code="shop_position"></spring:message>1</label>
+													class="col-lg-2 col-md-2 control-label"><spring:message code="shop_position"></spring:message></label>
 												<div class="col-lg-4 col-md-4" >
-													<a style="width: 16%; ">x1:</a> <input
+												<input type="text" name="pointsArray" 
+														style="width: 60%; height: 28px;" id="pointsArray" />
+													<!-- <a style="width: 16%; ">x1:</a> <input
 														type="text" name="xSpot" maxlength="15"
 														style="width: 18%; height: 28px; " id="x1Id"
 														onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" />
 													<a style="width: 16%; margin-left: 2%;">y1:</a> <input
 														type="text" name="ySpot" maxlength="15"
 														style="width: 18%; height: 28px;" id="y1Id"
-														onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" />
+														onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" /> -->
 												</div>
 
 											</div>
@@ -326,19 +328,23 @@ div.svgCotainer {
 														id="mapId">
 													</select>
 												</div>
-												<label
+												<%-- <label
 													style="color: #71d398; text-align: center; margin-top: 6px; font-size: 16px;"
 													class="col-lg-2 col-md-2 control-label"><spring:message code="shop_position"></spring:message>2</label>
 												<div class="col-lg-4 col-md-4" >
-													<a style="width: 16%;">x2:</a> <input
+													
+													<!-- <a style="width: 16%;">x2:</a> <input
 														type="text" name="x1Spot" maxlength="15"
 														style="width: 18%; height: 28px;" id="x2Id"
 														onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" />
 													<a style="width: 16%; margin-left: 2%;">y2:</a> <input
 														type="text" name="y1Spot" maxlength="15"
 														style="width: 18%; height: 28px;" id="y2Id"
-														onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" />
-												</div>
+														onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" /> -->
+												</div> --%>
+												<!-- <div class="hide">
+													<input id="pointsArray" name="pointsArray" type="text">
+												</div> -->
 											</div>
 										</div>
 										<div class="col-lg-12 col-md-12"
@@ -381,10 +387,7 @@ div.svgCotainer {
 										<th><spring:message code="store"></spring:message></th>
 										<th><spring:message code="shop_floor"></spring:message></th>
 										<th><spring:message code="shop_status"></spring:message></th>
-										<th>X1(m)</th>
-										<th>Y1(m)</th>
-										<th>X2(m)</th>
-										<th>Y2(m)</th>
+										<th><spring:message code="shop_position"></spring:message></th>
 										<th><spring:message code="store_updateTime"></spring:message></th>
 										<th style="width:160px;"><spring:message code="store_opreration"></spring:message></th>
 									</tr>
@@ -430,10 +433,10 @@ div.svgCotainer {
 					</div>
 				</div>
 				<div class="modal-footer">
-					<div class="hide">
+					<!-- <div class="hide">
 						<input id="x0" type="text"> <input id="y0" type="text">
 						<input id="x1" type="text"> <input id="y1" type="text">
-					</div>
+					</div> -->
 					<button id="Ok" data-dismiss="modal" aria-hidden="true"
 						disabled="disabled" class="btn"><spring:message code="shop_ok"></spring:message></button>
 				</div>
@@ -533,23 +536,27 @@ div.svgCotainer {
 	<script src="<c:url value='/plugins/raphael-min.js'/>"
 		type="text/javascript"></script>
 	<script src="<c:url value='/js/util.js'/>" type="text/javascript"></script>
-	<script src="<c:url value='/js/config/mapEdit.js'/>"
+	<script src="<c:url value='/js/config/mapEditNew.js'/>"
 		type="text/javascript"></script>
 
-	<script src="<c:url value='/js/config/shopConfig.js'/>"
+	<script src="<c:url value='/js/config/shopConfigNew.js'/>"
 		type="text/javascript"></script>
 	<script type="text/javascript">
 		var home = '<spring:message code="home"/>';
 		var iedit = '<spring:message code="store_edt"/>',
 			idelete = '<spring:message code="store_delete"/>',
 			notnull = '<spring:message code="shop_not_null"/>',
+			format_error = '<spring:message code="format_error"/>',
+			points_over = '<spring:message code="points_over"/>',
 			exist =  '<spring:message code="shop_exists"/>',
 			shop_pass = '<spring:message code="shop_pass"/>',
 	        table_language = '<spring:message code="common_table_lang"/>',
 	       isearch = '<spring:message code="mall_search"/>',
 	       ientries = '<spring:message code="mall_entries"/>';
+	    var pointsArray;
 
 		$(document).ready(function() {
+			pointsArray=[];
 			ShopConfig.initSelect();
 			ShopConfig.bindClickEvent();
 			ShopConfig.initTable();
