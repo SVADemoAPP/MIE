@@ -530,17 +530,17 @@ public class ShopController {
         ShopModel shopModel = new ShopModel();
         if (shopList.size() > 0) {
             shopModel = shopList.get(0);
-            count = locationDao.getNowCount(times, tableName, shopModel);
+            count = locationDao.getNowCount(times, tableName, shopModel);//辜义睿getNowCount
             if (statisticsDao.isTableExist(yesTableName, this.db) < 1) {
                 statisticsDao.createTable(yesTableName);
             }
-            yesCount = locationDao.getYesCount(yesTimesBegin, yesTimes, yesTableName, shopModel);
-            nowList = locationDao.getNowAllCount(tableName, shopModel);
-            yesList = locationDao.getYesNowCount(yesTableName, shopModel, yesTimes);
+            yesCount = locationDao.getYesCount(yesTimesBegin, yesTimes, yesTableName, shopModel);//辜义睿getYesCount
+            nowList = locationDao.getNowAllCount(tableName, shopModel);//辜义睿getNowAllCount
+            yesList = locationDao.getYesNowCount(yesTableName, shopModel, yesTimes);//辜义睿getYesNowCount
             allcount = nowList.size();
             yesAllCount = yesList.size();
-            allTiaoshu = locationDao.getAllTiaoshu(tableName, shopModel);
-            yesAllTiaoshu = locationDao.getYesAllTiaoshu(yesTableName, shopModel, yesTimes);
+            allTiaoshu = locationDao.getAllTiaoshu(tableName, shopModel);//辜义睿getAllTiaoshu
+            yesAllTiaoshu = locationDao.getYesAllTiaoshu(yesTableName, shopModel, yesTimes);//辜义睿getYesAllTiaoshu
             averageTime = Util.getMinute(allTiaoshu * 2000, allcount);
             yesAverageTime = Util.getMinute(yesAllTiaoshu * 2000, yesAllCount);
 //            nowList.removeAll(yesList);
@@ -585,7 +585,7 @@ public class ShopController {
             if (statisticsDao.isTableExist(yesTableNames, this.db) < 1) {
                 statisticsDao.createTable(yesTableNames);
             }
-            int yesCounts = locationDao.getYesCount(yesTimesBegins, yesTimess, yesTableNames, shopModel);
+            int yesCounts = locationDao.getYesCount(yesTimesBegins, yesTimess, yesTableNames, shopModel);//辜义睿getYesCount
             nowMap.put(newRiqi, yesCounts);
             visitMap.put(String.valueOf(Util.dateFormatStringtoLong(newRiqi, Params.YYMMDD)), 0);
             countMap.put(newRiqi, 0);
@@ -690,8 +690,8 @@ public class ShopController {
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
 
-        int count = locationDao.getNowCounts(times,nowTimes, tableName, shopModel);
-        int yesCount = locationDao.getNowCounts(yesStartTimel,yesEndTimel,yesTbaleName, shopModel);
+        int count = locationDao.getNowCounts(times,nowTimes, tableName, shopModel);//辜义睿getNowCounts
+        int yesCount = locationDao.getNowCounts(yesStartTimel,yesEndTimel,yesTbaleName, shopModel);//辜义睿getNowCounts
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put("allData", weekUsercount);
         modelMap.put("timeData", weekDelaytime);

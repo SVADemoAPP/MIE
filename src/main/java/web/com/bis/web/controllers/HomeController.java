@@ -544,7 +544,7 @@ public class HomeController {
             String tableName = Params.LOCATION + dateKey;
             String shopTableName = Params.SHOPLOCATION + dateKey.substring(0, dateKey.length() - 2);
             String insertUserid = "replace into " + shopTableName + "(userId,time,delaytime,shopId,type) values";
-            List<VisitTimeModel> userListModel = locationDao.getUserList(tableName);
+            List<VisitTimeModel> userListModel = locationDao.getUserList(tableName); //辜义睿getUserList
             for (VisitTimeModel sva : userListModel) {
                 String userId = sva.getUserId();
                 long visiTime = sva.getMaxTime() - sva.getMinTime();
@@ -689,7 +689,7 @@ public class HomeController {
             int areaResult = statisticsDao.doUpdate(insertStoreUserid);
             LOG.debug("saveUserShop-store-userid result:" + areaResult);
         }
-        List<VisitTimeModel> userListModel = locationDao.getUserList(tableName);
+        List<VisitTimeModel> userListModel = locationDao.getUserList(tableName); //辜义睿getUserList
         for (VisitTimeModel sva : userListModel) {
             String userId = sva.getUserId();
             long visiTime = sva.getMaxTime() - sva.getMinTime();
@@ -758,7 +758,7 @@ public class HomeController {
                 LOG.debug("saveVisitTime-store result:" + areaResult);
             }
             String insertEntersql = "insert into bi_static_shop_enter(time,allcount,shopId,allcounts) values";
-            List<VisitTimeModel> shopList = locationDao.getShopVisitTime(tableName, beginTime, endTime);
+            List<VisitTimeModel> shopList = locationDao.getShopVisitTime(tableName, beginTime, endTime); //辜义睿getShopVisitTime
             Map<String, String> mapShop = getNewMap(shopList);
             // List<VisitTimeModel> shopCount =
             // locationDao.getCountGroupByShopId(tableName);
@@ -770,7 +770,7 @@ public class HomeController {
                 if (shopId != null && shopId != "null" && shopId != "") {
                     String allcount = s.split("-")[1];
                     String visitTime = mapShop.get(s);
-                    long allCounts = locationDao.getShopAllCount(shopId, tableName);
+                    long allCounts = locationDao.getShopAllCount(shopId, tableName); //辜义睿getShopAllCount
                     insertShop += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + shopId + "','"
                             + allCounts + "'),";
                     if (endTimes.equals("23:00:00")) {

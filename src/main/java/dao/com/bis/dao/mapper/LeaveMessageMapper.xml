@@ -28,10 +28,10 @@
     
     
 
-    <select id="getLeaveMessageAndFootprints" resultType="ShopModel">
+<!--     <select id="getLeaveMessageAndFootprints" resultType="ShopModel">
         select (select count(*) from bi_footprints where mapId = #{mapId} ) allcount,a.shopId,b.shopName,b.xSpot,b.ySpot,b.x1Spot,b.y1Spot 
         from bi_footprints a left join bi_shop b on a.shopId = b.id  where b.mapId = #{mapId} group by a.shopId;    
-    </select>
+    </select> -->
     
      <select id="getFootprintsPathByShopId" resultType="LeaveMessageModel">
         SELECT a.*,b.floor floorName

@@ -45,7 +45,7 @@ public interface LeaveMessageDao {
     
     public List<LeaveMessageModel> getFootprints(@Param("mapId")String mapId);
     
-    public List<ShopModel> getLeaveMessageAndFootprints(@Param("mapId")String mapId);
+//    public List<ShopModel> getLeaveMessageAndFootprints(@Param("mapId")String mapId);
     
     
     public List<LeaveMessageModel> getFootprintsPathByShopId(@Param("shopId")String shopId);

@@ -114,7 +114,7 @@ public class HeatmapController {
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
-        resultList = locationDao.getShopHeatMapByShopId(time, tableName, model);
+        resultList = locationDao.getShopHeatMapByShopId(time, tableName, model); //辜义睿getShopHeatMapByShopId
         modelMap.put("data", resultList);
 
         return modelMap;
@@ -148,7 +148,7 @@ public class HeatmapController {
         // 表名
         String nowDay = Util.dateFormat(startTimestamp, Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
-        resultList = locationDao.getMapPeriodHeatMapById(startTimestamp, endTimestamp, tableName, model);
+        resultList = locationDao.getMapPeriodHeatMapById(startTimestamp, endTimestamp, tableName, model); //辜义睿getMapPeriodHeatMapById
         modelMap.put("data", resultList);
 
         return modelMap;
@@ -192,7 +192,7 @@ public class HeatmapController {
         String tableName = Params.LOCATION + nowDay;
         // resultList = locationDao.getTenminitShopData(startTime, nowTime,
         // tableName, model);
-        int count = locationDao.getShopNowCount(shopId, tableName, startTime, nowTime);
+        int count = locationDao.getShopNowCount(shopId, tableName, startTime, nowTime); //辜义睿getShopNowCount
         // int startIndex=0; //开始遍历resultList的位置
         // Set<String> userIdSet=new HashSet<>();
         // LocationModel eachModel;
@@ -376,7 +376,7 @@ public class HeatmapController {
         String tableName = Params.LOCATION + nowDay;
         long startTime = endTime - durationOfLocation * 1000 - 28800000;
         long endTimes = endTime - 28800000;
-        resultList = locationDao.getNowCounts(startTime, endTimes, tableName, model);
+        resultList = locationDao.getNowCounts(startTime, endTimes, tableName, model); //辜义睿getNowCounts
         modelMap.put("data", coefficientData(resultList));
 
         return modelMap;
