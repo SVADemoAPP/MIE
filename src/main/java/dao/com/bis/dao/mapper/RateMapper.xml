@@ -3,15 +3,11 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.bis.dao.RateDao">
-	<select id="selectCountByShop"  resultType="int">
-		SELECT COUNT(DISTINCT userId) 
-		FROM ${tableName}
-		WHERE x &gt;= 10*#{shop.xSpot}
-		AND x &lt;= 10*#{shop.x1Spot}
-		 AND y &gt;= 10*#{shop.ySpot}
-		 AND y &lt;= 10*#{shop.y1Spot}
-		AND mapId = #{shop.mapId}
-	</select>
+	<!-- <select id="selectCountByShopNew"  resultType="LocModel">
+		SELECT a.x,a.y,a.userId,b.pointsArray
+		FROM ${tableName} a join bi_shop b on a.mapId=b.mapId
+		WHERE a.mapId = #{shop.mapId}
+	</select> -->
 	
 	<select id="getShopInfoById" resultType="ShopModel">	
         select * from bi_shop where id = #{id}
@@ -25,13 +21,13 @@
         select a.*,b.x,b.y from bi_shop a join bi_shop_category b on a.categoryId = b.id join bi_maps c on c.mapId = a.mapId and c.storeId = #{storeId}
     </select>      	
 	
-    <select id="getShopCountByShopId" resultType="int"> 
+    <!-- <select id="getShopCountByShopId" resultType="int"> 
         select count(distinct userId) from ${tableName} where mapId = #{shop.mapId} and  x &gt;= (10 * #{shop.xSpot}) and x &lt;= (10 * #{shop.x1Spot}) and y &gt;= (10 * #{shop.ySpot}) and y &lt;= (10 * #{shop.y1Spot}) 
-    </select>   
+    </select> -->   
     
-     <select id="getShopCountByShopIdRound" resultType="int"> 
+     <!-- <select id="getShopCountByShopIdRound" resultType="int"> 
         select count(distinct userId) from ${tableName} where mapId = #{shop.mapId} and  x &gt;= (10 * #{shop.xSpot}-5*#{shop.x}) and x &lt;= (10 * #{shop.x1Spot}+5*#{shop.x}) and y &gt;= (10 * #{shop.ySpot}-5*#{shop.y}) and y &lt;= (10 * #{shop.y1Spot}+5*#{shop.y}) 
-    </select>  
+    </select> -->  
 	
 	<select id="selectXByCategoryId" resultType="Integer">
 		SELECT x FROM bi_shop_category WHERE id =
@@ -47,7 +43,7 @@
 		)	
 	</select>
 	
-	<select id="selectAllCountByShop" resultType="int">
+	<!-- <select id="selectAllCountByShop" resultType="int">
 		SELECT COUNT(DISTINCT userId) 
 		FROM ${tableName}
 		WHERE x &gt;=
@@ -68,7 +64,7 @@
 		) 
 		AND mapId =#{shop.mapId}
 	
-	</select>
+	</select> -->
 	
 	<select id="selectAllCount" resultType="int">
 		SELECT COUNT(*) FROM bi_shop

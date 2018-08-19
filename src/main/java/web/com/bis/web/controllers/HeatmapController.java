@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
+import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -19,12 +22,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bis.common.Util;
+import com.bis.common.area.Point;
 import com.bis.common.conf.Params;
 import com.bis.dao.LocationDao;
 import com.bis.dao.MapMngDao;
 import com.bis.dao.RateDao;
 import com.bis.dao.ShopDao;
 import com.bis.model.GlobalModel;
+import com.bis.model.LocModel;
 import com.bis.model.LocationModel;
 import com.bis.model.MapBorderModel;
 import com.bis.model.MapMngModel;
@@ -114,8 +119,18 @@ public class HeatmapController {
         // 表名
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
-        resultList = locationDao.getShopHeatMapByShopId(time, tableName, model); //辜义睿getShopHeatMapByShopId
-        modelMap.put("data", resultList);
+        resultList = locationDao.getShopHeatMapByShopIdNew(time, tableName, model); //辜义睿getShopHeatMapByShopId
+        List<LocationModel> returnList = new ArrayList<LocationModel>();
+        Point tempPoint=new Point(0D, 0D);
+        String pointsArray=model.getPointsArray();
+        for(LocationModel locationModel:resultList){
+            tempPoint.setX(locationModel.getX()/10.0D);
+            tempPoint.setY(locationModel.getY()/10.0D);
+            if(Util.isInArea(tempPoint, pointsArray)){
+                returnList.add(locationModel);
+            }
+        }
+        modelMap.put("data", returnList);
 
         return modelMap;
     }
@@ -148,9 +163,18 @@ public class HeatmapController {
         // 表名
         String nowDay = Util.dateFormat(startTimestamp, Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
-        resultList = locationDao.getMapPeriodHeatMapById(startTimestamp, endTimestamp, tableName, model); //辜义睿getMapPeriodHeatMapById
-        modelMap.put("data", resultList);
-
+        resultList = locationDao.getMapPeriodHeatMapByIdNew(startTimestamp, endTimestamp, tableName, model); //辜义睿getMapPeriodHeatMapById
+        List<LocationModel> returnList = new ArrayList<LocationModel>();
+        Point tempPoint=new Point(0D, 0D);
+        String pointsArray=model.getPointsArray();
+        for(LocationModel locationModel:resultList){
+            tempPoint.setX(locationModel.getX()/10.0D);
+            tempPoint.setY(locationModel.getY()/10.0D);
+            if(Util.isInArea(tempPoint, pointsArray)){
+                returnList.add(locationModel);
+            }
+        }
+        modelMap.put("data", returnList);
         return modelMap;
     }
 
@@ -192,7 +216,18 @@ public class HeatmapController {
         String tableName = Params.LOCATION + nowDay;
         // resultList = locationDao.getTenminitShopData(startTime, nowTime,
         // tableName, model);
-        int count = locationDao.getShopNowCount(shopId, tableName, startTime, nowTime); //辜义睿getShopNowCount
+        Point tempPoint=new Point(0D, 0D);
+        String pointsArray=shopDao.getPointsArrayById(shopId);
+        Set<String> userIdSet=new HashSet<String>();
+        List<LocModel> myLocModels=locationDao.getShopNowCountNew(shopId, tableName, startTime, nowTime); //辜义睿getShopNowCount
+        for(LocModel loc:myLocModels){
+            tempPoint.setX(loc.getX()/10.0D);
+            tempPoint.setY(loc.getY()/10.0D);
+            if(Util.isInArea(tempPoint, pointsArray)){
+                userIdSet.add(loc.getUserId());
+            }
+        }
+        int count=userIdSet.size();
         // int startIndex=0; //开始遍历resultList的位置
         // Set<String> userIdSet=new HashSet<>();
         // LocationModel eachModel;
@@ -376,7 +411,20 @@ public class HeatmapController {
         String tableName = Params.LOCATION + nowDay;
         long startTime = endTime - durationOfLocation * 1000 - 28800000;
         long endTimes = endTime - 28800000;
-        resultList = locationDao.getNowCounts(startTime, endTimes, tableName, model); //辜义睿getNowCounts
+        
+        Point tempPoint=new Point(0D, 0D);
+        String pointsArray=model.getPointsArray();
+        Set<String> userIdSet=new HashSet<String>();
+        List<LocModel> locModelsToday=locationDao.getNowCountsNew(startTime, endTimes, tableName, model); 
+        for(LocModel loc:locModelsToday){
+            tempPoint.setX(loc.getX()/10.0D);
+            tempPoint.setY(loc.getY()/10.0D);
+            if(Util.isInArea(tempPoint, pointsArray)){
+                userIdSet.add(loc.getUserId());
+            }
+        }
+        resultList =userIdSet.size();
+//        resultList = locationDao.getNowCountsNew(startTime, endTimes, tableName, model); //辜义睿getNowCounts
         modelMap.put("data", coefficientData(resultList));
 
         return modelMap;

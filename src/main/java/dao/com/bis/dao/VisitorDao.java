@@ -245,7 +245,7 @@ public interface VisitorDao {
      * @param storeId
      * @return
      */
-    public List<Map<String, Object>> getShopVisitorCount(@Param("tableName") String tableName,
-            @Param("storeId") String storeId);
+//    public List<Map<String, Object>> getShopVisitorCount(@Param("tableName") String tableName,
+//            @Param("storeId") String storeId);  //辜义睿
 
 }

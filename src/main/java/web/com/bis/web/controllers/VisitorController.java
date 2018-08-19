@@ -489,30 +489,30 @@ public class VisitorController {
         return modelMap;
     }
 
-    /**
-     * 
-     * @Title: getTodayTop
-     * @Description: 获取商场当天楼层客流量排名和店铺客流量排名
-     * @param request
-     * @param storeId
-     * @return
-     */
-    @RequestMapping(value = "/getTodayTop", method = { RequestMethod.POST })
-    @ResponseBody
-    public Map<String, Object> getTodayTop(HttpServletRequest request, @RequestParam("storeId") String storeId) {
-        String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
-        String tableName = Params.LOCATION + nowDay;
-        Map<String, Object> modelMap = new HashMap<String, Object>();
-        int sum = locationDao.getMallTotal1(1,tableName, storeId);
-        if (statisticsDao.isTableExist(tableName, this.db) > 0) {
-            modelMap.put("mapData", addRation(dao.getMapVisitorCount(tableName, storeId)));
-            modelMap.put("shopData",sortTop10(addRation( dao.getShopVisitorCount(tableName, storeId),sum)));
-            modelMap.put("status", Params.RETURN_CODE_200);
-        } else {
-            modelMap.put("status", Params.RETURN_CODE_400);
-        }
-        return modelMap;
-    }
+//    /**
+//     * 
+//     * @Title: getTodayTop
+//     * @Description: 获取商场当天楼层客流量排名和店铺客流量排名
+//     * @param request
+//     * @param storeId
+//     * @return
+//     */
+//    @RequestMapping(value = "/getTodayTop", method = { RequestMethod.POST })
+//    @ResponseBody
+//    public Map<String, Object> getTodayTop(HttpServletRequest request, @RequestParam("storeId") String storeId) {
+//        String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
+//        String tableName = Params.LOCATION + nowDay;
+//        Map<String, Object> modelMap = new HashMap<String, Object>();
+//        int sum = locationDao.getMallTotal1(1,tableName, storeId);
+//        if (statisticsDao.isTableExist(tableName, this.db) > 0) {
+//            modelMap.put("mapData", addRation(dao.getMapVisitorCount(tableName, storeId)));
+//            modelMap.put("shopData",sortTop10(addRation( dao.getShopVisitorCount(tableName, storeId),sum)));
+//            modelMap.put("status", Params.RETURN_CODE_200);
+//        } else {
+//            modelMap.put("status", Params.RETURN_CODE_400);
+//        }
+//        return modelMap;
+//    }
     
     /**
      * 

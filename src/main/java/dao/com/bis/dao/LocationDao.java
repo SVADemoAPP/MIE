@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.bis.model.LocModel;
 import com.bis.model.LocationModel;
 import com.bis.model.MapBorderModel;
 import com.bis.model.ShopModel;
@@ -111,24 +112,13 @@ public interface LocationDao {
 
     public int getAllCount(@Param("mapId") String mapId, @Param("tableName") String tableName);
 
-    public int getNowCount(@Param("times") long times, @Param("tableName") String tableName,
-            @Param("shopData") ShopModel model);
 
-    public int getNowCounts(@Param("times") long times, @Param("endTime") long endTime,
-            @Param("tableName") String tableName, @Param("shopData") ShopModel model);//辜义睿
+    public List<LocModel> getNowCountsNew(@Param("times") long times, @Param("endTime") long endTime,
+            @Param("tableName") String tableName, @Param("shopData") ShopModel model);//辜义睿改了
 
-    public int getYesCount(@Param("beginTimes") long beginTimes, @Param("times") long times,
-            @Param("tableName") String tableName, @Param("shopData") ShopModel model);//辜义睿
 
-    public List<String> getNowAllCount(@Param("tableName") String tableName, @Param("shopData") ShopModel model);//辜义睿
+    public List<LocModel> getNowAllCountNew(@Param("tableName") String tableName, @Param("shopData") ShopModel model);//辜义睿改了
 
-    public List<String> getYesNowCount(@Param("tableName") String tableName, @Param("shopData") ShopModel model,
-            @Param("times") long times);//辜义睿
-
-    public int getAllTiaoshu(@Param("tableName") String tableName, @Param("shopData") ShopModel model);//辜义睿
-
-    public int getYesAllTiaoshu(@Param("tableName") String tableName, @Param("shopData") ShopModel model,
-            @Param("times") long times);//辜义睿
 
     public int getMomentTotal(@Param("beginTimes") long beginTimes, @Param("times") long times,
             @Param("tableName") String tableName, @Param("mapId") String mapId);
@@ -148,11 +138,9 @@ public interface LocationDao {
     
     public Long getTodayDelayCountByMapId(@Param("tableName") String tableName, @Param("mapId") String mapId);
     
-    public List<LocationModel> getShopHeatMapByShopId(@Param("times") long times, @Param("tableName") String tableName,
-            @Param("shopData") ShopModel model);//辜义睿
+    public List<LocationModel> getShopHeatMapByShopIdNew(@Param("times") long times, @Param("tableName") String tableName,
+            @Param("shopData") ShopModel model);//辜义睿改了
 
-    public List<LocationModel> getTenminitShopData(@Param("times") long times, @Param("endTime") long endTime,
-            @Param("tableName") String tableName, @Param("shopData") ShopModel model);//辜义睿
 
     public List<LocationModel> getMapHeatMapById(@Param("times") long times, @Param("tableName") String tableName,
             @Param("mapId") String mapId);
@@ -163,8 +151,8 @@ public interface LocationDao {
     public List<LocationModel> getMapHeatMapByIds(@Param("tableName") String tableName,
             @Param("mapId") String mapId);    
 
-    public List<LocationModel> getMapPeriodHeatMapById(@Param("beginTimes") long beginTimes, @Param("times") long times,
-            @Param("tableName") String tableName, @Param("shopData") ShopModel model);//辜义睿
+    public List<LocationModel> getMapPeriodHeatMapByIdNew(@Param("beginTimes") long beginTimes, @Param("times") long times,
+            @Param("tableName") String tableName, @Param("shopData") ShopModel model);//辜义睿改了
 
     public List<LocationModel> getPeriodMapHeatMap(@Param("startTime") long startTime, @Param("endTime") long endTime,
             @Param("tableName") String tableName, @Param("mapId") String mapId);
@@ -194,30 +182,28 @@ public interface LocationDao {
 
     public void saveTrendShopByDay(TrendShopModel model);
     
-    public List<String> queryAllUserIdByShopId(@Param("shopId") int shopId, @Param("tableName") String tableName);//辜义睿
+    public List<LocModel> queryAllUserIdByShopIdNew(@Param("shopId") int shopId, @Param("tableName") String tableName);//辜义睿改了
     
-    public LocationModel getOtherShopIdByMaxTime(@Param("shopId") int shopId, @Param("userId") String userId,
-            @Param("tableName") String tableName);//辜义睿
+    public List<LocationModel> getOtherShopIdByMaxTimeNew(@Param("shopId") int shopId, @Param("userId") String userId,
+            @Param("tableName") String tableName);//辜义睿改了
     
     public int getCountByTimestamp(@Param("timestamp")long timestamp,@Param("tableName")String tableName);
     
     public List<TrendAllModel> getAllTrendData(@Param("tableName") String tableName);
     
-    public List<TrendAllModel> getAllTrendShopData(@Param("tableName") String tableName);//辜义睿
+    public List<TrendAllModel> getAllTrendShopDataNew(@Param("tableName") String tableName);//辜义睿改了
     
     public List<VisitTimeModel> getMapVisitTime(@Param("tableName") String tableName,@Param("beginTime") long beginTime,@Param("endTime") long endTime);
     
     public List<VisitTimeModel> getStoreVisitTime(@Param("tableName") String tableName,@Param("beginTime") long beginTime,@Param("endTime") long endTime);
     
-    public List<VisitTimeModel> getShopVisitTime(@Param("tableName") String tableName,@Param("beginTime") long beginTime,@Param("endTime") long endTime);//辜义睿
+    public List<VisitTimeModel> getShopVisitTimeNew(@Param("tableName") String tableName,@Param("beginTime") long beginTime,@Param("endTime") long endTime);//辜义睿改了
     
     public List<VisitTimeModel> getCountGroupByMapId(@Param("tableName") String tableName);
     
     public List<VisitTimeModel> getCountGroupByStoreId(@Param("tableName") String tableName);
     
-    public List<VisitTimeModel> getCountGroupByShopId(@Param("tableName") String tableName);//辜义睿
-    
-    public List<WeekTotalModel> getCountGroupByShopIdAndXY(@Param("tableName") String tableName);//辜义睿
+    public List<LocModel> getCountGroupByShopIdNew(@Param("tableName") String tableName);//辜义睿改了
     
     public List<WeekTotalModel> getXYCountAndCount(@Param("time") String time);
     
@@ -227,7 +213,7 @@ public interface LocationDao {
     
     public List<WeekTotalModel> getWeekDataByShopId(@Param("shopId") String shopId,@Param("startTime") String beginTime,@Param("endTime") String endTime);
     
-    public List<VisitTimeModel> getUserList(@Param("tableName") String tableName);//辜义睿
+    public List<VisitTimeModel> getUserListNew(@Param("tableName") String tableName);//辜义睿改了
     
     public List<VisitTimeModel> getStoreUserList(@Param("tableName") String tableName);
     
@@ -244,11 +230,10 @@ public interface LocationDao {
     
     public int getStoreNowCount(@Param("storeId") String storeId, @Param("tableName") String tableName,@Param("startTime") long beginTime,@Param("endTime") long endTime);
     
-    public long getShopAllCount(@Param("shopId") String shopId, @Param("tableName") String tableName);//辜义睿
-    public long getShopAllCount1(@Param("shopId") String shopId, @Param("tableName") String tableName);//辜义睿
+    public List<LocModel> getShopAllCountNew(@Param("shopId") String shopId, @Param("tableName") String tableName);//辜义睿改了
     public long getShopAllCount2(@Param("shopId") String shopId, @Param("tableName") String tableName);
     
-    public int getShopNowCount(@Param("shopId") String shopId, @Param("tableName") String tableName,@Param("startTime") long beginTime,@Param("endTime") long endTime);//辜义睿
+    public List<LocModel> getShopNowCountNew(@Param("shopId") String shopId, @Param("tableName") String tableName,@Param("startTime") long beginTime,@Param("endTime") long endTime);//辜义睿改了
     
     public int getMapNowCount(@Param("mapId") String mapId, @Param("tableName") String tableName,@Param("startTime") long beginTime,@Param("endTime") long endTime);
     

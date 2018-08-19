@@ -3,16 +3,20 @@ package com.bis.web.auth;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.bis.common.Util;
+import com.bis.common.area.Point;
 import com.bis.common.conf.Params;
 import com.bis.dao.RateDao;
 import com.bis.dao.StatisticsDao;
+import com.bis.model.LocModel;
 import com.bis.model.ShopModel;
 import com.bis.model.WeekTotalModel;
 
@@ -45,75 +49,86 @@ public class Rates {
 	    }
 	    return enterRate;
 	}
-	public int getEnter(ShopModel model,String tableName){
-		
-	    //统计进入店内的游客
-//	    double visitorIn = rateDao.selectCountByShop(tableName, id);
-//	    Integer x = rateDao.selectXByCategoryId(id);
-//	    Integer y = rateDao.selectYByCategoryId(id);
-	    double shopCount  = rateDao.getShopCountByShopId(tableName, model);
-	    double x = Double.valueOf(model.getX())/2;
-	    double y = Double.valueOf(model.getY())/2;
-	    double allCount = rateDao.getShopCountByShopIdRound(tableName, model);
-	    //统计经过店门的游客
-//	    double visitorAll = rateDao.selectAllCountByShop(tableName,id,x,y);
-	    double enterRateDouble = 0;
-	    int enterRate;
-	    if(x==0||y==0||allCount==0){
-//	    	 System.out.println("xxx");
-	    	 return 0;
-//	    }else if(visitorAll==0){
+//	public int getEnter(ShopModel model,String tableName){
+//		
+//	    //统计进入店内的游客
+////	    double visitorIn = rateDao.selectCountByShop(tableName, id);
+////	    Integer x = rateDao.selectXByCategoryId(id);
+////	    Integer y = rateDao.selectYByCategoryId(id);
+//	    double shopCount  = rateDao.getShopCountByShopId(tableName, model);
+//	    double x = Double.valueOf(model.getX())/2;
+//	    double y = Double.valueOf(model.getY())/2;
+//	    double allCount = rateDao.getShopCountByShopIdRound(tableName, model);
+//	    //统计经过店门的游客
+////	    double visitorAll = rateDao.selectAllCountByShop(tableName,id,x,y);
+//	    double enterRateDouble = 0;
+//	    int enterRate;
+//	    if(x==0||y==0||allCount==0){
+////	    	 System.out.println("xxx");
+//	    	 return 0;
+////	    }else if(visitorAll==0){
+//////	    	System.out.println("visitorAll=0");
+////	    	return 0;
+//	    }else{
+//	    	//进店率
+//		    BigDecimal b = new BigDecimal(shopCount / allCount);  
+//		    enterRateDouble = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()*100;
+//		    enterRate = (int)enterRateDouble;
+//		    
+//	    }
+////	    System.out.println(visitorIn);
+////	    System.out.println(visitorAll);
+////	    System.out.println("进店率："+enterRate);
+//	    return enterRate;
+//	}
+//	//参数为shopId,向前推的天数
+//	public int getEnter(ShopModel model,Calendar calendar){
+//		
+////		calendar.getTimeInMillis()
+//	    String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
+//	    String tableName = Params.LOCATION + nowDay;
+//	    try {
+//			if(statisticsDao.isTableExist(tableName, this.db) < 1) {
+////				System.out.println("表不存在："+tableName);
+//				return 0;
+//			}
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//	    List<LocModel>  myLocModels= rateDao.selectCountByShopNew(tableName, model);
+//	    Point tempPoint=new Point(0D, 0D);
+//        Set<String> userIdSet=new HashSet<String>();
+//        for(LocModel loc:myLocModels){
+//            tempPoint.setX(loc.getX()/10.0D);
+//            tempPoint.setY(loc.getY()/10.0D);
+//            if(Util.isInArea(tempPoint, loc.getPointsArray())){
+//                userIdSet.add(loc.getUserId());
+//            }
+//        }
+//      //统计进入店内的游客
+//        double visitorIn = userIdSet.size();
+//	    
+////	    Integer x = rateDao.selectXByCategoryId(id);
+////	    Integer y = rateDao.selectYByCategoryId(id);
+//	    //统计经过店门的游客
+//	    double visitorAll = rateDao.selectAllCountByShop(tableName,model);
+//	    double enterRateDouble = 0;
+//	    int enterRate;
+//	   if(visitorAll==0){
 ////	    	System.out.println("visitorAll=0");
 //	    	return 0;
-	    }else{
-	    	//进店率
-		    BigDecimal b = new BigDecimal(shopCount / allCount);  
-		    enterRateDouble = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()*100;
-		    enterRate = (int)enterRateDouble;
-		    
-	    }
-//	    System.out.println(visitorIn);
-//	    System.out.println(visitorAll);
-//	    System.out.println("进店率："+enterRate);
-	    return enterRate;
-	}
-	//参数为shopId,向前推的天数
-	public int getEnter(ShopModel model,Calendar calendar){
-		
-//		calendar.getTimeInMillis()
-	    String nowDay = Util.dateFormat(calendar.getTimeInMillis(), Params.YYYYMMDD);
-	    String tableName = Params.LOCATION + nowDay;
-	    try {
-			if(statisticsDao.isTableExist(tableName, this.db) < 1) {
-//				System.out.println("表不存在："+tableName);
-				return 0;
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	    //统计进入店内的游客
-	    double visitorIn = rateDao.selectCountByShop(tableName, model);
-//	    Integer x = rateDao.selectXByCategoryId(id);
-//	    Integer y = rateDao.selectYByCategoryId(id);
-	    //统计经过店门的游客
-	    double visitorAll = rateDao.selectAllCountByShop(tableName,model);
-	    double enterRateDouble = 0;
-	    int enterRate;
-	   if(visitorAll==0){
-//	    	System.out.println("visitorAll=0");
-	    	return 0;
-	    }else{
-	    	//进店率
-		    BigDecimal b = new BigDecimal(visitorIn / visitorAll);  
-		    enterRateDouble = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()*100;
-		    enterRate = (int)enterRateDouble;
-		    
-	    }
-//	    System.out.println(visitorIn);
-//	    System.out.println(visitorAll);
-//	    System.out.println("进店率："+enterRate);
-	    return enterRate;
-	}
+//	    }else{
+//	    	//进店率
+//		    BigDecimal b = new BigDecimal(visitorIn / visitorAll);  
+//		    enterRateDouble = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()*100;
+//		    enterRate = (int)enterRateDouble;
+//		    
+//	    }
+////	    System.out.println(visitorIn);
+////	    System.out.println(visitorAll);
+////	    System.out.println("进店率："+enterRate);
+//	    return enterRate;
+//	}
 	
 	
 	

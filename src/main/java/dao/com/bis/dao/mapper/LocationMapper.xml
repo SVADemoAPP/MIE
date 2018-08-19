@@ -234,53 +234,24 @@
 		#{mapId}
 	</select>
 
-	<select id="getNowCount" resultType="int">
-		select count(distinct
-		userId)
-		from ${tableName}
-		where mapId = #{shopData.mapId}
-		and timestamp
-		 &gt; #{times}
-		and x &gt; (#{shopData.xSpot}) *10
-		and x &lt;
-		(#{shopData.x1Spot})*10
-		and y &gt; (#{shopData.ySpot}) *10
-		and y &lt;
-		(#{shopData.y1Spot})*10
-	</select>
 
-	<select id="getNowCounts" resultType="int">
-		select count(distinct
-		userId)
+	<select id="getNowCountsNew" resultType="LocModel">
+		select *
 		from ${tableName}
 		where mapId = #{shopData.mapId}
 		and timestamp
 		&gt; #{times}
 		and timestamp &lt; #{endTime}
-		and x &gt;
-		(#{shopData.xSpot}) *10
-		and x &lt;
-		(#{shopData.x1Spot})*10
-		and y &gt;
-		(#{shopData.ySpot}) *10
-		and y &lt;
-		(#{shopData.y1Spot})*10
 		<!-- and timestamp &lt;= #{endTime} -->
 	</select>
 
-	<select id="getShopHeatMapByShopId" resultType="LocationModel">
+	<select id="getShopHeatMapByShopIdNew" resultType="LocationModel">
 		select
 		x,y,mapId,userId
 		from ${tableName}
 		where mapId = #{shopData.mapId}
 		and
 		timestamp >#{times}
-		and x &gt; (#{shopData.xSpot}) *10
-		and x &lt;
-		(#{shopData.x1Spot})*10
-		and y &gt; (#{shopData.ySpot}) *10
-		and y &lt;
-		(#{shopData.y1Spot})*10
 		group by userId
 	</select>
 
@@ -315,59 +286,19 @@
 		group by userId
 	</select>
 
-	<select id="getMapPeriodHeatMapById" resultType="LocationModel">
+	<select id="getMapPeriodHeatMapByIdNew" resultType="LocationModel">
 		select
 		x,y,mapId,userId
 		from ${tableName}
 		where mapId = #{shopData.mapId}
 		and
 		timestamp &gt; #{beginTimes}
-		and x &gt;
-		(#{shopData.xSpot}) *10
-		and x &lt; (#{shopData.x1Spot})*10
-		and y &gt;
-		(#{shopData.ySpot}) *10
-		and y &lt; (#{shopData.y1Spot})*10
 		group by
 		userId
 		<!--      and timestamp &lt; #{times} -->
 	</select>
 
-	<select id="getYesCount" resultType="int">
-		select count(distinct
-		userId)
-		from ${tableName}
-		where mapId = #{shopData.mapId}
-		and timestamp
-		&gt; #{beginTimes}
-		and timestamp &lt; #{times}
-		and x &gt;
-		(#{shopData.xSpot}) *10
-		and x &lt; (#{shopData.x1Spot})*10
-		and y &gt;
-		(#{shopData.ySpot}) *10
-		and y &lt; (#{shopData.y1Spot})*10
-	</select>
 
-	<select id="getTenminitShopData" resultType="LocationModel">
-		select
-		timestamp,userId
-		from ${tableName}
-		where mapId = #{shopData.mapId}
-		and
-		timestamp &gt; #{times}
-		and timestamp &lt;= #{endTime}
-		and x &gt;
-		(#{shopData.xSpot}) *10
-		and x &lt;
-		(#{shopData.x1Spot})*10
-		and y &gt;
-		(#{shopData.ySpot}) *10
-		and y &lt;
-		(#{shopData.y1Spot})*10
-		order by
-		timestamp
-	</select>
 
 
 	<select id="getTenminitMallData" resultType="LocationModel">
@@ -394,57 +325,10 @@
 		order by a.timestamp
 	</select>
 
-	<select id="getNowAllCount" resultType="String">
-		select distinct userId
+	<select id="getNowAllCountNew" resultType="LocModel">
+		select *
 		from ${tableName}
 		where mapId = #{shopData.mapId}
-		and x &gt;
-		(#{shopData.xSpot}) *10
-		and x &lt; (#{shopData.x1Spot})*10
-		and y &gt;
-		(#{shopData.ySpot}) *10
-		and y &lt; (#{shopData.y1Spot})*10
-	</select>
-
-	<select id="getYesNowCount" resultType="String">
-		select distinct userId
-		from ${tableName}
-		where mapId = #{shopData.mapId}
-		and timestamp &lt;
-		#{times}
-		and x &gt; (#{shopData.xSpot}) *10
-		and x &lt;
-		(#{shopData.x1Spot})*10
-		and y &gt; (#{shopData.ySpot}) *10
-		and y &lt;
-		(#{shopData.y1Spot})*10
-	</select>
-
-	<select id="getAllTiaoshu" resultType="int">
-		select count(userId)
-		from
-		${tableName}
-		where mapId = #{shopData.mapId}
-		and x &gt;
-		(#{shopData.xSpot}) *10
-		and x &lt; (#{shopData.x1Spot})*10
-		and y &gt;
-		(#{shopData.ySpot}) *10
-		and y &lt; (#{shopData.y1Spot})*10
-	</select>
-
-	<select id="getYesAllTiaoshu" resultType="int">
-		select count(userId)
-		from ${tableName}
-		where mapId = #{shopData.mapId}
-		and timestamp &lt;
-		#{times}
-		and x &gt; (#{shopData.xSpot}) *10
-		and x &lt;
-		(#{shopData.x1Spot})*10
-		and y &gt; (#{shopData.ySpot}) *10
-		and y &lt;
-		(#{shopData.y1Spot})*10
 	</select>
 
 
@@ -537,14 +421,10 @@
 	</select>
 
 
-	<select id="queryAllUserIdByShopId" resultType="String">
+	<select id="queryAllUserIdByShopIdNew" resultType="LocModel">
 		SELECT
-		distinct(a.userID)FROM ${tableName} a join bi_shop b on
+		a.* FROM ${tableName} a join bi_shop b on
 		a.mapId=b.mapId
-		and (a.x between least(b.xSpot*10,b.x1Spot*10) and
-		greatest(b.xSpot*10,b.x1Spot*10))
-		and (a.y between least(b.ySpot*10,b.y1Spot*10)
-		and greatest(b.ySpot*10,b.y1Spot*10))
 		where b.id=#{shopId}
 		order by
 		a.userID
@@ -564,26 +444,20 @@
 		a.timestamp desc limit 1
 	</select>
 
-	<select id="getOtherShopIdByMaxTime" resultType="LocationModel">
+	<select id="getOtherShopIdByMaxTimeNew" resultType="LocationModel">
 		select
 		a.timestamp,b.id from ${tableName} a join bi_shop b on
 		a.mapId=b.mapId
-		and a.userId=#{userId} and (a.x between least(b.xSpot*10,b.x1Spot*10) and
-		greatest(b.xSpot*10,b.x1Spot*10))
-		and (a.y between least(b.ySpot*10,b.y1Spot*10)
-		and greatest(b.ySpot*10,b.y1Spot*10))
+		and a.userId=#{userId} 
 		where b.id!=#{shopId} and a.timestamp
 		&lt; (select
 		max(a.timestamp) from ${tableName} a join bi_shop b on
 		a.mapId=b.mapId
-		and (a.x between least(b.xSpot*10,b.x1Spot*10) and
-		greatest(b.xSpot*10,b.x1Spot*10)) and (a.y between least(b.ySpot*10,b.y1Spot*10)
-		and greatest(b.ySpot*10,b.y1Spot*10)) where b.id=#{shopId} and
+		where b.id=#{shopId} and
 		a.userId=#{userId}) and ((select storeId from bi_maps where
 		mapId=b.mapId)=(select d.storeId from bi_shop c join bi_maps d on
 		c.mapId=d.mapId where c.id=#{shopId}))
-		order by a.timestamp desc limit
-		1
+		order by a.timestamp desc 
 	</select>
 
 	<insert id="saveTrendMapByHour">
@@ -664,9 +538,9 @@
         order by c.userId asc,c.time desc      
     </select>  
     
-    <select id="getAllTrendShopData" resultType="TrendAllModel">
-        select * from (select a.userid,max(a.timestamp) time,b.id mapId from ${tableName} a 
-        join bi_shop b on a.mapId = b.mapId where a.x &gt;(b.xSpot)*10 and  a.x &lt;(b.x1Spot)*10 and a.y &gt; (b.ySpot)*10 and a.y &lt;(b.y1Spot)*10 group by a.userId,b.id) as c 
+    <select id="getAllTrendShopDataNew" resultType="TrendAllModel">
+        select * from (select a.userid,max(a.timestamp) time,a.x,a.y,b.id,b.pointsArray mapId from ${tableName} a 
+        join bi_shop b on a.mapId = b.mapId  group by a.userId,b.id) as c 
         order by c.userId asc,c.time desc      
     </select>
     
@@ -688,13 +562,13 @@
         select count(distinct a.userId) maxTime,b.storeId id from ${tableName} a join bi_maps b on a.mapId = b.mapId group by b.storeId         
     </select>
     
-    <select id="getShopVisitTime" resultType="VisitTimeModel">
-        select * from (select a.userid userid,max(a.timestamp) maxTime,min(a.timestamp) minTime,c.id id from ${tableName} a 
-        join bi_maps b on a.mapId = b.mapId join bi_shop c on c.mapId = b.mapId where a.timestamp &gt; #{beginTime} and a.timestamp &lt; #{endTime} and a.x &gt;(c.xSpot)*10 and  a.x &lt;(c.x1Spot)*10 and a.y &gt; (c.ySpot)*10 and a.y &lt;(c.y1Spot)*10 group by a.userId,c.id)as d order by d.id asc            
+    <select id="getShopVisitTimeNew" resultType="VisitTimeModel">
+        select * from (select a.userid userid,max(a.timestamp) maxTime,min(a.timestamp) minTime,c.id id,c.pointsArray,a.x,a.y from ${tableName} a 
+        join bi_maps b on a.mapId = b.mapId join bi_shop c on c.mapId = b.mapId where a.timestamp &gt; #{beginTime} and a.timestamp &lt; #{endTime}  group by a.userId,c.id)as d order by d.id asc            
     </select>
     
-    <select id="getCountGroupByShopId" resultType="VisitTimeModel">
-       select count(distinct a.userId) maxTime,b.id id from ${tableName} a join bi_shop b on a.mapId = b.mapId where a.x &gt;(b.xSpot)*10 and  a.x &lt;(b.x1Spot)*10 and a.y &gt; (b.ySpot)*10 and a.y &lt;(b.y1Spot)*10 group by b.id       
+    <select id="getCountGroupByShopIdNew" resultType="LocModel">
+       select a.x,a.y,a.userId,b.id,b.pointsArray from ${tableName} a join bi_shop b on a.mapId = b.mapId  group by b.id       
     </select>
     
     <select id="getWeekDataByStoreId" resultType="WeekTotalModel">
@@ -709,9 +583,9 @@
        select  substring(time,3,8) mytime,shopId myId,max(allcounts) allCount,round(sum(delayTime*allCount)/sum(allCount),2) averageTime from bi_static_shop_visitTime where shopId = #{shopId} and  time &gt; #{startTime} and time &lt; #{endTime} group by shopId,mytime order by mytime       
     </select>
     
-    <select id="getUserList" resultType="VisitTimeModel">
-     select * from (select a.userid userid,b.storeId storeId,b.mapId mapId,max(a.timestamp) maxTime,min(a.timestamp) minTime,c.id id from ${tableName} a 
-        join bi_maps b on a.mapId = b.mapId join bi_shop c on c.mapId = b.mapId where a.x &gt;(c.xSpot)*10 and  a.x &lt;(c.x1Spot)*10 and a.y &gt; (c.ySpot)*10 and a.y &lt;(c.y1Spot)*10 group by a.userId,c.id)as d order by d.id asc                  
+    <select id="getUserListNew" resultType="VisitTimeModel">
+     select * from (select a.userid userid,b.storeId storeId,b.mapId mapId,max(a.timestamp) maxTime,min(a.timestamp) minTime,c.id id,c.pointsArray,a.x,a.y from ${tableName} a 
+        join bi_maps b on a.mapId = b.mapId join bi_shop c on c.mapId = b.mapId  group by a.userId,c.id)as d order by d.id asc                  
     </select>
     
     <select id="getStoreUserList" resultType="VisitTimeModel">
@@ -735,9 +609,6 @@
     select max(allcounts) from bi_static_store_visitTime where storeId = #{storeId}  and time &gt; #{time}
     </select>
     
-    <select id="getCountGroupByShopIdAndXY" resultType="WeekTotalModel">
-       select count(distinct a.userId) allcount,b.id myId,b.shopName myTime from ${tableName} a join bi_shop b on a.mapId = b.mapId join bi_shop_category c on c.id = b.categoryId  where a.x &gt; (b.xSpot-c.x/2)*10 and  a.x &lt; (b.x1Spot+c.x/2)*10 and a.y &gt;(b.ySpot-c.y/2)*10 and a.y &lt; (b.y1Spot+c.y/2)*10  group by b.id        
-    </select>
     
     <select id="getXYCountAndCount" resultType="WeekTotalModel">
        select a.allcount allCount,max(b.allcounts) averageTime,a.shopId myId from bi_static_shop_count a left join bi_static_shop_visitTime b on a.shopId = b.shopId where b.time &gt;#{time} and a.time &gt;#{time} group by a.shopId
@@ -755,19 +626,16 @@
     <select id="getStoreNowCount" resultType="int">
         select count(distinct a.userid) from ${tableName} a join bi_maps c on c.mapId = a.mapId join bi_store b on b.id = c.storeId where b.id = #{storeId} and a.timestamp &gt; #{startTime} and a.timestamp &lt;#{endTime}
     </select>    
-    <select id="getShopAllCount" resultType="long">
-        select count(distinct a.userid) from ${tableName} a join bi_shop b on a.mapId = b.mapId where b.id = #{shopId} and  a.x &gt;(b.xSpot)*10 and  a.x &lt;(b.x1Spot)*10 and a.y &gt; (b.ySpot)*10 and a.y &lt;(b.y1Spot)*10 
-    </select>
-    <select id="getShopAllCount1" resultType="long">
-		select count(distinct a.userid) from ${tableName} a join bi_shop b on a.mapId = b.mapId join bi_shop_category d on d.id = b.categoryId  where b.id = #{shopId} and  a.x &gt;(b.xSpot-(d.x/2))*10 and  a.x &lt;(b.x1Spot+(d.x/2))*10 and a.y &gt;(b.ySpot-(d.y/2))*10 and a.y &lt;(b.y1Spot+(d.x/2))*10
+    <select id="getShopAllCountNew" resultType="LocModel">
+        select a.x,a.y,a.userId from ${tableName} a join bi_shop b on a.mapId = b.mapId where b.id = #{shopId} 
     </select>
     
     <select id="getShopAllCount2" resultType="long">
 		select count(distinct a.userid) from ${tableName} a join bi_shop b on a.mapId = b.mapId   where b.id = #{shopId} 
     </select>
 
-    <select id="getShopNowCount" resultType="int">
-        select count(distinct a.userid) from ${tableName} a join bi_shop b on a.mapId = b.mapId where b.id = #{shopId} and  a.x &gt;(b.xSpot)*10 and  a.x &lt;(b.x1Spot)*10 and a.y &gt; (b.ySpot)*10 and a.y &lt;(b.y1Spot)*10 and a.timestamp &gt; #{startTime} and a.timestamp &lt;#{endTime}
+    <select id="getShopNowCountNew" resultType="LocModel">
+        select a.x,a.y,a.userId from ${tableName} a join bi_shop b on a.mapId = b.mapId where b.id = #{shopId}  and a.timestamp &gt; #{startTime} and a.timestamp &lt;#{endTime}
     </select>
     
     <select id="getMapNowCount" resultType="int">

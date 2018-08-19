@@ -259,48 +259,48 @@ public class MarketController {
         return topSpend;
     }
 
-    // 获取商场店铺的面积统计情况，返回的MarketShopTopModel使用shopName字段作为区间信息
-    public List<MarketShopTopModel> getMarketShopSquare() {
-        List<MarketShopTopModel> shopSqrInfo = new ArrayList<MarketShopTopModel>();
-        MarketShopTopModel sqr30 = new MarketShopTopModel();
-        sqr30.setShopName("[0,30)");
-        sqr30.setValue(0);
-        MarketShopTopModel sqr60 = new MarketShopTopModel();
-        sqr60.setShopName("[30,60)");
-        sqr60.setValue(0);
-        MarketShopTopModel sqr90 = new MarketShopTopModel();
-        sqr90.setShopName("[60,90)");
-        sqr90.setValue(0);
-        MarketShopTopModel sqr120 = new MarketShopTopModel();
-        sqr120.setShopName("[90,120)");
-        sqr120.setValue(0);
-        MarketShopTopModel sqrOther = new MarketShopTopModel();
-        sqrOther.setValue(0);
-        sqrOther.setShopName("other");
-        List<MarketShopSquareModel> sqrOriInfo = dao.getMarketShopSquare();
-        Iterator<MarketShopSquareModel> it = sqrOriInfo.iterator();
-        while (it.hasNext()) {
-            MarketShopSquareModel tmp = it.next();
-            int square = Math.abs(tmp.getX1() - tmp.getX()) * Math.abs(tmp.getY1() - tmp.getY());
-            if (square < 30) {
-                sqr30.setValue(sqr30.getValue() + 1);
-            } else if (square >= 30 && square < 60) {
-                sqr60.setValue(sqr60.getValue() + 1);
-            } else if (square >= 60 && square < 90) {
-                sqr90.setValue(sqr90.getValue() + 1);
-            } else if (square >= 90 && square < 120) {
-                sqr120.setValue(sqr120.getValue() + 1);
-            } else {
-                sqrOther.setValue(sqrOther.getValue() + 1);
-            }
-        }
-        shopSqrInfo.add(sqr30);
-        shopSqrInfo.add(sqr60);
-        shopSqrInfo.add(sqr90);
-        shopSqrInfo.add(sqr120);
-        shopSqrInfo.add(sqrOther);
-        return shopSqrInfo;
-    }
+//    // 获取商场店铺的面积统计情况，返回的MarketShopTopModel使用shopName字段作为区间信息
+//    public List<MarketShopTopModel> getMarketShopSquare() {
+//        List<MarketShopTopModel> shopSqrInfo = new ArrayList<MarketShopTopModel>();
+//        MarketShopTopModel sqr30 = new MarketShopTopModel();
+//        sqr30.setShopName("[0,30)");
+//        sqr30.setValue(0);
+//        MarketShopTopModel sqr60 = new MarketShopTopModel();
+//        sqr60.setShopName("[30,60)");
+//        sqr60.setValue(0);
+//        MarketShopTopModel sqr90 = new MarketShopTopModel();
+//        sqr90.setShopName("[60,90)");
+//        sqr90.setValue(0);
+//        MarketShopTopModel sqr120 = new MarketShopTopModel();
+//        sqr120.setShopName("[90,120)");
+//        sqr120.setValue(0);
+//        MarketShopTopModel sqrOther = new MarketShopTopModel();
+//        sqrOther.setValue(0);
+//        sqrOther.setShopName("other");
+//        List<MarketShopSquareModel> sqrOriInfo = dao.getMarketShopSquare();
+//        Iterator<MarketShopSquareModel> it = sqrOriInfo.iterator();
+//        while (it.hasNext()) {
+//            MarketShopSquareModel tmp = it.next();
+//            int square = Math.abs(tmp.getX1() - tmp.getX()) * Math.abs(tmp.getY1() - tmp.getY());
+//            if (square < 30) {
+//                sqr30.setValue(sqr30.getValue() + 1);
+//            } else if (square >= 30 && square < 60) {
+//                sqr60.setValue(sqr60.getValue() + 1);
+//            } else if (square >= 60 && square < 90) {
+//                sqr90.setValue(sqr90.getValue() + 1);
+//            } else if (square >= 90 && square < 120) {
+//                sqr120.setValue(sqr120.getValue() + 1);
+//            } else {
+//                sqrOther.setValue(sqrOther.getValue() + 1);
+//            }
+//        }
+//        shopSqrInfo.add(sqr30);
+//        shopSqrInfo.add(sqr60);
+//        shopSqrInfo.add(sqr90);
+//        shopSqrInfo.add(sqr120);
+//        shopSqrInfo.add(sqrOther);
+//        return shopSqrInfo;
+//    }
 
     // 获取商场的类型数据，只返回前80%类型，剩下的合并为other
     public List<StringIntModel> getMarketShopType() {

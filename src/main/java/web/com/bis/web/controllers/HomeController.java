@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -31,12 +32,15 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.RequestContext;
 import com.bis.common.RSAUtils;
 import com.bis.common.Util;
+import com.bis.common.area.Point;
 import com.bis.common.conf.Params;
 import com.bis.dao.LocationDao;
+import com.bis.dao.ShopDao;
 import com.bis.dao.StatisticsDao;
 import com.bis.dao.VisitorDao;
 import com.bis.model.AreaModel;
 import com.bis.model.GlobalModel;
+import com.bis.model.LocModel;
 import com.bis.model.VisitTimeModel;
 import com.bis.web.auth.AuthPassport;
 
@@ -544,8 +548,17 @@ public class HomeController {
             String tableName = Params.LOCATION + dateKey;
             String shopTableName = Params.SHOPLOCATION + dateKey.substring(0, dateKey.length() - 2);
             String insertUserid = "replace into " + shopTableName + "(userId,time,delaytime,shopId,type) values";
-            List<VisitTimeModel> userListModel = locationDao.getUserList(tableName); //辜义睿getUserList
-            for (VisitTimeModel sva : userListModel) {
+            List<VisitTimeModel> userListModel = locationDao.getUserListNew(tableName); //辜义睿getUserList
+            List<VisitTimeModel> filterUserListModel=new ArrayList<>();
+            Point tempPoint=new Point(0D, 0D);
+            for(VisitTimeModel visitTimeModel:userListModel){
+                tempPoint.setX(visitTimeModel.getX()/10.0D);
+                tempPoint.setY(visitTimeModel.getY()/10.0D);
+                if(Util.isInArea(tempPoint, visitTimeModel.getPointsArray())){
+                    filterUserListModel.add(visitTimeModel);
+                }
+            }
+            for (VisitTimeModel sva : filterUserListModel) {
                 String userId = sva.getUserId();
                 long visiTime = sva.getMaxTime() - sva.getMinTime();
                 int shopId = sva.getId();
@@ -554,7 +567,7 @@ public class HomeController {
                 String shopVisit = Util.getMinute(visiTime, 1);
                 insertUserid += "('" + userId + "','" + doDay + "','" + shopVisit + "','" + shopId + "','" + 0 + "'),";
             }
-            if (userListModel.size() > 0) {
+            if (filterUserListModel.size() > 0) {
                 insertUserid = insertUserid.substring(0, insertUserid.length() - 1);
                 int areaResult = statisticsDao.doUpdate(insertUserid);
                 LOG.debug("saveUserShop-shop-userid :" + areaResult);
@@ -665,6 +678,8 @@ public class HomeController {
         return "today:" + ftpResult;
     }
     
+    @Autowired
+    private ShopDao shopDao;
     
     @RequestMapping(value = "/testSaveUserShop", method = { RequestMethod.GET })
     @ResponseBody
@@ -689,8 +704,17 @@ public class HomeController {
             int areaResult = statisticsDao.doUpdate(insertStoreUserid);
             LOG.debug("saveUserShop-store-userid result:" + areaResult);
         }
-        List<VisitTimeModel> userListModel = locationDao.getUserList(tableName); //辜义睿getUserList
-        for (VisitTimeModel sva : userListModel) {
+        List<VisitTimeModel> userListModel = locationDao.getUserListNew(tableName); //辜义睿getUserList
+        List<VisitTimeModel> filterUserListModel=new ArrayList<>();
+        Point tempPoint=new Point(0D, 0D);
+        for(VisitTimeModel visitTimeModel:userListModel){
+            tempPoint.setX(visitTimeModel.getX()/10.0D);
+            tempPoint.setY(visitTimeModel.getY()/10.0D);
+            if(Util.isInArea(tempPoint, visitTimeModel.getPointsArray())){
+                filterUserListModel.add(visitTimeModel);
+            }
+        }
+        for (VisitTimeModel sva : filterUserListModel) {
             String userId = sva.getUserId();
             long visiTime = sva.getMaxTime() - sva.getMinTime();
             int shopId = sva.getId();
@@ -699,7 +723,7 @@ public class HomeController {
             String shopVisit = Util.getMinute(visiTime, 1);
             insertUserid += "('" + userId + "','" + userDay1 + "','" + shopVisit + "','" + shopId + "','" + 0 + "'),";
         }
-        if (userListModel.size() > 0) {
+        if (filterUserListModel.size() > 0) {
             insertUserid = insertUserid.substring(0, insertUserid.length() - 1);
             int areaResult = statisticsDao.doUpdate(insertUserid);
             LOG.debug("saveUserShop-shop-userid :" + areaResult);
@@ -758,8 +782,17 @@ public class HomeController {
                 LOG.debug("saveVisitTime-store result:" + areaResult);
             }
             String insertEntersql = "insert into bi_static_shop_enter(time,allcount,shopId,allcounts) values";
-            List<VisitTimeModel> shopList = locationDao.getShopVisitTime(tableName, beginTime, endTime); //辜义睿getShopVisitTime
-            Map<String, String> mapShop = getNewMap(shopList);
+            List<VisitTimeModel> shopList = locationDao.getShopVisitTimeNew(tableName, beginTime, endTime); //辜义睿getShopVisitTime
+            List<VisitTimeModel> filterShopList=new ArrayList<>();
+            Point tempPoint2=new Point(0D, 0D);
+            for(VisitTimeModel visitTimeModel:shopList){
+                tempPoint2.setX(visitTimeModel.getX()/10.0D);
+                tempPoint2.setY(visitTimeModel.getY()/10.0D);
+                if(Util.isInArea(tempPoint2, visitTimeModel.getPointsArray())){
+                    filterShopList.add(visitTimeModel);
+                }
+            }
+            Map<String, String> mapShop = getNewMap(filterShopList);
             // List<VisitTimeModel> shopCount =
             // locationDao.getCountGroupByShopId(tableName);
             // Map<String, Long> shops = getListToMap(shopCount);
@@ -770,7 +803,18 @@ public class HomeController {
                 if (shopId != null && shopId != "null" && shopId != "") {
                     String allcount = s.split("-")[1];
                     String visitTime = mapShop.get(s);
-                    long allCounts = locationDao.getShopAllCount(shopId, tableName); //辜义睿getShopAllCount
+                    List<LocModel> myLocModels= locationDao.getShopAllCountNew(shopId, tableName); //辜义睿getShopAllCount
+                    String pointsArray=shopDao.getPointsArrayById(shopId);
+                    Point tempPoint3=new Point(0D, 0D);
+                    Set<String> userIdSet=new HashSet<String>();
+                    for(LocModel loc:myLocModels){
+                        tempPoint3.setX(loc.getX()/10.0D);
+                        tempPoint3.setY(loc.getY()/10.0D);
+                        if(Util.isInArea(tempPoint, pointsArray)){
+                            userIdSet.add(loc.getUserId());
+                        }
+                    }
+                    long allCounts = userIdSet.size(); //辜义睿getShopAllCount
                     insertShop += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + shopId + "','"
                             + allCounts + "'),";
                     if (endTimes.equals("23:00:00")) {

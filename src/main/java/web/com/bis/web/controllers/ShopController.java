@@ -5,12 +5,14 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.formula.functions.Count;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -21,10 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bis.common.Util;
+import com.bis.common.area.Point;
 import com.bis.common.conf.Params;
 import com.bis.dao.LocationDao;
 import com.bis.dao.ShopDao;
 import com.bis.dao.StatisticsDao;
+import com.bis.model.LocModel;
 import com.bis.model.ShopCostModel;
 import com.bis.model.ShopModel;
 import com.bis.model.StatisticsModel;
@@ -471,166 +475,6 @@ public class ShopController {
         return modelMap;
     }
 
-    /**
-     * 
-     * @Title: getTotal
-     * @Description: 获取今天和昨天的相关数据
-     * @param shopId
-     * @return
-     */
-    @RequestMapping(value = "/getTotal", method = { RequestMethod.POST })
-    @ResponseBody
-    public Map<String, Object> getTotal(@RequestParam("shopId") String shopId) {
-        LOG.info("ShopController ~ getTotal");
-
-        // 当前人数
-        List<String> nowList = new ArrayList<String>();
-        // 昨天人数
-        List<String> yesList = new ArrayList<String>();
-        List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
-        // 当前实时人数
-        int count = 0;
-        // 昨天实时人数
-        int yesCount = 0;
-        // 新增人数
-//        int newUser = 0;
-        // 今日累计人数
-        int allcount = 0;
-        // 昨日累计人数
-        int yesAllCount = 0;
-        // 今天条数
-        int allTiaoshu = 0;
-        // 昨日条数
-        int yesAllTiaoshu = 0;
-        // 今日平均驻留时长
-        String averageTime = null;
-        // 昨日平均驻留时长
-        String yesAverageTime = null;
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
-        c.add(Calendar.DATE, -1);
-        // 表名
-        String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
-        String nows = Util.dateFormat(new Date(), Params.DD);
-        String yesDay = Util.dateFormat(c.getTimeInMillis(), Params.YYYYMMDD);
-        String yesDays = Util.dateFormat(c.getTimeInMillis(), Params.YYMMDD);
-        String tableName = Params.LOCATION + nowDay;
-        String yesTableName = Params.LOCATION + yesDay;
-        long nowTimes = System.currentTimeMillis();
-        long times = nowTimes - 4000;
-        long yesTimes = c.getTimeInMillis();
-        long yesTimesBegin = yesTimes - 4000;
-        List<ShopModel> shopList = dao.getShopDataById(shopId);
-        String nowMouths = Util.dateFormat(new Date(), Params.YYYYMM);
-        String shopTableName = Params.SHOPLOCATION + nowMouths;
-        c.setTime(new Date());
-        c.add(Calendar.MONTH, -1);
-        String riqi = Util.dateFormat(c.getTime(), Params.YYYYMM);
-        String shopTableName1 = Params.SHOPLOCATION + riqi;
-        ShopModel shopModel = new ShopModel();
-        if (shopList.size() > 0) {
-            shopModel = shopList.get(0);
-            count = locationDao.getNowCount(times, tableName, shopModel);//辜义睿getNowCount
-            if (statisticsDao.isTableExist(yesTableName, this.db) < 1) {
-                statisticsDao.createTable(yesTableName);
-            }
-            yesCount = locationDao.getYesCount(yesTimesBegin, yesTimes, yesTableName, shopModel);//辜义睿getYesCount
-            nowList = locationDao.getNowAllCount(tableName, shopModel);//辜义睿getNowAllCount
-            yesList = locationDao.getYesNowCount(yesTableName, shopModel, yesTimes);//辜义睿getYesNowCount
-            allcount = nowList.size();
-            yesAllCount = yesList.size();
-            allTiaoshu = locationDao.getAllTiaoshu(tableName, shopModel);//辜义睿getAllTiaoshu
-            yesAllTiaoshu = locationDao.getYesAllTiaoshu(yesTableName, shopModel, yesTimes);//辜义睿getYesAllTiaoshu
-            averageTime = Util.getMinute(allTiaoshu * 2000, allcount);
-            yesAverageTime = Util.getMinute(yesAllTiaoshu * 2000, yesAllCount);
-//            nowList.removeAll(yesList);
-//            newUser = nowList.size();
-        } else {
-            return null;
-        }
-        c.setTime(new Date());
-        c.add(Calendar.DATE, -7);
-        String sevenDay = Util.dateFormat(c.getTimeInMillis(), Params.YYYYMMDD);
-//        String sevenDays = Util.dateFormat(c.getTimeInMillis(), Params.YYMMDD);
-        if (Integer.parseInt(nows) >= 7) {
-            lists = dao.getShopWeekData(shopTableName, shopId, sevenDay, nowDay);
-        } else {
-            if (statisticsDao.isTableExist(shopTableName1, db) < 1) {
-                // 动态创建表
-                statisticsDao.createShopTable(shopTableName1);
-            }
-            List<Map<String, Object>> lists1 = dao.getShopWeekData1(shopTableName1, shopId, sevenDay);
-            List<Map<String, Object>> lists2 = dao.getShopWeekData2(shopTableName, shopId, nowDay);
-            lists.addAll(lists1);
-            lists.addAll(lists2);
-        }
-        // 表格驻留时长于人数
-        Map<String, Object> visitMap = new TreeMap<String, Object>();
-        Map<String, Object> countMap = new TreeMap<String, Object>();
-        Map<String, Object> nowMap = new TreeMap<String, Object>();
-//        Map<String, Object> newUserMap = new TreeMap<String, Object>();
-        nowMap.put(yesDays, yesCount);
-        visitMap.put(String.valueOf(Util.dateFormatStringtoLong(yesDays, Params.YYMMDD)), 0);
-        countMap.put(yesDays, 0);
-//        newUserMap.put(yesDays, 0);
-
-        for (int i = 2; i < 8; i++) {
-            c.setTime(new Date());
-            c.add(Calendar.DATE, -i);
-            String newRiqi = Util.dateFormat(c.getTimeInMillis(), Params.YYMMDD);
-            String yesDayss = Util.dateFormat(c.getTimeInMillis(), Params.YYYYMMDD);
-            String yesTableNames = Params.LOCATION + yesDayss;
-            long yesTimess = c.getTimeInMillis();
-            long yesTimesBegins = yesTimes - 4000;
-            if (statisticsDao.isTableExist(yesTableNames, this.db) < 1) {
-                statisticsDao.createTable(yesTableNames);
-            }
-            int yesCounts = locationDao.getYesCount(yesTimesBegins, yesTimess, yesTableNames, shopModel);//辜义睿getYesCount
-            nowMap.put(newRiqi, yesCounts);
-            visitMap.put(String.valueOf(Util.dateFormatStringtoLong(newRiqi, Params.YYMMDD)), 0);
-            countMap.put(newRiqi, 0);
-//            newUserMap.put(newRiqi, 0);
-        }
-        for (int i = 0; i < lists.size(); i++) {
-            String keyVal = lists.get(i).get("times").toString();
-            String allTimes = lists.get(i).get("alltimes").toString();
-            int allSize = Integer.parseInt(lists.get(i).get("allcount").toString());
-            double vistiTime = Double.valueOf(allTimes) / allSize;
-
-            visitMap.put(String.valueOf(Util.dateFormatStringtoLong(keyVal, Params.YYYYMMDD2)), vistiTime);
-            countMap.put(keyVal.replace("-", "/").substring(2, keyVal.length()), coefficientData2(allSize));
-        }
-        yesAllCount = coefficientData2(Integer.parseInt(lists.get(lists.size()-1).get("allcount").toString()));
-//        List<NewUserModel> list = dao.getAllNewDataByShopId(shopId, sevenDays, yesDays);
-//        for (int i = 0; i < list.size(); i++) {
-//            NewUserModel model = list.get(i);
-//            // String userTime = model.getTime();
-//            int newUsers = model.getNewUser();
-//            newUserMap.put(yesDays, coefficientData(newUsers));
-//        }
-        Map<String, Object> modelMap = new HashMap<String, Object>();
-        // visitMap.put(String.valueOf(Util.dateFormatStringtoLong(yesDays,
-        // Params.YYMMDD)), yesAverageTime);
-        nowMap.put(yesDays, yesAllCount);
-        modelMap.put("nowData", nowMap);
-//        modelMap.put("newData", newUserMap);
-        modelMap.put("allData", countMap);
-        modelMap.put("timeData", visitMap);
-        modelMap.put("nowPeople", coefficientData(count));
-        modelMap.put("yesPeople", coefficientData(yesCount));
-//        modelMap.put("newPeople", coefficientData(newUser));
-//        modelMap.put("yesNewPeople", newUserMap.get(yesDays));
-        modelMap.put("nowAllPeople", coefficientData2(allcount));
-        modelMap.put("yesAllPeople", yesAllCount);
-        modelMap.put("nowTime", averageTime);
-        modelMap.put("yesTime", yesAverageTime);
-        modelMap.put("yesTime1", visitMap.get(String.valueOf(Util.dateFormatStringtoLong(yesDays, Params.YYMMDD))));
-//        modelMap.put("newAllPeople", allcount);
-        modelMap.put(Params.RETURN_KEY_ERROR, Params.RETURN_CODE_200);
-        modelMap.put(Params.RETURN_KEY_DATA, shopList);
-
-        return modelMap;
-    }
     
     @RequestMapping(value = "/getNewTotal", method = { RequestMethod.POST })
     @ResponseBody
@@ -689,9 +533,32 @@ public class ShopController {
         ShopModel shopModel = listShopModel.get(0);
         String nowDay = Util.dateFormat(new Date(), Params.YYYYMMDD);
         String tableName = Params.LOCATION + nowDay;
-
-        int count = locationDao.getNowCounts(times,nowTimes, tableName, shopModel);//辜义睿getNowCounts
-        int yesCount = locationDao.getNowCounts(yesStartTimel,yesEndTimel,yesTbaleName, shopModel);//辜义睿getNowCounts
+        Point tempPoint=new Point(0D, 0D);
+        String pointsArray=shopModel.getPointsArray();
+        Set<String> userIdSet=new HashSet<String>();
+        List<LocModel> locModelsToday=locationDao.getNowCountsNew(times,nowTimes, tableName, shopModel);
+        for(LocModel loc:locModelsToday){
+            tempPoint.setX(loc.getX()/10.0D);
+            tempPoint.setY(loc.getY()/10.0D);
+            if(Util.isInArea(tempPoint, pointsArray)){
+                userIdSet.add(loc.getUserId());
+            }
+        }
+        int count =userIdSet.size();
+        userIdSet.clear();
+        List<LocModel> locModelsYes=locationDao.getNowCountsNew(yesStartTimel,yesEndTimel,yesTbaleName, shopModel);
+        for(LocModel loc:locModelsYes){
+            tempPoint.setX(loc.getX()/10.0D);
+            tempPoint.setY(loc.getY()/10.0D);
+            if(Util.isInArea(tempPoint, pointsArray)){
+                userIdSet.add(loc.getUserId());
+            }
+        }
+        int yesCount=userIdSet.size();
+        
+        
+//        int count = locationDao.getNowCountsNew(times,nowTimes, tableName, shopModel);//辜义睿getNowCounts
+//        int yesCount = locationDao.getNowCountsNew(yesStartTimel,yesEndTimel,yesTbaleName, shopModel);//辜义睿getNowCounts
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put("allData", weekUsercount);
         modelMap.put("timeData", weekDelaytime);

@@ -30,7 +30,7 @@ public interface MarketOverviewDao {
     
     public List<MarketShopTopModel> getMarketDelayInfoByType(@Param("typeSeq") List<String> typeSeq,@Param("timeDiffDay") int timeDiffDay);        
     
-    public List<MarketShopSquareModel> getMarketShopSquare();
+//    public List<MarketShopSquareModel> getMarketShopSquare();
     
     public List<StringIntModel> getMarketShopType();
     

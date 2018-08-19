@@ -42,9 +42,10 @@
 	</select>
 	
 	
-	<select id="getMarketShopSquare" resultType="MarketShopSquareModel">
+	<!-- <select id="getMarketShopSquare" resultType="MarketShopSquareModel">
 		select xSpot as x,ySpot as y,x1Spot as x1,y1Spot as y1 from bi_shop
-	</select>
+	</select> -->
+	
 	<select id="getMarketShopType" resultType="StringIntModel">
 		SELECT B.name as eleName ,count(B.name) as eleValue from bi_shop A , bi_shop_category B where A.categoryId=B.id GROUP BY eleName ORDER BY eleValue desc
 	</select>

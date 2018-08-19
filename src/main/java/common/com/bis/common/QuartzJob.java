@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,9 +20,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.support.DaoSupport;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import com.bis.common.area.Point;
 import com.bis.common.conf.Params;
 import com.bis.dao.LocationDao;
 import com.bis.dao.MapMngDao;
@@ -32,6 +35,7 @@ import com.bis.dao.VisitorDao;
 import com.bis.model.AreaModel;
 import com.bis.model.GlobalModel;
 import com.bis.model.IvasSvaModel;
+import com.bis.model.LocModel;
 import com.bis.model.LocationModel;
 import com.bis.model.MapBorderModel;
 import com.bis.model.MarketModel;
@@ -371,7 +375,35 @@ public class QuartzJob {
             List<VisitTimeModel> list = locationDao.getMapVisitTime(tableName, beginTime, endTime);
             List<VisitTimeModel> mapCount = locationDao.getCountGroupByMapId(tableName);
             List<VisitTimeModel> storeCount = locationDao.getCountGroupByStoreId(tableName);
-            List<VisitTimeModel> shopCount = locationDao.getCountGroupByShopId(tableName); //辜义睿getCountGroupByShopId
+            List<VisitTimeModel> shopCount = new ArrayList<>(); //辜义睿getCountGroupByShopId
+            List<LocModel>  myLocModels=locationDao.getCountGroupByShopIdNew(tableName);
+            
+            Point tempPoint=new Point(0D, 0D);
+            int lastId=-1;
+            Set<String> tempUserIdSet=new HashSet<>();
+            for(LocModel loc:myLocModels){
+                tempPoint.setX(loc.getX()/10.0D);
+                tempPoint.setY(loc.getY()/10.0D);
+                if(Util.isInArea(tempPoint, loc.getPointsArray())){
+                    if(loc.getId()!=lastId){
+                        if(lastId!=-1){
+                            VisitTimeModel visitTimeModel=new VisitTimeModel();
+                            visitTimeModel.setId(lastId);
+                            visitTimeModel.setMaxTime(tempUserIdSet.size());
+                            shopCount.add(visitTimeModel);
+                            tempUserIdSet.clear();
+                        }
+                        lastId=loc.getId();
+                    }
+                    tempUserIdSet.add(loc.getUserId());
+                }
+                if(lastId!=-1){
+                    VisitTimeModel visitTimeModel=new VisitTimeModel();
+                    visitTimeModel.setId(lastId);
+                    visitTimeModel.setMaxTime(tempUserIdSet.size());
+                    shopCount.add(visitTimeModel);
+                }
+            }
             Map<String, Long> map = getFloorVisitTime(list);
             Map<String, Long> mapIdS = getListToMap(mapCount);
             Map<String, Long> stores = getListToMap(storeCount);
@@ -410,8 +442,17 @@ public class QuartzJob {
                 int areaResult = statisticsDao.doUpdate(insertStore);
                 LOG.debug("saveVisitTime-store result:" + areaResult);
             }
-            List<VisitTimeModel> shopList = locationDao.getShopVisitTime(tableName, beginTime, endTime); //辜义睿getShopVisitTime
-            Map<String, Long> shopMap = getShopVisitTime(shopList);
+            List<VisitTimeModel> shopList = locationDao.getShopVisitTimeNew(tableName, beginTime, endTime); //辜义睿getShopVisitTime
+            List<VisitTimeModel> filterShopList=new ArrayList<>();
+            Point tempPoint2=new Point(0D, 0D);
+            for(VisitTimeModel visitTimeModel:shopList){
+                tempPoint2.setX(visitTimeModel.getX()/10.0D);
+                tempPoint2.setY(visitTimeModel.getY()/10.0D);
+                if(Util.isInArea(tempPoint2, visitTimeModel.getPointsArray())){
+                    filterShopList.add(visitTimeModel);
+                }
+            }
+            Map<String, Long> shopMap = getShopVisitTime(filterShopList);
             Set<String> shopSet = shopMap.keySet();
             for (String s : shopSet) {
                 long visitTime = shopMap.get(s);
@@ -504,8 +545,17 @@ public class QuartzJob {
                 LOG.debug("saveVisitTime-store result:" + areaResult);
             }
             String insertEntersql = "insert into bi_static_shop_enter(time,allcount,shopId,allcounts) values";
-            List<VisitTimeModel> shopList = locationDao.getShopVisitTime(tableName, beginTime, endTime); //辜义睿getShopVisitTime
-            Map<String, String> mapShop = getNewMap(shopList);
+            List<VisitTimeModel> shopList = locationDao.getShopVisitTimeNew(tableName, beginTime, endTime); //辜义睿getShopVisitTime
+            List<VisitTimeModel> filterShopList=new ArrayList<>();
+            Point tempPoint2=new Point(0D, 0D);
+            for(VisitTimeModel visitTimeModel:shopList){
+                tempPoint2.setX(visitTimeModel.getX()/10.0D);
+                tempPoint2.setY(visitTimeModel.getY()/10.0D);
+                if(Util.isInArea(tempPoint2, visitTimeModel.getPointsArray())){
+                    filterShopList.add(visitTimeModel);
+                }
+            }
+            Map<String, String> mapShop = getNewMap(filterShopList);
             // List<VisitTimeModel> shopCount =
             // locationDao.getCountGroupByShopId(tableName);
             // Map<String, Long> shops = getListToMap(shopCount);
@@ -516,7 +566,19 @@ public class QuartzJob {
                 if (shopId != null && shopId != "null" && shopId != "") {
                     String allcount = s.split("-")[1];
                     String visitTime = mapShop.get(s);
-                    long allCounts = locationDao.getShopAllCount(shopId, tableName); //辜义睿getShopAllCount
+                   
+                    List<LocModel> myLocModels= locationDao.getShopAllCountNew(shopId, tableName); //辜义睿getShopAllCount
+                    String pointsArray=shopDao.getPointsArrayById(shopId);
+                    Point tempPoint=new Point(0D, 0D);
+                    Set<String> userIdSet=new HashSet<String>();
+                    for(LocModel loc:myLocModels){
+                        tempPoint.setX(loc.getX()/10.0D);
+                        tempPoint.setY(loc.getY()/10.0D);
+                        if(Util.isInArea(tempPoint, pointsArray)){
+                            userIdSet.add(loc.getUserId());
+                        }
+                    }
+                    long allCounts = userIdSet.size(); //辜义睿getShopAllCount
                     insertShop += "('" + nowMouth + "','" + visitTime + "','" + allcount + "','" + shopId + "','"
                             + allCounts + "'),";
                     if (endTimes.equals("23:00:00")) {
@@ -563,8 +625,17 @@ public class QuartzJob {
             int areaResult = statisticsDao.doUpdate(insertStoreUserid);
             LOG.debug("saveUserShop-store-userid result:" + areaResult);
         }
-        List<VisitTimeModel> userListModel = locationDao.getUserList(tableName); //辜义睿getUserList
-        for (VisitTimeModel sva : userListModel) {
+        List<VisitTimeModel> userListModel = locationDao.getUserListNew(tableName); //辜义睿getUserList
+        List<VisitTimeModel> filterUserListModel=new ArrayList<>();
+        Point tempPoint=new Point(0D, 0D);
+        for(VisitTimeModel visitTimeModel:userListModel){
+            tempPoint.setX(visitTimeModel.getX()/10.0D);
+            tempPoint.setY(visitTimeModel.getY()/10.0D);
+            if(Util.isInArea(tempPoint, visitTimeModel.getPointsArray())){
+                filterUserListModel.add(visitTimeModel);
+            }
+        }
+        for (VisitTimeModel sva : filterUserListModel) {
             String userId = sva.getUserId();
             long visiTime = sva.getMaxTime() - sva.getMinTime();
             int shopId = sva.getId();
@@ -573,7 +644,7 @@ public class QuartzJob {
             String shopVisit = Util.getMinute(visiTime, 1);
             insertUserid += "('" + userId + "','" + userDay + "','" + shopVisit + "','" + shopId + "','" + 0 + "'),";
         }
-        if (userListModel.size() > 0) {
+        if (filterUserListModel.size() > 0) {
             insertUserid = insertUserid.substring(0, insertUserid.length() - 1);
             int areaResult = statisticsDao.doUpdate(insertUserid);
             LOG.debug("saveUserShop-shop-userid :" + areaResult);
@@ -608,17 +679,39 @@ public class QuartzJob {
         List<ShopModel> list = shopDao.getAllShopData();
         for (int i = 0; i < list.size(); i++) {
             ShopModel model = list.get(i);
-            List<String> todayList = new ArrayList<>();
-            List<String> yesdayList = new ArrayList<>();
+            Set<String> todayList = new HashSet<String>();
+            Set<String> yesdayList = new HashSet<String>();
             int newUser = 0;
             int toDayUser = 0;
             int yesDayUser = 0;
             String shopId = model.getId();
             NewUserModel userModel = new NewUserModel();
-            todayList = locationDao.getNowAllCount(tableName, model); //辜义睿getNowAllCount
+//            todayList = locationDao.getNowAllCount(tableName, model); //辜义睿getNowAllCount
+            
+            Point tempPoint=new Point(0D, 0D);
+            String pointsArray=model.getPointsArray();
+//            Set<String> userIdSet=new HashSet<String>();
+            List<LocModel> locModelsToday=locationDao.getNowAllCountNew(tableName, model);
+            for(LocModel loc:locModelsToday){
+                tempPoint.setX(loc.getX()/10.0D);
+                tempPoint.setY(loc.getY()/10.0D);
+                if(Util.isInArea(tempPoint, pointsArray)){
+                    todayList.add(loc.getUserId());
+                }
+            }
             toDayUser = todayList.size();
-            yesdayList = locationDao.getNowAllCount(yesTableName, model); //辜义睿getNowAllCount
+            
+//            yesdayList = locationDao.getNowAllCount(yesTableName, model); //辜义睿getNowAllCount
+            List<LocModel> locModelsYes=locationDao.getNowAllCountNew(tableName, model);
+            for(LocModel loc:locModelsYes){
+                tempPoint.setX(loc.getX()/10.0D);
+                tempPoint.setY(loc.getY()/10.0D);
+                if(Util.isInArea(tempPoint, pointsArray)){
+                    yesdayList.add(loc.getUserId());
+                }
+            }
             yesDayUser = yesdayList.size();
+            
             todayList.removeAll(yesdayList);
             newUser = todayList.size();
             userModel.setNewUser(newUser);
@@ -876,12 +969,31 @@ public class QuartzJob {
             }
             // 根据店铺计算动向预处理
             List<Integer> shopIdList = shopDao.getAllShopId();
-            LocationModel model2;
+            LocationModel model2 = null;
             for (int shopId : shopIdList) {
                 Map<Integer, Integer> trendMap = new HashMap<>(); // 用户来源map
-                List<String> userIdList = locationDao.queryAllUserIdByShopId(shopId, tableName); //辜义睿queryAllUserIdByShopId
+                List<LocModel> myLocModels=locationDao.queryAllUserIdByShopIdNew(shopId, tableName);
+                Point tempPoint=new Point(0D, 0D);
+                String pointsArray=shopDao.getPointsArrayById(shopId+"");
+                Set<String> userIdList = new HashSet<String>(); 
+                for(LocModel loc:myLocModels){
+                    tempPoint.setX(loc.getX()/10.0D);
+                    tempPoint.setY(loc.getY()/10.0D);
+                    if(Util.isInArea(tempPoint, pointsArray)){
+                        userIdList.add(loc.getUserId());
+                    }
+                }
                 for (String userId : userIdList) {
-                    model2 = locationDao.getOtherShopIdByMaxTime(shopId, userId, tableName); //辜义睿getOtherShopIdByMaxTime
+                    List<LocationModel> maxLocationModels= locationDao.getOtherShopIdByMaxTimeNew(shopId, userId, tableName);
+                    for(LocationModel loc:maxLocationModels){
+                        tempPoint.setX(loc.getX()/10.0D);
+                        tempPoint.setY(loc.getY()/10.0D);
+                        if(Util.isInArea(tempPoint, pointsArray)){
+                            model2=loc;
+                            break;
+                        }
+                    }
+//                  model2 = locationDao.getOtherShopIdByMaxTimeNew(shopId, userId, tableName); //辜义睿getOtherShopIdByMaxTime
                     if (model2 == null) {
                         if (trendMap.get(-1) == null) {
                             trendMap.put(-1, 1);
@@ -966,9 +1078,17 @@ public class QuartzJob {
         String sqlshop = "INSERT INTO bi_trend_shop_hour( shopId,fromShopId,visitorCount,hour,time)VALUES";
         String sqlShopDay = "INSERT INTO bi_trend_shop_day( shopId,fromShopId,visitorCount,day,time)VALUES";
 
-        List<TrendAllModel> shopList = locationDao.getAllTrendShopData(tableName); //辜义睿getAllTrendShopData
-        Map<String, Integer> shopMap = calculationTrend(shopList);
-
+        List<TrendAllModel> shopList = locationDao.getAllTrendShopDataNew(tableName); //辜义睿getAllTrendShopData
+        List<TrendAllModel> filterShopList=new ArrayList<>();
+        Point tempPoint=new Point(0D, 0D);
+        for(TrendAllModel trendAllModel:shopList){
+            tempPoint.setX(trendAllModel.getX()/10.0D);
+            tempPoint.setY(trendAllModel.getY()/10.0D);
+            if(Util.isInArea(tempPoint, trendAllModel.getPointsArray())){
+                filterShopList.add(trendAllModel);
+            }
+        }
+        Map<String, Integer> shopMap = calculationTrend(filterShopList);
         Set<String> shopset = shopMap.keySet();
         int shopId = 0;
         String fromShopId = null;

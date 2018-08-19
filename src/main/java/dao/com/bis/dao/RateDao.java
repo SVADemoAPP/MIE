@@ -4,17 +4,18 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.bis.model.LocModel;
 import com.bis.model.ShopModel;
 import com.bis.model.WeekTotalModel;
 
 public interface RateDao {
-	public int selectCountByShop(@Param("tableName") String tableName,@Param("shop") ShopModel shop);
+//	public List<LocModel> selectCountByShopNew(@Param("tableName") String tableName,@Param("shop") ShopModel shop); //辜义睿改了
 	
 	public Integer selectXByCategoryId(@Param("id") int id);
 	
 	public Integer selectYByCategoryId(@Param("id") int id);
 	
-	public int selectAllCountByShop(@Param("tableName") String tableName,@Param("shop") ShopModel shop);
+//	public int selectAllCountByShop(@Param("tableName") String tableName,@Param("shop") ShopModel shop); //辜义睿
 	
 	public int selectAllCount();
 	 
@@ -40,9 +41,9 @@ public interface RateDao {
 	
 	public List<ShopModel> getShopInfoByStore(@Param("storeId")String storeId);
 	
-	public int getShopCountByShopId(@Param("tableName")String tableName,@Param("shop")ShopModel shop);
+//	public int getShopCountByShopId(@Param("tableName")String tableName,@Param("shop")ShopModel shop); //辜义睿
 	
-	public int getShopCountByShopIdRound(@Param("tableName")String tableName,@Param("shop")ShopModel shop);
+//	public int getShopCountByShopIdRound(@Param("tableName")String tableName,@Param("shop")ShopModel shop);//辜义睿
 	
 	public List<WeekTotalModel> getShopEnterData(@Param("mytime")String mytime,@Param("shopId")String shopId);
 	

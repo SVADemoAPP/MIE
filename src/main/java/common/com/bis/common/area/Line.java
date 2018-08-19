@@ -16,12 +16,13 @@ public class Line
     {
       this.vertical = false;
       this.slope = Double.valueOf((endPoint.getY().doubleValue() - startPoint.getY().doubleValue()) / (endPoint.getX().doubleValue() - startPoint.getX().doubleValue()));
+      this.b = (getStartPoint().getY().doubleValue() - getSlope().doubleValue() * getStartPoint().getX().doubleValue());
     }
     else
     {
       this.vertical = true;
     }
-    this.b = (getStartPoint().getY().doubleValue() - getSlope().doubleValue() * getStartPoint().getX().doubleValue());
+    
   }
   
   public boolean isContainsPoint(Point point)

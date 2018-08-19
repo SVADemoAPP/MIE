@@ -456,7 +456,7 @@
 		value desc
 	</select>
 
-	<select id="getShopVisitorCount" resultType="Map">
+	<!-- <select id="getShopVisitorCount" resultType="Map">
 		select b.shopName
 		name,count(distinct a.userId) value from ${tableName} a left join bi_shop b
 		on (a.x between least(b.xSpot*10,b.x1Spot*10) and
@@ -469,6 +469,6 @@
 		bi_maps c on 
 		b.mapId=c.mapId where c.storeId=#{storeId} group by
 		name order by value desc
-	</select>
+	</select> -->
 
 </mapper>
