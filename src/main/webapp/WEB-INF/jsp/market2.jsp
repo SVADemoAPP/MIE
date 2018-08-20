@@ -93,7 +93,7 @@
 			<div class="navbar">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="../market/getMarketInfo"><span
-                        class="text-logo" style="margin: 17px 5px 0 5%;height: 35px;color: #ffffff; "><spring:message code="hangyang_title"></spring:message> </span><span class="text-slogan"></span>
+                        class="text-logo" style="margin: 17px 5px 0 5%;height: 35px;color: #ffffff; font-size:18px;"><spring:message code="hangyang_title"></spring:message> </span><span class="text-slogan"></span>
                     </a>
                 </div>
 				<nav class="top-nav" role="navigation">
