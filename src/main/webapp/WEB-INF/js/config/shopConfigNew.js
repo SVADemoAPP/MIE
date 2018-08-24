@@ -432,6 +432,9 @@ var ShopConfig = function() {
 							return false;
 						}
 						Ploy.clearPaper();
+						isDuobianxing=false;
+						$(".duobianxing").css("background-color","white");
+						$(".duobianxing").html(map_duobianxing);
 						pointsArray=[];
 //						Ploy.clearPaper1();
 						// $("#pointY2").val("");
@@ -566,6 +569,8 @@ var ShopConfig = function() {
 					top : top
 				};
 				var len=pointsArray.length;
+				if(isDuobianxing){
+				
 				if(len==0){
 					Ploy.clearPaper();
 					Ploy.addOnePoint('#preview', o);
@@ -580,6 +585,30 @@ var ShopConfig = function() {
 					Ploy.makePoly('#preview',o);
 					pointsArray.push(o);
 				}
+				}else{
+					if(len==0){
+						Ploy.clearPaper();
+						Ploy.addOnePoint('#preview', o);
+						pointsArray.push(o);
+					}else if(len==1){
+					    var o1=pointsArray[0];
+					    var o3=o;
+					    var o2={
+								left : o1.left,
+								top : o3.top
+							};
+					    var o4={
+								left : o3.left,
+								top : o1.top
+							};
+					    Ploy.makeRect('#preview', o3);
+					    pointsArray.push(o2);
+					    pointsArray.push(o3);
+					    pointsArray.push(o4);
+					    $("#Ok").attr("disabled", false);
+					}
+				}
+				
 				
 				
 //				var datas = Ploy.getData();
@@ -611,12 +640,30 @@ var ShopConfig = function() {
 //				$("#pointsArray").val("");
 				// $("#Ok").attr("disabled","disabled");
 			});
+			$(".duobianxing").on("click", function(e) {
+				if(isDuobianxing){
+					isDuobianxing=false;
+					$(".duobianxing").css("background-color","white");
+					$(".duobianxing").html(map_duobianxing);
+				}else{
+					isDuobianxing=true;
+					$(".duobianxing").css("background-color","red");
+					$(".duobianxing").html(map_changfangxing);
+				}
+				Ploy.clearPaper();
+				pointsArray=[];
+				$("#Ok").attr("disabled", "disabled");
+				$("#alertBoxScale").hide();
+			});
+
 
 			$("#Ok")
 					.on(
 							"click",
 							function(e) {
+								if(isDuobianxing){
 								Ploy.makePoly('#preview',pointsArray[0]);
+								}
 								var myArray=[];
 								var leftX=$('#preview').offset().left;
 								var topY=$('#preview').offset().top;
@@ -757,6 +804,8 @@ var ShopConfig = function() {
 							return false;
 						}
 						Ploy.clearPaper();
+//						isDuobianxing=false;
+//						$(".duobianxing").css("background-color","white");
 						pointsArray=[];
 						var mapId = $("#mapId").val();
 						$.post("/sva/shop/api/getShopInfoByMapId", {

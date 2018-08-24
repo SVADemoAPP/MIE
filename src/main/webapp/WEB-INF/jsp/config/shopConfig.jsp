@@ -418,6 +418,8 @@ div.svgCotainer {
 						<spring:message code="shop_click_to_choose"></spring:message>
 						<button class="btn btn-small clearPaper"
 							style="float: right; margin-right: 40px; margin-top: -10px;"><spring:message code="map_clera"></spring:message></button>
+							<button class="btn btn-small duobianxing"
+							style="float: right; margin-right: 40px; margin-top: -10px;background-color:white;color:#768399;"><spring:message code="map_duobianxing"></spring:message></button>
 					</div>
 				</div>
 
@@ -543,6 +545,8 @@ div.svgCotainer {
 		type="text/javascript"></script>
 	<script type="text/javascript">
 		var home = '<spring:message code="home"/>';
+		var map_duobianxing = '<spring:message code="map_duobianxing"/>';
+		var map_changfangxing = '<spring:message code="map_changfangxing"/>';
 		var iedit = '<spring:message code="store_edt"/>',
 			idelete = '<spring:message code="store_delete"/>',
 			notnull = '<spring:message code="shop_not_null"/>',
@@ -555,8 +559,9 @@ div.svgCotainer {
 	       isearch = '<spring:message code="mall_search"/>',
 	       ientries = '<spring:message code="mall_entries"/>';
 	    var pointsArray;
-
+	    var isDuobianxing;
 		$(document).ready(function() {
+			isDuobianxing=false;
 			pointsArray=[];
 			ShopConfig.initSelect();
 			ShopConfig.bindClickEvent();
