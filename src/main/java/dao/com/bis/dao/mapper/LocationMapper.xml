@@ -539,7 +539,7 @@
     </select>  
     
     <select id="getAllTrendShopDataNew" resultType="TrendAllModel">
-        select * from (select a.userid,max(a.timestamp) time,a.x,a.y,b.id,b.pointsArray mapId from ${tableName} a 
+        select * from (select a.userid,max(a.timestamp) time,a.x,a.y,b.id mapId,b.pointsArray from ${tableName} a 
         join bi_shop b on a.mapId = b.mapId  group by a.userId,b.id) as c 
         order by c.userId asc,c.time desc      
     </select>

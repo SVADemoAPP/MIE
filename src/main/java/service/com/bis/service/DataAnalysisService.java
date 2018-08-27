@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.bis.common.Util;
+import com.bis.common.area.Point;
 import com.bis.common.conf.Params;
 import com.bis.dao.LocationDao;
 import com.bis.dao.ShopDao;
@@ -123,11 +124,11 @@ public class DataAnalysisService {
     private String checkIsInShop(LocationModel lm, List<ShopModel> shopList) {
         String shopId = "";
         // 遍历店铺，判断当前位置在哪个店铺内
+        Point tempPoint=new Point(0D, 0D);
         for (ShopModel sm : shopList) {
-            if (lm.getMapId().equals(sm.getMapId()) && lm.getX() / 10 > Double.parseDouble(sm.getxSpot())
-                    && lm.getX() / 10 < Double.parseDouble(sm.getX1Spot())
-                    && lm.getY() / 10 > Double.parseDouble(sm.getySpot())
-                    && lm.getY() / 10 < Double.parseDouble(sm.getY1Spot())) {
+            tempPoint.setX(lm.getX()/10.0D);
+            tempPoint.setY(lm.getY()/10.0D);
+            if (lm.getMapId().equals(sm.getMapId()) && Util.isInArea(tempPoint, sm.getPointsArray())) {
                 shopId = String.valueOf(sm.getId());
                 break;
             }

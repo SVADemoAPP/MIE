@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,7 +42,9 @@ import com.bis.dao.VisitorDao;
 import com.bis.model.AreaModel;
 import com.bis.model.GlobalModel;
 import com.bis.model.LocModel;
+import com.bis.model.TrendAllModel;
 import com.bis.model.VisitTimeModel;
+import com.bis.service.DataAnalysisService;
 import com.bis.web.auth.AuthPassport;
 
 import net.sf.json.JSONObject;
@@ -975,5 +978,148 @@ public class HomeController {
     @ResponseBody
     public Object testMapBorder() {
         return globalModel;
+    }
+    
+    @RequestMapping(value = "/testSaveTrend", method = { RequestMethod.GET })
+    @ResponseBody
+    public Object testSaveTrend(String dateKey) {
+        Calendar calendar = Calendar.getInstance();
+        // 防止跑到下一天，往前推30分钟取时间值
+        calendar.add(Calendar.MINUTE, -30);
+        String nowDay = dateKey;
+        int hour = calendar.get(Calendar.HOUR_OF_DAY) + 1;
+        String tableName = Params.LOCATION + nowDay;
+        List<TrendAllModel> list = locationDao.getAllTrendData(tableName);
+        String sql = "INSERT INTO bi_trend_map_hour( mapId,fromMapId,visitorCount,hour,time)VALUES";
+        String sqlDay = "INSERT INTO bi_trend_map_day( mapId,fromMapId,visitorCount,day,time)VALUES";
+        Map<String, Integer> map = calculationTrend(list);
+        Set<String> set = map.keySet();
+        int mapId = 0;
+        String fromMapId = null;
+        int count = 0;
+        for (String s : set) {
+            String[] arrayStr = s.split("-");
+            mapId = Integer.parseInt(arrayStr[0]);
+            fromMapId = arrayStr[1];
+            count = map.get(s);
+            sql += "('" + mapId + "'," + fromMapId + ",'" + count + "','" + hour + "','" + nowDay + "'),";
+        }
+        if (set.size() > 0) {
+            String insertsql = sql.substring(0, sql.length() - 1);
+            statisticsDao.doUpdate(insertsql);
+        }
+        // 如果hour为24同时按日保存
+        if (hour == 24) {
+            int day = calendar.get(Calendar.DATE);
+            for (String s : set) {
+                String[] arrayStr = s.split("-");
+                mapId = Integer.parseInt(arrayStr[0]);
+                fromMapId = arrayStr[1];
+                count = map.get(s);
+                sqlDay += "('" + mapId + "'," + fromMapId + ",'" + count + "','" + day + "','" + nowDay + "'),";
+            }
+            if (set.size() > 0) {
+                String insertsql = sqlDay.substring(0, sqlDay.length() - 1);
+                statisticsDao.doUpdate(insertsql);
+            }
+        }
+        String sqlshop = "INSERT INTO bi_trend_shop_hour( shopId,fromShopId,visitorCount,hour,time)VALUES";
+        String sqlShopDay = "INSERT INTO bi_trend_shop_day( shopId,fromShopId,visitorCount,day,time)VALUES";
+
+        List<TrendAllModel> shopList = locationDao.getAllTrendShopDataNew(tableName); //辜义睿getAllTrendShopData
+        List<TrendAllModel> filterShopList=new ArrayList<>();
+        Point tempPoint=new Point(0D, 0D);
+        for(TrendAllModel trendAllModel:shopList){
+            tempPoint.setX(trendAllModel.getX()/10.0D);
+            tempPoint.setY(trendAllModel.getY()/10.0D);
+            if(Util.isInArea(tempPoint, trendAllModel.getPointsArray())){
+                filterShopList.add(trendAllModel);
+            }
+        }
+        Map<String, Integer> shopMap = calculationTrend(filterShopList);
+        Set<String> shopset = shopMap.keySet();
+        int shopId = 0;
+        String fromShopId = null;
+        int shopCount = 0;
+        for (String s : shopset) {
+            String[] arrayStr = s.split("-");
+            shopId = Integer.parseInt(arrayStr[0]);
+            fromShopId = arrayStr[1];
+            shopCount = shopMap.get(s);
+            sqlshop += "('" + shopId + "'," + fromShopId + ",'" + shopCount + "','" + hour + "','" + nowDay + "'),";
+        }
+        if (shopset.size() > 0) {
+            String insertsql = sqlshop.substring(0, sqlshop.length() - 1);
+            statisticsDao.doUpdate(insertsql);
+        }
+        // 如果hour为24同时按日保存
+        if (hour == 24) {
+            int day = calendar.get(Calendar.DATE);
+            for (String s : shopset) {
+                String[] arrayStr = s.split("-");
+                shopId = Integer.parseInt(arrayStr[0]);
+                fromShopId = arrayStr[1];
+                shopCount = shopMap.get(s);
+                sqlShopDay += "('" + shopId + "'," + fromShopId + ",'" + shopCount + "','" + day + "','" + nowDay
+                        + "'),";
+            }
+            if (set.size() > 0) {
+                String insertsql = sqlShopDay.substring(0, sqlShopDay.length() - 1);
+                statisticsDao.doUpdate(insertsql);
+            }
+        }
+        return true;
+    }
+    
+    @Autowired
+    private DataAnalysisService analysisService;
+    
+    @RequestMapping(value = "/testCalcPeopleRoute", method = { RequestMethod.GET })
+    @ResponseBody
+    public Object testCalcPeopleRoute(String dateKey) {
+        LOG.debug("calcPeopleRoute start:" + new Date().getTime());
+        // 今日表
+        String nowDay = dateKey;
+        String tableName = Params.LOCATION + nowDay;
+        analysisService.calcPeopleRoute(tableName);
+        LOG.debug("calcPeopleRoute end:" + new Date().getTime());
+        return true;
+    }
+    
+    private static Map<String, Integer> calculationTrend(List<TrendAllModel> list) {
+        HashMap<String, Integer> map = new HashMap<String, Integer>();
+        String user = list.get(0).getUserid();
+        String newUuser;
+        int mapId = list.get(0).getMapId();
+        int fromMapId;
+        String key;
+        for (TrendAllModel sva : list) {
+            newUuser = sva.getUserid();
+            fromMapId = sva.getMapId();
+            if (newUuser.equals(user)) {
+                if (fromMapId == mapId) {
+                    continue;
+                } else {
+                    key = mapId + "-" + fromMapId;
+                    if (map.containsKey(key)) {
+                        map.put(key, map.get(key) + 1);
+                    } else {
+                        map.put(key, 1);
+                    }
+                    mapId = sva.getMapId();
+                }
+            } else {
+//                key = mapId + "-" + "null";
+//                if (map.containsKey(key)) {
+//                    map.put(key, map.get(key) + 1);
+//                } else {
+//                    map.put(key, 1);
+//                }
+                mapId = sva.getMapId();
+                user = sva.getUserid();
+            }
+
+        }
+        return map;
     }
 }

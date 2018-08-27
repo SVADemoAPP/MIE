@@ -29,6 +29,16 @@ var RouteLine = function() {
 			var mapId = data[i].mapId;
 			for ( var j in mapObject) {
 				if (mapObject[j].mapId==mapId) {
+					var pointsArray=JSON.parse(data[i].pointsArray);
+					var sumX=0;
+					var sumY=0;
+					var len=pointsArray.length;
+					for (n=0;n<len;n++) {
+						sumX+=parseFloat(pointsArray[n].x);
+						sumY+=parseFloat(pointsArray[n].y);
+					}
+					var avgX=(sumX/len).toFixed(2);
+					var avgY=(sumY/len).toFixed(2);
 					var mapInfo = mapObject[j],
 					scale = mapInfo.scale,
 					xo = mapInfo.xo,
@@ -40,63 +50,39 @@ var RouteLine = function() {
 					var point = {};
 					switch (coordinate){
 					case "ul":
-						var x1 = (data[i].xSpot * scale + xo * scale) / imgScale,
-						y1 = (data[i].ySpot * scale + xo * scale) / imgScale,
-						x2 = (data[i].x1Spot * scale + xo * scale) / imgScale,
-						y2 = (data[i].y1Spot * scale + xo * scale) / imgScale;
+						var x1 = (avgX * scale + xo * scale) / imgScale,
+						y1 = (avgY * scale + xo * scale) / imgScale;
 						point = {
 								name:data[i].shopName,
-								x : (x1 + x2) / 2,
-								y : (y1 + y2) / 2,
-								x1 : x1,
-								x2 : x2,
-								y1 : y1,
-								y2 : y2
+								x : x1,
+								y : y1
 						};
 						break;
 					case "ll":
-						var x1 = (data[i].xSpot * scale + xo * scale) / imgScale,
-						y1 = height - (data[i].ySpot * scale + yo * scale) / imgScale,
-						x2 = (data[i].x1Spot * scale + xo * scale) / imgScale,
-						y2 = height - (data[i].y1Spot * scale + yo * scale) / imgScale;
+						var x1 = (avgX * scale + xo * scale) / imgScale,
+						y1 = height - (avgY * scale + yo * scale) / imgScale;
 						point = {
 								name:data[i].shopName,
-								x : (x1 + x2) / 2,
-								y : (y1 + y2) / 2,
-								x1 : x1,
-								x2 : x2,
-								y1 : y1,
-								y2 : y2
+								x : x1,
+								y : y1
 						};
 						break;
 					case "ur":
-						var x1 = width - (data[i].xSpot * scale + xo * scale) / imgScale,
-						y1 = (data[i].ySpot * scale + yo * scale) / imgScale,
-						x2 = width - (data[i].x1Spot * scale + xo * scale) / imgScale,
-						y2 = (data[i].y1Spot * scale + yo * scale) / imgScale;
+						var x1 = width - (avgX * scale + xo * scale) / imgScale,
+						y1 = (avgY * scale + yo * scale) / imgScale;
 						point = {
 								name:data[i].shopName,
-								x : (x1 + x2) / 2,
-								y : (y1 + y2) / 2,
-								x1 : x1,
-								x2 : x2,
-								y1 : y1,
-								y2 : y2
+								x : x1,
+								y : y1
 						};
 						break;
 					case "lr":
-						var x1 = width - (data[i].xSpot * scale + xo * scale) / imgScale,
-						y1 = height - (data[i].ySpot * scale + yo * scale) / imgScale,
-						x2 = width - (data[i].x1Spot * scale + xo * scale) / imgScale,
-						y2 = height - (data[i].y1Spot * scale + yo * scale) / imgScale;
+						var x1 = width - (avgX * scale + xo * scale) / imgScale,
+						y1 = height - (avgY * scale + yo * scale) / imgScale;
 						point = {
 								name:data[i].shopName,
-								x : (x1 + x2) / 2,
-								y : (y1 + y2) / 2,
-								x1 : x1,
-								x2 : x2,
-								y1 : y1,
-								y2 : y2
+								x : x1,
+								y : y1
 						};
 						break;
 					}
@@ -321,6 +307,7 @@ var RouteLine = function() {
 			}
 			// 获取店铺信息
 			getShopInfo(function(data){
+				console.log(data);
 				// 全局店铺信息赋值
 				shopObj = shopPositionConvert(data.data, mapObj);
 				shopObj.selectedShopId = shopId;
