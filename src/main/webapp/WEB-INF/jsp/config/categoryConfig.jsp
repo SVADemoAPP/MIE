@@ -81,7 +81,7 @@
 						href="/sva/home/changeLocal?local=en">English</a></li>
 					<li class="dropdown"><a href="#" data-toggle="dropdown"> <img
 							class="user-avatar" src="../plugins/newJs/img/avatars/48.jpg"
-							alt="SuggeElson">SuggeElson
+							alt="${sessionScope.userName}">${sessionScope.userName}
 					</a>
 						<ul class="dropdown-menu right" role="menu">
 							<li><a href="../account/logout"><i class="im-exit"></i>

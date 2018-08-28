@@ -161,9 +161,9 @@ div.svgCotainer {
                     <a class="navbar-brand" href="../market/getMarketInfo"><span
                         class="text-logo" style="margin: 17px 5px 0 5%;height: 35px;color: #ffffff; "><spring:message code="hangyang_title"></spring:message> </span><span class="text-slogan"></span>
                     </a>
-                </div>>
+                </div>
 				<nav class="top-nav" role="navigation">
-				<ul class="nav navbar-nav pull-left"style="margin-top: 1px;">
+				<ul class="nav navbar-nav pull-left"style="margin-top: 17px;">
 					<li id="toggle-sidebar-li"><a href="#" id="toggle-sidebar"><i
 							class="en-arrow-left2"></i> </a></li>
 					<li><a href="#" class="full-screen"><i
