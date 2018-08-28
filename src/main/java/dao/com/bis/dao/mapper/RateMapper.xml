@@ -94,14 +94,14 @@
 	</select>
 	
 	<select id="selectCountDelayTime" resultType="int">
-		SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{shop.id} AND time = #{nowDay} AND delaytime &gt;=
+		SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{shop.id} AND time = #{nowDay} AND delaytime*60 &gt;=
 		(
 			SELECT deepTime FROM bi_shop_category WHERE id = #{shop.categoryId}
 		)
 	</select>
 	
     <select id="selectCountDelayTime1" resultType="int">
-        SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{shop.id} AND time = #{nowDay} AND delaytime &lt;=
+        SELECT COUNT(*) FROM ${tableName} WHERE shopId = #{shop.id} AND time = #{nowDay} AND delaytime*60 &lt;=
         (
             SELECT visitorNumber FROM bi_shop_category WHERE id = #{shop.categoryId}
         )

@@ -52,17 +52,13 @@
 		x,
 		y,
 		deepTime,
-		visitorNumber,
-		deepTime1,
-		visitorNumber1		
+		visitorNumber	
 		)
 		VALUES(
 		#{name},
 		#{createTime},
 		#{x},
 		#{y},
-		#{deepTime}/60,
-		#{visitorNumber}/60,
 		#{deepTime},
 		#{visitorNumber}
 		)
@@ -73,8 +69,7 @@
 		UPDATE bi_shop_category
 		SET name = #{name}, updateTime
 		= #{updateTime},
-		x= #{x},y=#{y},deepTime= #{deepTime}/60,visitorNumber=
-		#{visitorNumber}/60,deepTime1= #{deepTime},visitorNumber1=
+		x= #{x},y=#{y},deepTime= #{deepTime},visitorNumber=
 		#{visitorNumber}
 		WHERE id = #{id}
 	</update>
