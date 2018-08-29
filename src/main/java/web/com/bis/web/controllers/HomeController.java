@@ -813,7 +813,7 @@ public class HomeController {
                     for(LocModel loc:myLocModels){
                         tempPoint3.setX(loc.getX()/10.0D);
                         tempPoint3.setY(loc.getY()/10.0D);
-                        if(Util.isInArea(tempPoint, pointsArray)){
+                        if(Util.isInArea(tempPoint3, pointsArray)){
                             userIdSet.add(loc.getUserId());
                         }
                     }
